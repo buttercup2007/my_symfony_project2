@@ -11,6 +11,9 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        return new Response('Hello from Symfonygktmglktrmhkl!');
+        return $this->render('home/index.html.twig', [
+            'appName' => 'Symfony + Vue',
+            'features' => ['Routing', 'Templates', 'Components'],
+        ]);
     }
 }
