@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use Doctrine\DBAL\Connection;
@@ -6,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class WedstrijdController extends AbstractController
+class wedstrijdController extends AbstractController
 {
     #[Route('/wedstrijden', name: 'wedstrijden')]
     public function wedstrijden(Connection $connection): Response

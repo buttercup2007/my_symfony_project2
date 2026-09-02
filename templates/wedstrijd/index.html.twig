@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Wedstrijden{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Wedstrijden</h1>
+        
+        {% if resultaten %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Sport</th>
+                        <th>Aantal Wedstrijden</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resultaat in resultaten %}
+                        <tr>
+                            <td>{{ resultaat.sportnaam }}</td>
+                            <td>{{ resultaat.aantal_wedstrijden }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Geen wedstrijden gevonden.</p>
+        {% endif %}
+    </div>
+{% endblock %}
