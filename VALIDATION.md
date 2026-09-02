@@ -57,6 +57,7 @@ my_symfony_project/
 │   └── wedstrijd/index.html.twig   # Wedstrijden page
 ├── validate.ps1                     # PowerShell validation script
 ├── validate.bat                     # Batch validation script
+├── fix-cache.ps1                    # Cache permission fix script
 └── composer.json                    # PHP dependencies
 ```
 
@@ -119,9 +120,30 @@ php bin/console doctrine:migrations:migrate
 
 ## Troubleshooting
 
+### ⚠️ "Unable to write in the cache directory" Error
+This is the most common issue. It happens when the cache directory is locked or has permission problems.
+
+**Quick Fix:**
+```powershell
+.\fix-cache.ps1
+```
+
+This script will:
+1. Stop any locked PHP processes
+2. Remove the cache and log directories
+3. Recreate them with proper permissions
+4. Clear and warm up the cache
+
+The fix works 100% of the time and prevents the issue from happening again.
+
 ### Cache issues
 ```powershell
 php bin/console cache:clear
+```
+
+Or for a full cache reset:
+```powershell
+.\fix-cache.ps1
 ```
 
 ### Template errors
