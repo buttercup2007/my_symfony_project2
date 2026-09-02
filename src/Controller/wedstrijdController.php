@@ -27,7 +27,7 @@ class WedstrijdController extends AbstractController
                 ON w.compnummer = c.compnummer
             JOIN sporten s
                 ON c.sportsoort = s.sportsoort
-            WHERE w.datum BETWEEN '2026-10-03' AND '2026-10-04'
+            WHERE w.datum >= '2026-09-02'
             ORDER BY w.datum, w.tijd
         ";
 

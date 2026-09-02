@@ -1,147 +1,176 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Wedstrijden overzicht{% endblock %}
-
-{% block body %}
-
 <div class="dashboard">
 
-    {# LINKERKANT - WEDSTRIJDEN (MET UITSLAG) #}
-    <section class="dashboard-section">
-        <div class="section-header">
-            <h1>Wedstrijden</h1>
-            <span class="section-count">{{ wedstrijden|length }}</span>
+<section class="dashboard-section">
+
+    <div class="section-header">
+        <h1>Wedstrijden</h1>
+        <span class="section-count">
+            {{ wedstrijden|length }}
+        </span>
+    </div>
+
+    {% if wedstrijden %}
+
+        {# Groepeer wedstrijden per sport #}
+        {% set sporten = {} %}
+
+        {% for wedstrijd in wedstrijden %}
+            {% set sport = wedstrijd.sportnaam %}
+
+            {% if sporten[sport] is not defined %}
+                {% set sporten = sporten|merge({
+                    (sport): []
+                }) %}
+            {% endif %}
+
+            {% set sporten = sporten|merge({
+                (sport): sporten[sport]|merge([wedstrijd])
+            }) %}
+        {% endfor %}
+
+        <div class="sports-list">
+
+            {% for sport, wedstrijdenSport in sporten %}
+
+                <div class="sport-group">
+                    <h3>{{ sport }}</h3>
+
+                    {% for wedstrijd in wedstrijdenSport %}
+
+                        <div class="match-row">
+
+                            <div>
+                                <strong>
+                                    {{ wedstrijd.team1 }}
+                                </strong>
+
+                                <span class="vs">vs</span>
+
+                                <strong>
+                                    {{ wedstrijd.team2 }}
+                                </strong>
+                            </div>
+
+                            <div class="match-info">
+                                {{ wedstrijd.datum }}
+                                &nbsp;
+                                {{ wedstrijd.tijd }}
+                            </div>
+
+                            <span class="score">
+                                {{ wedstrijd.score1 }} - {{ wedstrijd.score2 }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endfor %}
+
         </div>
 
-        {% if wedstrijden %}
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Sport</th>
-                            <th>Wedstrijd</th>
-                            <th>Datum</th>
-                            <th>Tijd</th>
-                            <th>Teams</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
+    {% else %}
 
-                    <tbody>
-                        {% for wedstrijd in wedstrijden %}
-                            <tr>
-                                <td>{{ wedstrijd.sportnaam }}</td>
+        <p class="empty-message">
+            Geen wedstrijden beschikbaar.
+        </p>
 
-                                <td>
-                                    {{ wedstrijd.wedstrijdnummer }}
-                                </td>
+    {% endif %}
 
-                                <td>
-                                    {{ wedstrijd.datum }}
-                                </td>
+</section>
 
-                                <td>
-                                    {{ wedstrijd.tijd }}
-                                </td>
+<section class="dashboard-section missing-section">
 
-                                <td>
-                                    {{ wedstrijd.team1 }}
-                                    <br>
-                                    <span class="vs">vs</span>
-                                    <br>
-                                    {{ wedstrijd.team2 }}
-                                </td>
+    <div class="section-header">
+        <h1>Ontbrekende uitslagen</h1>
+        <span class="section-count missing-count">
+            {{ ontbrekende|length }}
+        </span>
+    </div>
 
-                                <td>
-                                    <strong class="score">
-                                        {{ wedstrijd.score1 }} - {{ wedstrijd.score2 }}
+    {% if ontbrekende %}
+
+        {# Groepeer wedstrijden per sport #}
+        {% set sporten = {} %}
+
+        {% for wedstrijd in ontbrekende %}
+            {% set sport = wedstrijd.sportnaam %}
+
+            {% if sporten[sport] is not defined %}
+                {% set sporten = sporten|merge({
+                    (sport): []
+                }) %}
+            {% endif %}
+
+            {% set sporten = sporten|merge({
+                (sport): sporten[sport]|merge([wedstrijd])
+            }) %}
+        {% endfor %}
+
+
+        <div class="missing-sports">
+
+            {% for sport, wedstrijdenSport in sporten %}
+
+                <details class="sport-dropdown">
+
+                    <summary>
+                        <span>{{ sport }}</span>
+                        <span class="sport-count">
+                            {{ wedstrijdenSport|length }}
+                        </span>
+                    </summary>
+
+                    <div class="sport-matches">
+
+                        {% for wedstrijd in wedstrijdenSport %}
+
+                            <div class="missing-match">
+
+                                <div>
+                                    <strong>
+                                        {{ wedstrijd.team1 }}
                                     </strong>
-                                </td>
-                            </tr>
+
+                                    <span class="vs">vs</span>
+
+                                    <strong>
+                                        {{ wedstrijd.team2 }}
+                                    </strong>
+                                </div>
+
+                                <div class="match-info">
+                                    {{ wedstrijd.datum }}
+                                    &nbsp;
+                                    {{ wedstrijd.tijd }}
+                                </div>
+
+                                <span class="status">
+                                    In afwachting
+                                </span>
+
+                            </div>
+
                         {% endfor %}
-                    </tbody>
-                </table>
-            </div>
 
-        {% else %}
-            <p class="empty-message">
-                Geen wedstrijden met uitslagen gevonden.
-            </p>
-        {% endif %}
+                    </div>
 
-    </section>
+                </details>
 
+            {% endfor %}
 
-    {# RECHTERKANT - ONTBREKENDE UITSLAGEN #}
-    <section class="dashboard-section missing-section">
-
-        <div class="section-header">
-            <h1>Ontbrekende iets</h1>
-            <span class="section-count missing-count">
-                {{ ontbrekende|length }}
-            </span>
         </div>
 
-        {% if ontbrekende %}
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Sport</th>
-                            <th>Wedstrijd</th>
-                            <th>Datum</th>
-                            <th>Tijd</th>
-                            <th>Teams</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
+    {% else %}
 
-                    <tbody>
-                        {% for wedstrijd in ontbrekende %}
-                            <tr>
-                                <td>{{ wedstrijd.sportnaam }}</td>
+        <p class="empty-message">
+            Geen ontbrekende uitslagen.
+        </p>
 
-                                <td>
-                                    {{ wedstrijd.wedstrijdnummer }}
-                                </td>
+    {% endif %}
 
-                                <td>
-                                    {{ wedstrijd.datum }}
-                                </td>
-
-                                <td>
-                                    {{ wedstrijd.tijd }}
-                                </td>
-
-                                <td>
-                                    {{ wedstrijd.team1 }}
-                                    <br>
-                                    <span class="vs">vs</span>
-                                    <br>
-                                    {{ wedstrijd.team2 }}
-                                </td>
-
-                                <td>
-                                    <span class="status">
-                                        In afwachting
-                                    </span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-        {% else %}
-            <p class="empty-message">
-                Geen ontbrekende uitslagen.
-            </p>
-        {% endif %}
-
-    </section>
+</section>
 
 </div>
-
-{% endblock %}
-
-

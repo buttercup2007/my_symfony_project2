@@ -114,6 +114,40 @@ tbody tr:hover {
     padding: 30px 10px;
 }
 
+/* Wedstrijden links - sport groepen */
+.sports-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sport-group {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+}
+
+.sport-group:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.sport-group h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.match-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+}
+
+.match-row:last-child {
+    border-bottom: none;
+}
 
 /* Op kleinere schermen onder elkaar */
 @media (max-width: 1100px) {
@@ -122,3 +156,75 @@ tbody tr:hover {
     }
 }
 
+.missing-sports {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sport-dropdown {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+}
+
+.sport-dropdown summary {
+    padding: 10px 12px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+}
+
+.sport-dropdown summary::-webkit-details-marker {
+    display: none;
+}
+
+.sport-dropdown summary::before {
+    content: "▶";
+    font-size: 9px;
+    margin-right: 8px;
+}
+
+.sport-dropdown[open] summary::before {
+    content: "▼";
+}
+
+.sport-count {
+    font-size: 11px;
+    background: #eee;
+    padding: 2px 7px;
+    border-radius: 10px;
+}
+
+.sport-matches {
+    border-top: 1px solid #eee;
+}
+
+.missing-match {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 12px;
+}
+
+.missing-match:last-child {
+    border-bottom: none;
+}
+
+.match-info {
+    color: #777;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.status {
+    display: inline-block;
+    font-size: 9px;
+    padding: 2px 5px;
+    margin-top: 4px;
+    border-radius: 4px;
+    background: #eee;
+}

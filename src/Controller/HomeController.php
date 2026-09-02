@@ -37,7 +37,7 @@ class HomeController extends AbstractController
             LEFT JOIN clubs c2
                 ON w.club2nummer = c2.clubnummer
 
-            WHERE w.datum BETWEEN '2026-10-03' AND '2026-10-04'
+            WHERE w.datum >= '2026-09-02'
             AND w.puntenteam1 IS NOT NULL
             AND w.puntenteam2 IS NOT NULL
 
@@ -72,7 +72,7 @@ class HomeController extends AbstractController
             LEFT JOIN clubs c2
                 ON w.club2nummer = c2.clubnummer
 
-            WHERE w.datum BETWEEN '2026-10-03' AND '2026-10-04'
+            WHERE w.datum >= '2026-09-02'
 
             AND (
                 w.puntenteam1 IS NULL
