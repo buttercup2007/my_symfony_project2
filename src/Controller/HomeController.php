@@ -12,48 +12,73 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(Connection $connection): Response
     {
-        // Wedstrijden van het weekend
+        // Wedstrijden MET uitslag
         $wedstrijdenSql = "
-            SELECT
+            SELECT 
                 s.sportnaam AS sportnaam,
                 w.wedstrijdnummer AS wedstrijdnummer,
                 w.datum AS datum,
-                w.club1nummer AS team1,
-                w.club2nummer AS team2,
+                w.tijd AS tijd,
+                c1.naam AS team1,
+                c2.naam AS team2,
                 w.puntenteam1 AS score1,
                 w.puntenteam2 AS score2
             FROM wedstrijd w
+
             JOIN competities c
                 ON w.compnummer = c.compnummer
+
             JOIN sporten s
                 ON c.sportsoort = s.sportsoort
+
+            LEFT JOIN clubs c1
+                ON w.club1nummer = c1.clubnummer
+
+            LEFT JOIN clubs c2
+                ON w.club2nummer = c2.clubnummer
+
             WHERE w.datum BETWEEN '2026-10-03' AND '2026-10-04'
+            AND w.puntenteam1 IS NOT NULL
+            AND w.puntenteam2 IS NOT NULL
+
             ORDER BY w.datum, w.tijd
         ";
 
         $wedstrijden = $connection->fetchAllAssociative($wedstrijdenSql);
 
 
-        // Wedstrijden waarvan de uitslag ontbreekt
+        // Wedstrijden ZONDER uitslag (ontbrekende iets)
         $ontbrekendeSql = "
-            SELECT
+            SELECT 
                 s.sportnaam AS sportnaam,
-                w.wedstrijddag AS wedstrijddag,
+                w.wedstrijdnummer AS wedstrijdnummer,
                 w.datum AS datum,
-                w.club1nummer AS team1,
-                w.club2nummer AS team2,
+                w.tijd AS tijd,
+                c1.naam AS team1,
+                c2.naam AS team2,
                 w.puntenteam1 AS score1,
                 w.puntenteam2 AS score2
             FROM wedstrijd w
+
             JOIN competities c
                 ON w.compnummer = c.compnummer
+
             JOIN sporten s
                 ON c.sportsoort = s.sportsoort
+
+            LEFT JOIN clubs c1
+                ON w.club1nummer = c1.clubnummer
+
+            LEFT JOIN clubs c2
+                ON w.club2nummer = c2.clubnummer
+
             WHERE w.datum BETWEEN '2026-10-03' AND '2026-10-04'
-              AND (
-                  w.puntenteam1 IS NULL
-                  OR w.puntenteam2 IS NULL
-              )
+
+            AND (
+                w.puntenteam1 IS NULL
+                OR w.puntenteam2 IS NULL
+            )
+
             ORDER BY w.datum, w.tijd
         ";
 

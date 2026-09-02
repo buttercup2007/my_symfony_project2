@@ -16,7 +16,6 @@ class WedstrijdController extends AbstractController
             SELECT
                 s.sportnaam AS sportnaam,
                 w.wedstrijdnummer AS wedstrijdnummer,
-                w.wedstrijddag AS wedstrijddag,
                 w.datum AS datum,
                 w.tijd AS tijd,
                 w.club1nummer AS team1,

@@ -5,7 +5,7 @@
 {% block body %}
 <div class="dashboard">
     <section class="dashboard-section" style="grid-column: 1 / -1;">
-        <h1>Alle Wedstrijden</h1>
+        <h1> Alle Wedstrijden (Weekend 3-4 Oktober 2026)</h1>
         
         {% if wedstrijden %}
             <table>
@@ -31,9 +31,9 @@
                             <td>{{ wedstrijd.team2 }}</td>
                             <td>
                                 {% if wedstrijd.score1 is not null and wedstrijd.score2 is not null %}
-                                    {{ wedstrijd.score1 }} - {{ wedstrijd.score2 }}
+                                    <strong>{{ wedstrijd.score1 }} - {{ wedstrijd.score2 }}</strong>
                                 {% else %}
-                                    -
+                                    <span style="color: #95a5a6;">-</span>
                                 {% endif %}
                             </td>
                         </tr>
