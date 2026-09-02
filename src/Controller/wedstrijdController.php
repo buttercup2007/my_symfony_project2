@@ -7,21 +7,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class wedstrijdController extends AbstractController
+class WedstrijdController extends AbstractController
 {
     #[Route('/wedstrijden', name: 'wedstrijden')]
     public function wedstrijden(Connection $connection): Response
     {
         $sql = "
             SELECT
-                s.sportnaam,
-                COUNT(*) AS aantal_wedstrijden
-            FROM wedstrijd w
-            JOIN competities c
-                ON w.compnummer = c.compnummer
-            JOIN sporten s
-                ON c.sportsoort = s.sportsoort
-            WHERE w.datum BETWEEN '2026-09-05' AND '2026-09-06'
+                s.sportnaam AS sportnaam,
+                COUNT(w.wedstrijdnummer) AS aantal_wedstrijden
+            FROM sporten s
+            LEFT JOIN competities c
+                ON s.sportsoort = c.sportsoort
+            LEFT JOIN wedstrijd w
+                ON c.compnummer = w.compnummer
             GROUP BY s.sportnaam
             ORDER BY aantal_wedstrijden DESC
         ";
