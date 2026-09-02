@@ -15,20 +15,27 @@ class WedstrijdController extends AbstractController
         $sql = "
             SELECT
                 s.sportnaam AS sportnaam,
-                COUNT(w.wedstrijdnummer) AS aantal_wedstrijden
-            FROM sporten s
-            LEFT JOIN competities c
-                ON s.sportsoort = c.sportsoort
-            LEFT JOIN wedstrijd w
-                ON c.compnummer = w.compnummer
-            GROUP BY s.sportnaam
-            ORDER BY aantal_wedstrijden DESC
+                w.wedstrijdnummer AS wedstrijdnummer,
+                w.wedstrijddag AS wedstrijddag,
+                w.datum AS datum,
+                w.tijd AS tijd,
+                w.club1nummer AS team1,
+                w.club2nummer AS team2,
+                w.puntenteam1 AS score1,
+                w.puntenteam2 AS score2
+            FROM wedstrijd w
+            JOIN competities c
+                ON w.compnummer = c.compnummer
+            JOIN sporten s
+                ON c.sportsoort = s.sportsoort
+            WHERE w.datum BETWEEN '2026-10-03' AND '2026-10-04'
+            ORDER BY w.datum, w.tijd
         ";
 
-        $resultaten = $connection->fetchAllAssociative($sql);
+        $wedstrijden = $connection->fetchAllAssociative($sql);
 
         return $this->render('wedstrijd/index.html.twig', [
-            'resultaten' => $resultaten
+            'wedstrijden' => $wedstrijden
         ]);
     }
 }
