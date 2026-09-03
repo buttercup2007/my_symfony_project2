@@ -9,13 +9,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-	#[Route('/', name: 'home')]
-	public function index(Connection $connection): Response
-	{
-		$wedstrijden = $connection->fetchAllAssociative('SELECT * FROM wedstrijden');
+    #[Route('/index', name: 'home')]
+    public function index(Connection $connection): Response
+    {
+        $wedstrijden = $connection->fetchAllAssociative('SELECT * FROM wedstrijden');
 
-		return $this->render('home/index.html.twig', [
-			'wedstrijden' => $wedstrijden
-		]);
-	}
+        return $this->render('home/index.html.twig', [
+            'wedstrijden' => $wedstrijden
+        ]);
+    }
 }
