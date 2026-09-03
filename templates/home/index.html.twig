@@ -3,5 +3,23 @@
 {% block title %}Startpagina{% endblock %}
 
 {% block body %}
-   <h1>Hello world</h1>
+   <h1>Wedstrijden</h1>
+
+   <table>
+      <tr>
+         <th>Sport</th>
+         <th>Team 1</th>
+         <th>Team 2</th>
+         <th>Datum</th>
+      </tr>
+
+   {% for wedstrijd in wedstrijden%}
+      <tr>
+         <td>{{ wedstrijd.sport }}</td>
+         <td>{{ wedstrijd.team1 }}</td>
+         <td>{{ wedstrijd.team2 }}</td>
+         <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>
+      </tr>
+   {% endfor %}
+   </table>
 {% endblock %}

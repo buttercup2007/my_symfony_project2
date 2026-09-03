@@ -18,6 +18,33 @@
         <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
         <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
         {% endif %}
+
+        {% if app.environment == 'dev' and not frankenphp_hot_reload %}
+        <script>
+            (() => {
+                let signature;
+
+                const checkForChanges = async () => {
+                    try {
+                        const response = await fetch('{{ path('dev_reload') }}', { cache: 'no-store' });
+                        const data = await response.json();
+
+                        if (signature && signature !== data.signature) {
+                            window.location.reload();
+                            return;
+                        }
+
+                        signature = data.signature;
+                    } catch {
+                        // The development server may be restarting after a PHP change.
+                    }
+                };
+
+                checkForChanges();
+                window.setInterval(checkForChanges, 1000);
+            })();
+        </script>
+        {% endif %}
     </head>
     <body>
         {% block body %}{% endblock %}
