@@ -14,7 +14,7 @@ class WedstrijdService
     public function getWedstrijden(): array
     {
         return $this->connection->fetchAllAssociative('SELECT * FROM wedstrijden'); 
-        
+
     }
 }
 

@@ -2,17 +2,21 @@
 
 namespace App\Controller;
 
-use Doctrine\DBAL\Connection;
+use App\Services\WedstrijdService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 class wedstrijdApiController 
-   {
+{
+
     #[Route('/api/wedstrijden', methods: ['GET'])]
-    public function getCollection(Connection $connection): JsonResponse
+    public function getCollection(WedstrijdService $wedstrijdService): JsonResponse
     {
-        $wedstrijden = $connection->fetchAllAssociative(" SELECT * FROM wedstrijden");
+        $wedstrijden = $wedstrijdService->getWedstrijden();
 
         return new JsonResponse($wedstrijden);
+
     }
 }
+
+ 
