@@ -3,23 +3,55 @@
 {% block title %}Startpagina{% endblock %}
 
 {% block body %}
+
    <h1>Wedstrijden</h1>
 
    <table>
+      <thead>
       <tr>
          <th>Sport</th>
          <th>Team 1</th>
          <th>Team 2</th>
          <th>Datum</th>
       </tr>
+      </thead>
 
-   {% for wedstrijd in wedstrijden%}
-      <tr>
-         <td>{{ wedstrijd.sport }}</td>
-         <td>{{ wedstrijd.team1 }}</td>
-         <td>{{ wedstrijd.team2 }}</td>
-         <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>
-      </tr>
-   {% endfor %}
+      <tbody id="wedstrijd-table-body">
+         <tr>
+            <td colspan="4">Wedstrijden laden...</td>
+         </tr>
+      </tbody>
+
    </table>
+
+   <script>
+      fetch('/api/wedstrijden')
+         .then(response => response.json())
+         .then(wedstrijden => {
+
+            const tabel = document.getElementById('wedstrijden-tabel');
+
+            tabel.innerHTML = '';
+
+            wedstrijden.forEach(wedstrijd => {
+
+               const rij = document.createElement('tr');
+
+               const sportCel = document.createElement('td');
+
+               rij.innerHTML = `
+                  <td>${wedstrijd.sport}</td>
+                  <td>${wedstrijd.team1}</td>
+                  <td>${wedstrijd.team2}</td>
+                  <td>${new Date(wedstrijd.datum).toLocaleDateString()}</td>
+               `;
+
+               tabel.appendChild(rij);
+            });
+         })
+         .catch(error => {
+            console.error('Fout bij het laden van wedstrijden:', error);
+         });
+   </script>
 {% endblock %}
+  

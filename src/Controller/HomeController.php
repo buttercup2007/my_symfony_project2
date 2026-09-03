@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Doctrine\DBAL\Connection;
+use App\Services\WedstrijdService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -10,9 +10,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route('/index', name: 'home')]
-    public function index(Connection $connection): Response
+    public function index(WedstrijdService $wedstrijdService): Response
     {
-        $wedstrijden = $connection->fetchAllAssociative('SELECT * FROM wedstrijden');
+        $wedstrijden = $wedstrijdService->getWedstrijden();
 
         return $this->render('home/index.html.twig', [
             'wedstrijden' => $wedstrijden

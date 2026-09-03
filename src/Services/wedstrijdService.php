@@ -18,17 +18,4 @@ class WedstrijdService
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ?>
