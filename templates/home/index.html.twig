@@ -4,54 +4,122 @@
 
 {% block body %}
 
-   <h1>Wedstrijden</h1>
+    <h1>Wedstrijden</h1>
 
-   <table>
-      <thead>
-      <tr>
-         <th>Sport</th>
-         <th>Team 1</th>
-         <th>Team 2</th>
-         <th>Datum</th>
-      </tr>
-      </thead>
+    <div>
+        <button id="vorige-weekend">←</button>
 
-      <tbody id="wedstrijd-table-body">
-         <tr>
-            <td colspan="4">Wedstrijden laden...</td>
-         </tr>
-      </tbody>
+        <span id="weekend-datum"></span>
 
-   </table>
+        <button id="volgende-weekend">→</button>
+    </div>
 
-   <script>
-      fetch('/api/wedstrijden')
-         .then(response => response.json())
-         .then(wedstrijden => {
+    <table>
+        <thead>
+            <tr>
+                <th>Sport</th>
+                <th>Team 1</th>
+                <th>Team 2</th>
+                <th>Datum</th>
+            </tr>
+        </thead>
+
+        <tbody id="wedstrijd-table-body">
+            <tr>
+                <td colspan="4">Wedstrijden laden...</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        let wedstrijden = [];
+        let huidigeDatum = new Date('2026-10-03');
+
+        fetch('/api/wedstrijden')
+            .then(response => response.json())
+            .then(data => {
+
+                wedstrijden = data;
+
+                toonWedstrijden();
+
+            })
+            .catch(error => {
+                console.error('Fout bij het laden van wedstrijden:', error);
+            });
+
+
+        function toonWedstrijden() {
 
             const tabel = document.getElementById('wedstrijd-table-body');
 
             tabel.innerHTML = '';
 
-            wedstrijden.forEach(wedstrijd => {
+            const zaterdag = new Date(huidigeDatum);
+            const zondag = new Date(huidigeDatum);
 
-               const rij = document.createElement('tr');
+            zondag.setDate(zondag.getDate() + 1);
 
-               const sportCel = document.createElement('td');
 
-               rij.innerHTML = `
-                  <td>${wedstrijd.sport}</td>
-                  <td>${wedstrijd.team1}</td>
-                  <td>${wedstrijd.team2}</td>
-                  <td>${new Date(wedstrijd.datum).toLocaleDateString()}</td>
-               `;
+            const wedstrijdenWeekend = wedstrijden.filter(wedstrijd => {
 
-               tabel.appendChild(rij);
+                const datum = new Date(wedstrijd.datum);
+
+                return datum.toDateString() === zaterdag.toDateString()
+                    || datum.toDateString() === zondag.toDateString();
+
             });
-         })
-         .catch(error => {
-            console.error('Fout bij het laden van wedstrijden:', error);
-         });
-   </script>
+
+
+            wedstrijdenWeekend.forEach(wedstrijd => {
+
+                const rij = document.createElement('tr');
+
+                rij.innerHTML = `
+                    <td>${wedstrijd.sport}</td>
+                    <td>${wedstrijd.team1}</td>
+                    <td>${wedstrijd.team2}</td>
+                    <td>${new Date(wedstrijd.datum).toLocaleDateString('nl-NL')}</td>
+                `;
+
+                tabel.appendChild(rij);
+
+            });
+
+
+            document.getElementById('weekend-datum').textContent =
+                `${zaterdag.toLocaleDateString('nl-NL')} - ${zondag.toLocaleDateString('nl-NL')}`;
+
+
+            if (wedstrijdenWeekend.length === 0) {
+
+                tabel.innerHTML = `
+                    <tr>
+                        <td colspan="4">Geen wedstrijden dit weekend.</td>
+                    </tr>
+                `;
+
+            }
+        }
+
+
+        document.getElementById('vorige-weekend').addEventListener('click', () => {
+
+            huidigeDatum.setDate(huidigeDatum.getDate() - 7);
+
+            toonWedstrijden();
+
+        });
+
+
+        document.getElementById('volgende-weekend').addEventListener('click', () => {
+
+            huidigeDatum.setDate(huidigeDatum.getDate() + 7);
+
+            toonWedstrijden();
+
+        });
+
+    </script>
+
 {% endblock %}
-  
