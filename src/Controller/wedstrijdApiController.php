@@ -11,7 +11,7 @@ class wedstrijdApiController
     #[Route('/api/wedstrijden', methods: ['GET'])]
     public function getCollection(Connection $connection): JsonResponse
     {
-        $wedstrijden = $connection->fetchAllAssociative(" Select * FROM wedstrijden");
+        $wedstrijden = $connection->fetchAllAssociative(" SELECT * FROM wedstrijden");
 
         return new JsonResponse($wedstrijden);
     }
