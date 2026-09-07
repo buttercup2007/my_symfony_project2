@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
+use App\Repository\WedstrijdRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: WedstrijdRepository::class)]
 #[ORM\Table(name: 'wedstrijd')]
 class Wedstrijd
 {
