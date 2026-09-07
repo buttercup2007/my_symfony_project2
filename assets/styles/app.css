@@ -1,15 +1,106 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 30px;
+}
+
+
+h1 {
+    margin-bottom: 20px;
+}
+
+
+h2 {
+    margin-top: 0;
+}
+
+.weekend-navigatie {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+
+.weekend-navigatie button {
+    border: none;
+    background-color: #333;
+    color: white;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+.weekend-navigatie button:hover {
+    background-color: #555;
+}
+
+
+#weekend-datum {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.wedstrijd-overzicht {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
+    background-color: white;
 }
+
 
 th,
 td {
-    border: 1px solid black;
     padding: 10px;
+    border: 1px solid #ddd;
     text-align: left;
 }
 
+
 th {
+    background-color: #f2f2f2;
     font-weight: bold;
 }
+
+
+tbody tr:hover {
+    background-color: #f8f8f8;
+}
+
+.wedstrijd-aantal {
+    margin-bottom: 15px;
+}
+
+
+.wedstrijd-aantal strong {
+    font-size: 18px;
+}
+
+.ontbrekende-uitslagen {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+
+.ontbrekende-uitslagen table {
+    margin-top: 10px;
+}
+
+@media (max-width: 800px) {
+
+    .wedstrijd-overzicht {
+        grid-template-columns: 1fr;
+    }
+
+}
+

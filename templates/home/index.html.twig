@@ -1,13 +1,17 @@
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Startpagina{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/wedstrijden.css') }}">
+{% endblock %}
 
 {% block body %}
 
     <h1>Wedstrijden</h1>
 
-    <div>
+    <div class="weekend-navigatie">
         <button id="vorige-weekend" type="button">←</button>
 
         <span id="weekend-datum"></span>
@@ -15,52 +19,71 @@
         <button id="volgende-weekend" type="button">→</button>
     </div>
 
-    <p>
-        Aantal wedstrijden:
-        <strong id="aantal-wedstrijden">0</strong>
-    </p>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Datum</th>
-                <th>Tijd</th>
-                <th>Sport</th>
-                <th>Team 1</th>
-                <th>Team 2</th>
-            </tr>
-        </thead>
+    <div class="wedstrijd-overzicht">
 
-        <tbody id="wedstrijd-table-body">
-            {% for wedstrijd in wedstrijden %}
-                <tr>
-                    <td>{{ wedstrijd.datum }}</td>
+        <div class="wedstrijden">
 
-                    <td>
-                        {% if wedstrijd.tijd|length == 4 %}
-                            {{ wedstrijd.tijd|slice(0, 2) }}:{{ wedstrijd.tijd|slice(2, 2) }}
-                        {% else %}
-                            {{ wedstrijd.tijd }}
-                        {% endif %}
-                    </td>
+            <h2>Wedstrijden</h2>
 
-                    <td>{{ wedstrijd.sport }}</td>
-                    <td>{{ wedstrijd.team1 }}</td>
-                    <td>{{ wedstrijd.team2 }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <p class="wedstrijd-aantal">
+                Aantal wedstrijden:
+                <strong id="aantal-wedstrijden">0</strong>
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Tijd</th>
+                        <th>Sport</th>
+                        <th>Team 1</th>
+                        <th>Team 2</th>
+                    </tr>
+                </thead>
+
+                <tbody id="wedstrijd-table-body">
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="ontbrekende-uitslagen">
+
+            <h2>Ontbrekende uitslagen</h2>
+
+            <p class="wedstrijd-aantal">
+                Totaal ontbrekend:
+                <strong id="totaal-ontbrekend">0</strong>
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sport</th>
+                        <th>Aantal</th>
+                    </tr>
+                </thead>
+
+                <tbody id="ontbrekende-uitslagen-body">
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
 
 
     <script>
+
         let wedstrijden = [];
+        let ontbrekendeUitslagen = [];
 
         let huidigeDatum = new Date('2026-10-03');
 
 
-        function toonDatum() {
-
+        function toonDatum()
+        {
             const zaterdag = new Date(huidigeDatum);
             const zondag = new Date(huidigeDatum);
 
@@ -71,9 +94,10 @@
         }
 
 
-        function toonWedstrijden() {
-
-            const tabel = document.getElementById('wedstrijd-table-body');
+        function toonWedstrijden()
+        {
+            const tabel =
+                document.getElementById('wedstrijd-table-body');
 
             if (!tabel) {
                 return;
@@ -98,7 +122,6 @@
             });
 
 
-            // Aantal wedstrijden tonen
             document.getElementById('aantal-wedstrijden').textContent =
                 wedstrijdenWeekend.length;
 
@@ -125,7 +148,8 @@
 
                 rij.innerHTML = `
                     <td>
-                        ${new Date(wedstrijd.datum).toLocaleDateString('nl-NL')}
+                        ${new Date(wedstrijd.datum)
+                            .toLocaleDateString('nl-NL')}
                     </td>
 
                     <td>
@@ -146,7 +170,6 @@
                 `;
 
                 tabel.appendChild(rij);
-
             });
 
 
@@ -154,30 +177,92 @@
         }
 
 
-        // Wedstrijden ophalen uit de API
+        function toonOntbrekendeUitslagen()
+        {
+            const tabel =
+                document.getElementById(
+                    'ontbrekende-uitslagen-body'
+                );
+
+            if (!tabel) {
+                return;
+            }
+
+            tabel.innerHTML = '';
+
+            let totaal = 0;
+
+
+            ontbrekendeUitslagen.forEach(item => {
+
+                const aantal = Number(item.aantal);
+
+                totaal += aantal;
+
+
+                const rij = document.createElement('tr');
+
+                rij.innerHTML = `
+                    <td>${item.sport}</td>
+                    <td>${aantal}</td>
+                `;
+
+                tabel.appendChild(rij);
+            });
+
+
+            document.getElementById('totaal-ontbrekend').textContent =
+                totaal;
+
+
+            if (ontbrekendeUitslagen.length === 0) {
+
+                tabel.innerHTML = `
+                    <tr>
+                        <td colspan="2">
+                            Geen ontbrekende uitslagen.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+
         fetch('/api/wedstrijden')
 
-            .then(response => response.json())
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error('Fout bij API-aanvraag');
+                }
+
+                return response.json();
+
+            })
 
             .then(data => {
 
-                wedstrijden = data;
+                wedstrijden = data.wedstrijden;
+
+                ontbrekendeUitslagen =
+                    data.ontbrekendeUitslagen;
 
                 toonWedstrijden();
+
+                toonOntbrekendeUitslagen();
 
             })
 
             .catch(error => {
 
                 console.error(
-                    'Fout bij het laden van wedstrijden:',
+                    'Fout bij het laden van gegevens:',
                     error
                 );
 
             });
 
 
-        // Vorig weekend
         document
             .getElementById('vorige-weekend')
             .addEventListener('click', () => {
@@ -187,11 +272,9 @@
                 );
 
                 toonWedstrijden();
-
             });
 
 
-        // Volgend weekend
         document
             .getElementById('volgende-weekend')
             .addEventListener('click', () => {
@@ -201,7 +284,6 @@
                 );
 
                 toonWedstrijden();
-
             });
 
     </script>
