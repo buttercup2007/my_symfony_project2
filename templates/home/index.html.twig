@@ -4,13 +4,21 @@
 {% block title %}Startpagina{% endblock %}
 
 {% block body %}
+
     <h1>Wedstrijden</h1>
 
     <div>
         <button id="vorige-weekend" type="button">←</button>
+
         <span id="weekend-datum"></span>
+
         <button id="volgende-weekend" type="button">→</button>
     </div>
+
+    <p>
+        Aantal wedstrijden:
+        <strong id="aantal-wedstrijden">0</strong>
+    </p>
 
     <table>
         <thead>
@@ -27,6 +35,7 @@
             {% for wedstrijd in wedstrijden %}
                 <tr>
                     <td>{{ wedstrijd.datum }}</td>
+
                     <td>
                         {% if wedstrijd.tijd|length == 4 %}
                             {{ wedstrijd.tijd|slice(0, 2) }}:{{ wedstrijd.tijd|slice(2, 2) }}
@@ -34,6 +43,7 @@
                             {{ wedstrijd.tijd }}
                         {% endif %}
                     </td>
+
                     <td>{{ wedstrijd.sport }}</td>
                     <td>{{ wedstrijd.team1 }}</td>
                     <td>{{ wedstrijd.team2 }}</td>
@@ -42,11 +52,15 @@
         </tbody>
     </table>
 
+
     <script>
         let wedstrijden = [];
+
         let huidigeDatum = new Date('2026-10-03');
 
+
         function toonDatum() {
+
             const zaterdag = new Date(huidigeDatum);
             const zondag = new Date(huidigeDatum);
 
@@ -56,7 +70,9 @@
                 `${zaterdag.toLocaleDateString('nl-NL')} - ${zondag.toLocaleDateString('nl-NL')}`;
         }
 
+
         function toonWedstrijden() {
+
             const tabel = document.getElementById('wedstrijd-table-body');
 
             if (!tabel) {
@@ -65,61 +81,130 @@
 
             tabel.innerHTML = '';
 
+
             const zaterdag = new Date(huidigeDatum);
             const zondag = new Date(huidigeDatum);
+
             zondag.setDate(zondag.getDate() + 1);
 
+
             const wedstrijdenWeekend = wedstrijden.filter(wedstrijd => {
+
                 const datum = new Date(wedstrijd.datum);
+
                 return datum.toDateString() === zaterdag.toDateString()
                     || datum.toDateString() === zondag.toDateString();
+
             });
 
+
+            // Aantal wedstrijden tonen
+            document.getElementById('aantal-wedstrijden').textContent =
+                wedstrijdenWeekend.length;
+
+
             if (wedstrijdenWeekend.length === 0) {
+
                 tabel.innerHTML = `
                     <tr>
-                        <td colspan="5">Geen wedstrijden dit weekend.</td>
+                        <td colspan="5">
+                            Geen wedstrijden dit weekend.
+                        </td>
                     </tr>
                 `;
+
                 toonDatum();
+
                 return;
             }
 
+
             wedstrijdenWeekend.forEach(wedstrijd => {
+
                 const rij = document.createElement('tr');
 
                 rij.innerHTML = `
-                    <td>${new Date(wedstrijd.datum).toLocaleDateString('nl-NL')}</td>
-                    <td>${wedstrijd.tijd || ''}</td>
-                    <td>${wedstrijd.sport || ''}</td>
-                    <td>${wedstrijd.team1 || ''}</td>
-                    <td>${wedstrijd.team2 || ''}</td>
+                    <td>
+                        ${new Date(wedstrijd.datum).toLocaleDateString('nl-NL')}
+                    </td>
+
+                    <td>
+                        ${wedstrijd.tijd || ''}
+                    </td>
+
+                    <td>
+                        ${wedstrijd.sport || ''}
+                    </td>
+
+                    <td>
+                        ${wedstrijd.team1 || ''}
+                    </td>
+
+                    <td>
+                        ${wedstrijd.team2 || ''}
+                    </td>
                 `;
 
                 tabel.appendChild(rij);
+
             });
+
 
             toonDatum();
         }
 
+
+        // Wedstrijden ophalen uit de API
         fetch('/api/wedstrijden')
+
             .then(response => response.json())
+
             .then(data => {
+
                 wedstrijden = data;
+
                 toonWedstrijden();
+
             })
+
             .catch(error => {
-                console.error('Fout bij het laden van wedstrijden:', error);
+
+                console.error(
+                    'Fout bij het laden van wedstrijden:',
+                    error
+                );
+
             });
 
-        document.getElementById('vorige-weekend').addEventListener('click', () => {
-            huidigeDatum.setDate(huidigeDatum.getDate() - 7);
-            toonWedstrijden();
-        });
 
-        document.getElementById('volgende-weekend').addEventListener('click', () => {
-            huidigeDatum.setDate(huidigeDatum.getDate() + 7);
-            toonWedstrijden();
-        });
+        // Vorig weekend
+        document
+            .getElementById('vorige-weekend')
+            .addEventListener('click', () => {
+
+                huidigeDatum.setDate(
+                    huidigeDatum.getDate() - 7
+                );
+
+                toonWedstrijden();
+
+            });
+
+
+        // Volgend weekend
+        document
+            .getElementById('volgende-weekend')
+            .addEventListener('click', () => {
+
+                huidigeDatum.setDate(
+                    huidigeDatum.getDate() + 7
+                );
+
+                toonWedstrijden();
+
+            });
+
     </script>
+
 {% endblock %}
+
