@@ -16,7 +16,16 @@ class WedstrijdService
         return $this->connection->fetchAllAssociative("
             SELECT
                 w.datum,
-                w.tijd,
+                CASE
+                    WHEN w.tijd LIKE '%:%' THEN w.tijd
+                    WHEN LENGTH(TRIM(w.tijd)) = 4
+                        THEN CONCAT(
+                            LEFT(TRIM(w.tijd), 2),
+                            ':',
+                            RIGHT(TRIM(w.tijd), 2)
+                        )
+                    ELSE w.tijd
+                END AS tijd,
                 s.sportsoort AS sport,
                 w.club1nummer AS team1,
                 w.club2nummer AS team2
