@@ -1,33 +1,44 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Startpagina{% endblock %}
 
 {% block body %}
-
     <h1>Wedstrijden</h1>
 
     <div>
-        <button id="vorige-weekend">←</button>
-
+        <button id="vorige-weekend" type="button">←</button>
         <span id="weekend-datum"></span>
-
-        <button id="volgende-weekend">→</button>
+        <button id="volgende-weekend" type="button">→</button>
     </div>
 
     <table>
         <thead>
             <tr>
+                <th>Datum</th>
+                <th>Tijd</th>
                 <th>Sport</th>
                 <th>Team 1</th>
                 <th>Team 2</th>
-                <th>Datum</th>
             </tr>
         </thead>
 
         <tbody id="wedstrijd-table-body">
-            <tr>
-                <td colspan="4">Wedstrijden laden...</td>
-            </tr>
+            {% for wedstrijd in wedstrijden %}
+                <tr>
+                    <td>{{ wedstrijd.datum }}</td>
+                    <td>
+                        {% if wedstrijd.tijd|length == 4 %}
+                            {{ wedstrijd.tijd|slice(0, 2) }}:{{ wedstrijd.tijd|slice(2, 2) }}
+                        {% else %}
+                            {{ wedstrijd.tijd }}
+                        {% endif %}
+                    </td>
+                    <td>{{ wedstrijd.sport }}</td>
+                    <td>{{ wedstrijd.team1 }}</td>
+                    <td>{{ wedstrijd.team2 }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
@@ -35,91 +46,80 @@
         let wedstrijden = [];
         let huidigeDatum = new Date('2026-10-03');
 
-        fetch('/api/wedstrijden')
-            .then(response => response.json())
-            .then(data => {
-
-                wedstrijden = data;
-
-                toonWedstrijden();
-
-            })
-            .catch(error => {
-                console.error('Fout bij het laden van wedstrijden:', error);
-            });
-
-
-        function toonWedstrijden() {
-
-            const tabel = document.getElementById('wedstrijd-table-body');
-
-            tabel.innerHTML = '';
-
+        function toonDatum() {
             const zaterdag = new Date(huidigeDatum);
             const zondag = new Date(huidigeDatum);
 
             zondag.setDate(zondag.getDate() + 1);
 
+            document.getElementById('weekend-datum').textContent =
+                `${zaterdag.toLocaleDateString('nl-NL')} - ${zondag.toLocaleDateString('nl-NL')}`;
+        }
+
+        function toonWedstrijden() {
+            const tabel = document.getElementById('wedstrijd-table-body');
+
+            if (!tabel) {
+                return;
+            }
+
+            tabel.innerHTML = '';
+
+            const zaterdag = new Date(huidigeDatum);
+            const zondag = new Date(huidigeDatum);
+            zondag.setDate(zondag.getDate() + 1);
 
             const wedstrijdenWeekend = wedstrijden.filter(wedstrijd => {
-
                 const datum = new Date(wedstrijd.datum);
-
                 return datum.toDateString() === zaterdag.toDateString()
                     || datum.toDateString() === zondag.toDateString();
-
             });
 
+            if (wedstrijdenWeekend.length === 0) {
+                tabel.innerHTML = `
+                    <tr>
+                        <td colspan="5">Geen wedstrijden dit weekend.</td>
+                    </tr>
+                `;
+                toonDatum();
+                return;
+            }
 
             wedstrijdenWeekend.forEach(wedstrijd => {
-
                 const rij = document.createElement('tr');
 
                 rij.innerHTML = `
-                    <td>${wedstrijd.sport}</td>
-                    <td>${wedstrijd.team1}</td>
-                    <td>${wedstrijd.team2}</td>
                     <td>${new Date(wedstrijd.datum).toLocaleDateString('nl-NL')}</td>
+                    <td>${wedstrijd.tijd || ''}</td>
+                    <td>${wedstrijd.sport || ''}</td>
+                    <td>${wedstrijd.team1 || ''}</td>
+                    <td>${wedstrijd.team2 || ''}</td>
                 `;
 
                 tabel.appendChild(rij);
-
             });
 
-
-            document.getElementById('weekend-datum').textContent =
-                `${zaterdag.toLocaleDateString('nl-NL')} - ${zondag.toLocaleDateString('nl-NL')}`;
-
-
-            if (wedstrijdenWeekend.length === 0) {
-
-                tabel.innerHTML = `
-                    <tr>
-                        <td colspan="4">Geen wedstrijden dit weekend.</td>
-                    </tr>
-                `;
-
-            }
+            toonDatum();
         }
 
+        fetch('/api/wedstrijden')
+            .then(response => response.json())
+            .then(data => {
+                wedstrijden = data;
+                toonWedstrijden();
+            })
+            .catch(error => {
+                console.error('Fout bij het laden van wedstrijden:', error);
+            });
 
         document.getElementById('vorige-weekend').addEventListener('click', () => {
-
             huidigeDatum.setDate(huidigeDatum.getDate() - 7);
-
             toonWedstrijden();
-
         });
-
 
         document.getElementById('volgende-weekend').addEventListener('click', () => {
-
             huidigeDatum.setDate(huidigeDatum.getDate() + 7);
-
             toonWedstrijden();
-
         });
-
     </script>
-
 {% endblock %}
