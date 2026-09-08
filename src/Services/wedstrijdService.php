@@ -15,4 +15,9 @@ class WedstrijdService
     {
         return $this->wedstrijdRepository->getWedstrijden();
     }
+
+    public function getOntbrekendeUitslagen(): array
+    {
+        return $this->wedstrijdRepository->getOntbrekendeUitslagen();
+    }
 }

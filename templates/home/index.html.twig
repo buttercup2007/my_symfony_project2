@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Startpagina{% endblock %}
+{% block title %}Wedstrijden{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -18,7 +18,6 @@
 
         <button id="volgende-weekend" type="button">→</button>
     </div>
-
 
     <div class="wedstrijd-overzicht">
 
@@ -73,13 +72,13 @@
 
     </div>
 
-
     <script>
 
         let wedstrijden = [];
         let ontbrekendeUitslagen = [];
 
-        let huidigeDatum = new Date('2026-10-03');
+        // Tijdelijk een datum waarvan we weten dat er wedstrijden zijn
+        let huidigeDatum = new Date('2026-06-13');
 
 
         function toonDatum()
@@ -104,7 +103,6 @@
             }
 
             tabel.innerHTML = '';
-
 
             const zaterdag = new Date(huidigeDatum);
             const zondag = new Date(huidigeDatum);
@@ -157,15 +155,15 @@
                     </td>
 
                     <td>
-                        ${wedstrijd.sport || ''}
+                        ${wedstrijd.sportsoort || ''}
                     </td>
 
                     <td>
-                        ${wedstrijd.team1 || ''}
+                        -
                     </td>
 
                     <td>
-                        ${wedstrijd.team2 || ''}
+                        -
                     </td>
                 `;
 
@@ -242,10 +240,10 @@
 
             .then(data => {
 
-                wedstrijden = data.wedstrijden;
+                wedstrijden = data.wedstrijden || [];
 
                 ontbrekendeUitslagen =
-                    data.ontbrekendeUitslagen;
+                    data.ontbrekendeUitslagen || [];
 
                 toonWedstrijden();
 

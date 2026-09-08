@@ -10,6 +10,7 @@ class WedstrijdRepository
         private Connection $connection
     ) {
     }
+
     public function getWedstrijden(): array
     {
         return $this->connection->fetchAllAssociative('
@@ -31,5 +32,10 @@ class WedstrijdRepository
                 ON LEFT(TRIM(w.compnummer), 3) = s.code
             ORDER BY w.datum
         ');
+    }
+
+    public function getOntbrekendeUitslagen(): array
+    {
+        return [];
     }
 }

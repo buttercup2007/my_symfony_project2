@@ -14,9 +14,7 @@ class WedstrijdController extends AbstractController
     {
         $wedstrijden = $wedstrijdService->getWedstrijden();
 
-        dd($wedstrijden);
-
-        return $this->render('wedstrijd/index.html.twig', [
+        return $this->render('home/index.html.twig', [
             'wedstrijden' => $wedstrijden,
         ]);
     }
