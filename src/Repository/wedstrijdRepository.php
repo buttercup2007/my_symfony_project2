@@ -10,7 +10,6 @@ class WedstrijdRepository
         private Connection $connection
     ) {
     }
-
     public function getWedstrijden(): array
     {
         return $this->connection->fetchAllAssociative('
