@@ -12,12 +12,19 @@
     <h1>Wedstrijden</h1>
 
     <div class="weekend-navigatie">
-        <button id="vorige-weekend" type="button">←</button>
+
+        <button id="vorige-weekend" type="button">
+            ←
+        </button>
 
         <span id="weekend-datum"></span>
 
-        <button id="volgende-weekend" type="button">→</button>
+        <button id="volgende-weekend" type="button">
+            →
+        </button>
+
     </div>
+
 
     <div class="wedstrijd-overzicht">
 
@@ -31,6 +38,7 @@
             </p>
 
             <table>
+
                 <thead>
                     <tr>
                         <th>Datum</th>
@@ -43,37 +51,11 @@
 
                 <tbody id="wedstrijd-table-body">
                 </tbody>
+
             </table>
 
-            <h2>Stand</h2>
-
-        <table>
-        <thead>
-        <tr>
-            <th>Team</th>
-            <th>Wedstrijden</th>
-            <th>Gewonnen</th>
-            <th>Gelijk</th>
-            <th>Verloren</th>
-            <th>Punten</th>
-        </tr>
-       </thead>
-
-     <tbody>
-        {% for team in teamPunten %}
-            <tr>
-                <td>{{ team.team }}</td>
-                <td>{{ team.wedstrijden }}</td>
-                <td>{{ team.gewonnen }}</td>
-                <td>{{ team.gelijk }}</td>
-                <td>{{ team.verloren }}</td>
-                <td>{{ team.punten }}</td>
-            </tr>
-        {% endfor %}
-     </tbody>
-     </table>
-
         </div>
+
 
         <div class="ontbrekende-uitslagen">
 
@@ -85,6 +67,7 @@
             </p>
 
             <table>
+
                 <thead>
                     <tr>
                         <th>Sport</th>
@@ -94,114 +77,163 @@
 
                 <tbody id="ontbrekende-uitslagen-body">
                 </tbody>
+
             </table>
 
         </div>
 
     </div>
 
+
     <script>
 
         let wedstrijden = [];
         let ontbrekendeUitslagen = [];
 
-        // Tijdelijk een datum waarvan we weten dat er wedstrijden zijn
         let huidigeDatum = new Date('2026-06-13');
 
+
+        // ==========================================
+        // WEEKEND DATUM
+        // ==========================================
 
         function toonDatum()
         {
             const zaterdag = new Date(huidigeDatum);
+
             const zondag = new Date(huidigeDatum);
 
-            zondag.setDate(zondag.getDate() + 1);
+            zondag.setDate(
+                zondag.getDate() + 1
+            );
+
+
+            const zaterdagTekst =
+                zaterdag.toLocaleDateString('nl-NL');
+
+            const zondagTekst =
+                zondag.toLocaleDateString('nl-NL');
+
 
             document.getElementById('weekend-datum').textContent =
-                `${zaterdag.toLocaleDateString('nl-NL')} - ${zondag.toLocaleDateString('nl-NL')}`;
+                `${zaterdagTekst} - ${zondagTekst}`;
         }
 
+
+        // ==========================================
+        // DATUM OMZETTEN
+        // ==========================================
+
+        function datumNaarString(datum)
+        {
+            return datum.toISOString().split('T')[0];
+        }
+
+
+        // ==========================================
+        // WEDSTRIJDEN TONEN
+        // ==========================================
 
         function toonWedstrijden()
         {
             const tabel =
-                document.getElementById('wedstrijd-table-body');
+                document.getElementById(
+                    'wedstrijd-table-body'
+                );
 
-            if (!tabel) {
+            const aantal =
+                document.getElementById(
+                    'aantal-wedstrijden'
+                );
+
+
+            if (!tabel || !aantal) {
                 return;
             }
 
+
             tabel.innerHTML = '';
 
-            const zaterdag = new Date(huidigeDatum);
-            const zondag = new Date(huidigeDatum);
 
-            zondag.setDate(zondag.getDate() + 1);
-
-
-            const wedstrijdenWeekend = wedstrijden.filter(wedstrijd => {
-
-                const datum = new Date(wedstrijd.datum);
-
-                return datum.toDateString() === zaterdag.toDateString()
-                    || datum.toDateString() === zondag.toDateString();
-
-            });
+            const zaterdag =
+                new Date(huidigeDatum);
 
 
-            document.getElementById('aantal-wedstrijden').textContent =
-                wedstrijdenWeekend.length;
+            const zondag =
+                new Date(huidigeDatum);
+
+            zondag.setDate(
+                zondag.getDate() + 1
+            );
 
 
-            if (wedstrijdenWeekend.length === 0) {
+            const zaterdagString =
+                datumNaarString(zaterdag);
+
+            const zondagString =
+                datumNaarString(zondag);
+
+
+            const weekendWedstrijden =
+                wedstrijden.filter(wedstrijd => {
+
+                    return (
+                        wedstrijd.datum >= zaterdagString &&
+                        wedstrijd.datum <= zondagString
+                    );
+
+                });
+
+
+            aantal.textContent =
+                weekendWedstrijden.length;
+
+
+            if (weekendWedstrijden.length === 0) {
 
                 tabel.innerHTML = `
                     <tr>
                         <td colspan="5">
-                            Geen wedstrijden dit weekend.
+                            Geen wedstrijden gevonden voor dit weekend.
                         </td>
                     </tr>
                 `;
-
-                toonDatum();
 
                 return;
             }
 
 
-            wedstrijdenWeekend.forEach(wedstrijd => {
+            weekendWedstrijden.forEach(wedstrijd => {
 
-                const rij = document.createElement('tr');
+                const rij =
+                    document.createElement('tr');
+
+
+                const datum =
+                    wedstrijd.datum
+                        ? new Date(wedstrijd.datum)
+                            .toLocaleDateString('nl-NL')
+                        : '-';
+
 
                 rij.innerHTML = `
-                 <td>
-                     ${new Date(wedstrijd.datum)
-                     .toLocaleDateString('nl-NL')}
-                 </td>
-
-                 <td>
-                     ${wedstrijd.tijd || ''}
-                 </td>
-
-                 <td>
-                     ${wedstrijd.sportsoort || ''}
-                 </td>
-
-                 <td>
-                     ${wedstrijd.team1 || '-'}
-                 </td>
-
-                 <td>
-                     ${wedstrijd.team2 || '-'}
-                 </td>
+                    <td>${datum}</td>
+                    <td>${wedstrijd.tijd || '-'}</td>
+                    <td>${wedstrijd.sport || '-'}</td>
+                    <td>${wedstrijd.team1 || '-'}</td>
+                    <td>${wedstrijd.team2 || '-'}</td>
                 `;
 
+
                 tabel.appendChild(rij);
+
             });
-
-
-            toonDatum();
         }
 
+
+        // ==========================================
+        // ONTBREKENDE UITSLAGEN
+        // ==========================================
 
         function toonOntbrekendeUitslagen()
         {
@@ -210,38 +242,26 @@
                     'ontbrekende-uitslagen-body'
                 );
 
-            if (!tabel) {
+            const totaal =
+                document.getElementById(
+                    'totaal-ontbrekend'
+                );
+
+
+            if (!tabel || !totaal) {
                 return;
             }
 
+
             tabel.innerHTML = '';
 
-            let totaal = 0;
 
-
-            ontbrekendeUitslagen.forEach(item => {
-
-                const aantal = Number(item.aantal);
-
-                totaal += aantal;
-
-
-                const rij = document.createElement('tr');
-
-                rij.innerHTML = `
-                    <td>${item.sport}</td>
-                    <td>${aantal}</td>
-                `;
-
-                tabel.appendChild(rij);
-            });
-
-
-            document.getElementById('totaal-ontbrekend').textContent =
-                totaal;
+            let totaalAantal = 0;
 
 
             if (ontbrekendeUitslagen.length === 0) {
+
+                totaal.textContent = '0';
 
                 tabel.innerHTML = `
                     <tr>
@@ -250,16 +270,54 @@
                         </td>
                     </tr>
                 `;
+
+                return;
             }
+
+
+            ontbrekendeUitslagen.forEach(item => {
+
+                const aantal =
+                    Number(item.aantal) || 0;
+
+
+                totaalAantal += aantal;
+
+
+                const rij =
+                    document.createElement('tr');
+
+
+                rij.innerHTML = `
+                    <td>${item.sport || '-'}</td>
+                    <td>${aantal}</td>
+                `;
+
+
+                tabel.appendChild(rij);
+
+            });
+
+
+            totaal.textContent =
+                totaalAantal;
         }
 
+
+        // ==========================================
+        // API
+        // ==========================================
 
         fetch('/api/wedstrijden')
 
             .then(response => {
 
                 if (!response.ok) {
-                    throw new Error('Fout bij API-aanvraag');
+
+                    throw new Error(
+                        'Fout bij API-aanvraag'
+                    );
+
                 }
 
                 return response.json();
@@ -268,10 +326,21 @@
 
             .then(data => {
 
-                wedstrijden = data.wedstrijden || [];
+                console.log(
+                    'API gegevens:',
+                    data
+                );
+
+
+                wedstrijden =
+                    data.wedstrijden || [];
+
 
                 ontbrekendeUitslagen =
                     data.ontbrekendeUitslagen || [];
+
+
+                toonDatum();
 
                 toonWedstrijden();
 
@@ -289,6 +358,10 @@
             });
 
 
+        // ==========================================
+        // VORIG WEEKEND
+        // ==========================================
+
         document
             .getElementById('vorige-weekend')
             .addEventListener('click', () => {
@@ -297,9 +370,17 @@
                     huidigeDatum.getDate() - 7
                 );
 
+
+                toonDatum();
+
                 toonWedstrijden();
+
             });
 
+
+        // ==========================================
+        // VOLGEND WEEKEND
+        // ==========================================
 
         document
             .getElementById('volgende-weekend')
@@ -309,10 +390,13 @@
                     huidigeDatum.getDate() + 7
                 );
 
+
+                toonDatum();
+
                 toonWedstrijden();
+
             });
 
     </script>
 
 {% endblock %}
-
