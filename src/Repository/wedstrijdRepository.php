@@ -29,13 +29,74 @@ class WedstrijdRepository
                 s.sportsoort
             FROM wedstrijd w
             JOIN sporten s
-                ON LEFT(TRIM(w.compnummer), 3) = s.code
+                ON LEFT(w.compnummer, 3) = s.code
             ORDER BY w.datum
         ');
     }
 
-    public function getOntbrekendeUitslagen(): array
+    public function getTeamPunten(): array
     {
-        return [];
+        return $this->connection->fetchAllAssociative('
+            SELECT
+                team,
+                COUNT(*) AS wedstrijden,
+                SUM(winst) AS gewonnen,
+                SUM(gelijkspel) AS gelijk,
+                SUM(verlies) AS verloren,
+                SUM(punten) AS punten
+            FROM (
+                SELECT
+                    club1nummer AS team,
+                    CASE
+                        WHEN puntenteam1 > puntenteam2 THEN 1
+                        ELSE 0
+                    END AS winst,
+                    CASE
+                        WHEN puntenteam1 = puntenteam2 THEN 1
+                        ELSE 0
+                    END AS gelijkspel,
+                    CASE
+                        WHEN puntenteam1 < puntenteam2 THEN 1
+                        ELSE 0
+                    END AS verlies,
+                    CASE
+                        WHEN puntenteam1 > puntenteam2 THEN 3
+                        WHEN puntenteam1 = puntenteam2 THEN 1
+                        ELSE 0
+                    END AS punten
+                FROM wedstrijd
+                WHERE meetellen = \'J\'
+                  AND puntenteam1 IS NOT NULL
+                  AND puntenteam2 IS NOT NULL
+
+                UNION ALL
+
+                SELECT
+                    club2nummer AS team,
+                    CASE
+                        WHEN puntenteam2 > puntenteam1 THEN 1
+                        ELSE 0
+                    END AS winst,
+                    CASE
+                        WHEN puntenteam2 = puntenteam1 THEN 1
+                        ELSE 0
+                    END AS gelijkspel,
+                    CASE
+                        WHEN puntenteam2 < puntenteam1 THEN 1
+                        ELSE 0
+                    END AS verlies,
+                    CASE
+                        WHEN puntenteam2 > puntenteam1 THEN 3
+                        WHEN puntenteam2 = puntenteam1 THEN 1
+                        ELSE 0
+                    END AS punten
+                FROM wedstrijd
+                WHERE meetellen = \'J\'
+                  AND puntenteam1 IS NOT NULL
+                  AND puntenteam2 IS NOT NULL
+            ) AS resultaten
+            GROUP BY team
+            ORDER BY punten DESC
+        ');
     }
 }

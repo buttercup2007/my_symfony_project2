@@ -45,6 +45,34 @@
                 </tbody>
             </table>
 
+            <h2>Stand</h2>
+
+        <table>
+        <thead>
+        <tr>
+            <th>Team</th>
+            <th>Wedstrijden</th>
+            <th>Gewonnen</th>
+            <th>Gelijk</th>
+            <th>Verloren</th>
+            <th>Punten</th>
+        </tr>
+       </thead>
+
+     <tbody>
+        {% for team in teamPunten %}
+            <tr>
+                <td>{{ team.team }}</td>
+                <td>{{ team.wedstrijden }}</td>
+                <td>{{ team.gewonnen }}</td>
+                <td>{{ team.gelijk }}</td>
+                <td>{{ team.verloren }}</td>
+                <td>{{ team.punten }}</td>
+            </tr>
+        {% endfor %}
+     </tbody>
+     </table>
+
         </div>
 
         <div class="ontbrekende-uitslagen">
@@ -145,26 +173,26 @@
                 const rij = document.createElement('tr');
 
                 rij.innerHTML = `
-                    <td>
-                        ${new Date(wedstrijd.datum)
-                            .toLocaleDateString('nl-NL')}
-                    </td>
+                 <td>
+                     ${new Date(wedstrijd.datum)
+                     .toLocaleDateString('nl-NL')}
+                 </td>
 
-                    <td>
-                        ${wedstrijd.tijd || ''}
-                    </td>
+                 <td>
+                     ${wedstrijd.tijd || ''}
+                 </td>
 
-                    <td>
-                        ${wedstrijd.sportsoort || ''}
-                    </td>
+                 <td>
+                     ${wedstrijd.sportsoort || ''}
+                 </td>
 
-                    <td>
-                        -
-                    </td>
+                 <td>
+                     ${wedstrijd.team1 || '-'}
+                 </td>
 
-                    <td>
-                        -
-                    </td>
+                 <td>
+                     ${wedstrijd.team2 || '-'}
+                 </td>
                 `;
 
                 tabel.appendChild(rij);

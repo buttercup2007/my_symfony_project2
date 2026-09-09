@@ -10,12 +10,14 @@ use Symfony\Component\Routing\Attribute\Route;
 class WedstrijdController extends AbstractController
 {
     #[Route('/wedstrijden', name: 'wedstrijden')]
-    public function index(WedstrijdService $wedstrijdService): Response
-    {
-        $wedstrijden = $wedstrijdService->getWedstrijden();
+    public function index(): Response
+ {
+    $wedstrijden = $this->WedstrijdService->getWedstrijden();
+    $teamPunten = $this->WedstrijdService->getTeamPunten();
 
-        return $this->render('home/index.html.twig', [
-            'wedstrijden' => $wedstrijden,
-        ]);
-    }
+    return $this->render('wedstrijd/index.html.twig', [
+        'wedstrijden' => $wedstrijden,
+        'teamPunten' => $teamPunten,
+    ]);
+}
 }

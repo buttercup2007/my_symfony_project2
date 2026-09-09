@@ -9,16 +9,24 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'home')]
-    #[Route('/index', name: 'home_index')]
-    public function index(WedstrijdService $wedstrijdService): Response
+    public function __construct(
+        private WedstrijdService $wedstrijdService
+    ) {
+    }
+
+    #[Route('/index', name: 'home')]
+    public function index(): Response
     {
-        $wedstrijden = $wedstrijdService->getWedstrijden();
+        // Get the matches from the database
+        $wedstrijden = $this->wedstrijdService->getWedstrijden();
 
-        
+        // Calculate the points for each team
+        $teamPunten = $this->wedstrijdService->getTeamPunten();
 
+        // Send both results to the Twig page
         return $this->render('home/index.html.twig', [
-            'wedstrijden' => $wedstrijden
+            'wedstrijden' => $wedstrijden,
+            'teamPunten' => $teamPunten,
         ]);
     }
 }

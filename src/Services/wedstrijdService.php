@@ -20,4 +20,9 @@ class WedstrijdService
     {
         return $this->wedstrijdRepository->getOntbrekendeUitslagen();
     }
+
+    public function getTeamPunten(): array
+    {
+    return $this->wedstrijdRepository->getTeamPunten();
+    }
 }
