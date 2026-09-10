@@ -13,9 +13,18 @@ class wedstrijdApiController extends AbstractController
     public function wedstrijden(
         WedstrijdService $wedstrijdService
     ): JsonResponse {
+
+        $startDatum = '2026-06-13';
+        $eindDatum = '2026-06-14';
+
         return $this->json([
             'wedstrijden' => $wedstrijdService->getWedstrijden(),
-            'ontbrekendeUitslagen' => $wedstrijdService->getOntbrekendeUitslagen(),
+
+            'ontbrekendeUitslagen' =>
+                $wedstrijdService->getOntbrekendeUitslagen(
+                    $startDatum,
+                    $eindDatum
+                ),
         ]);
     }
 }

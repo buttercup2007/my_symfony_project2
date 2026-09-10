@@ -92,6 +92,18 @@ tbody tr:hover {
 }
 
 
+.ontbrekende-uitslagen-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+.ontbrekende-uitslagen-link:hover h2,
+.ontbrekende-uitslagen-link:focus-visible h2 {
+    text-decoration: underline;
+}
+
+
 .ontbrekende-uitslagen table {
     margin-top: 10px;
 }

@@ -20,4 +20,19 @@ class WedstrijdService
     {
         return $this->wedstrijdRepository->getOntbrekendeUitslagen($startDatum, $eindDatum);
     }
+
+    public function getWedstrijdTotalen(): array
+    {
+        return $this->wedstrijdRepository->getWedstrijdTotalen();
+    }
+
+    public function getAantalOntbrekendeUitslagen(
+        string $startDatum,
+        string $eindDatum
+    ): array {
+        return $this->wedstrijdRepository->getAantalOntbrekendeUitslagen(
+            $startDatum,
+            $eindDatum
+        );
+    }
 }

@@ -79,4 +79,41 @@ class WedstrijdRepository
             
         ', [$startDatum, $eindDatum]);
     }
+
+    public function getAantalOntbrekendeUitslagen(
+    string $startDatum,
+    string $eindDatum
+): array {
+    return $this->connection->fetchAllAssociative('
+        SELECT
+            s.sportnaam AS sport,
+            COUNT(*) AS aantal
+        FROM wedstrijd w
+        JOIN sporten s
+            ON LEFT(w.compnummer, 3) = s.code
+        WHERE w.datum BETWEEN ? AND ?
+          AND (
+              w.puntenteam1 IS NULL
+              OR w.puntenteam2 IS NULL
+          )
+        GROUP BY s.sportnaam
+        ORDER BY s.sportnaam
+    ', [
+        $startDatum,
+        $eindDatum
+    ]);
+}
+
+    public function getWedstrijdTotalen(): array
+    {
+        return $this->connection->fetchAllAssociative('
+            SELECT
+                s.sportnaam AS sport,
+                COUNT(*) AS totaal
+            FROM wedstrijd w
+            JOIN sporten s ON LEFT(w.compnummer, 3) = s.code
+            GROUP BY s.sportnaam
+            ORDER BY s.sportnaam
+        ');
+    }
 }
