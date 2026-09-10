@@ -8,6 +8,18 @@
 
 <h1>Ontbrekende uitslagen</h1>
 
+<form method="GET" action="{{ path('app_wedstrijd_ontbrekende_uitslagen') }}">
+
+    <label for="start">van:</label>
+    <input type="date" id="start" name="start" value="{{ startDatum }}">
+
+    <label for="eind">tot:</label>
+    <input type="date" id="eind" name="eind" value="{{ eindDatum }}">
+
+    <button type="submit">Zoeken</button>
+
+</form>
+
 <table>
     <thead>
         <tr>
