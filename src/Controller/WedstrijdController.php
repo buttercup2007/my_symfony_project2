@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Services\WedstrijdService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class WedstrijdController
+
+class WedstrijdController extends AbstractController
 {
     #[Route('/ontbrekende-uitslagen')]
     public function ontbrekendeUitslagen(
