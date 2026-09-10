@@ -49,10 +49,10 @@ class WedstrijdRepository
     {
         return $this->connection->fetchAllAssociative('
             SELECT
-                s.sportsoort AS sport,
+                s.sportnaam AS sport,
                 w.datum,
-
-                CASE 
+    
+                CASE
                     WHEN w.tijd LIKE \'%:%\' THEN w.tijd
                     WHEN LENGTH(TRIM(w.tijd)) = 4
                         THEN CONCAT(
@@ -62,20 +62,19 @@ class WedstrijdRepository
                         )
                     ELSE w.tijd
                 END AS tijd,
-
+    
                 w.club1nummer AS team1,
-                w.club2nummer AS team2,
-
+                w.club2nummer AS team2
+    
             FROM wedstrijd w
-
+    
             JOIN sporten s
                 ON LEFT(w.compnummer, 3) = s.code
-
+    
             WHERE w.puntenteam1 IS NULL
-                OR w.puntenteam2 IS NULL
-
-            GROUP BY w.datum, w.tijd
-            
+               OR w.puntenteam2 IS NULL
+    
+            ORDER BY w.datum, w.tijd
         ');
     }
 }

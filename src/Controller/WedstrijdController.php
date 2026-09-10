@@ -3,21 +3,19 @@
 namespace App\Controller;
 
 use App\Services\WedstrijdService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class WedstrijdController extends AbstractController
+class WedstrijdController
 {
-    #[Route('/wedstrijden', name: 'wedstrijden')]
-    public function index(): Response
- {
-    $wedstrijden = $this->WedstrijdService->getWedstrijden();
-    $teamPunten = $this->WedstrijdService->getTeamPunten();
-
-    return $this->render('wedstrijd/index.html.twig', [
-        'wedstrijden' => $wedstrijden,
-        'teamPunten' => $teamPunten,
-    ]);
-}
+    #[Route('/ontbrekende-uitslagen')]
+    public function ontbrekendeUitslagen(
+        WedstrijdService $wedstrijdService
+    ): Response {
+    $wedstrijden = $wedstrijdService->getOntbrekendeUitslagen();
+    
+    return $this->render('wedstrijd/ontbrekende.html.twig', [
+            'wedstrijden' => $wedstrijden,
+        ]);
+    }
 }
