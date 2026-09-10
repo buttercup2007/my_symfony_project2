@@ -13,14 +13,33 @@ class HomeController extends AbstractController
     public function index(
         WedstrijdService $wedstrijdService
     ): Response {
-        $wedstrijden = $wedstrijdService->getWedstrijden();
-
-        $wedstrijdTotalen = $wedstrijdService->getWedstrijdTotalen();
-
+    
+        $vandaag = new \DateTime();
+    
+        // Find the most recent Friday
+        $dagVanDeWeek = (int) $vandaag->format('N');
+    
+        if ($dagVanDeWeek >= 5) {
+            $dagenSindsVrijdag = $dagVanDeWeek - 5;
+        } else {
+            $dagenSindsVrijdag = $dagVanDeWeek + 2;
+        }
+    
+        $vrijdag = (clone $vandaag)->modify("-{$dagenSindsVrijdag} days");
+    
+        // The weekend runs from Friday until Sunday
+        $startDatum = (clone $vrijdag);
+        $eindDatum = (clone $vrijdag)->modify('+2 days');
+    
+        $overzicht = $wedstrijdService->getWeekendOverzicht(
+            $startDatum->format('Y-m-d'),
+            $eindDatum->format('Y-m-d')
+        );
+    
         return $this->render('home/index.html.twig', [
-            'wedstrijden' => $wedstrijden,
-            'wedstrijdTotalen' => $wedstrijdTotalen,
+            'overzicht' => $overzicht,
+            'startDatum' => $startDatum,
+            'eindDatum' => $eindDatum,
         ]);
     }
 }
-

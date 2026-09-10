@@ -104,16 +104,40 @@ class WedstrijdRepository
     ]);
 }
 
-    public function getWedstrijdTotalen(): array
-    {
-        return $this->connection->fetchAllAssociative('
-            SELECT
-                s.sportnaam AS sport,
-                COUNT(*) AS totaal
-            FROM wedstrijd w
-            JOIN sporten s ON LEFT(w.compnummer, 3) = s.code
-            GROUP BY s.sportnaam
-            ORDER BY s.sportnaam
-        ');
-    }
+public function getWeekendOverzicht(
+    string $startDatum,
+    string $eindDatum
+): array {
+    return $this->connection->fetchAllAssociative('
+        SELECT
+            s.sportnaam AS sport,
+
+            COUNT(*) AS aantal_wedstrijden,
+
+            SUM(
+                CASE
+                    WHEN w.puntenteam1 IS NULL
+                      OR w.puntenteam2 IS NULL
+                      OR TRIM(w.puntenteam1) = \'\'
+                      OR TRIM(w.puntenteam2) = \'\'
+                    THEN 1
+                    ELSE 0
+                END
+            ) AS aantal_ontbrekend
+
+        FROM wedstrijd w
+
+        JOIN sporten s
+            ON LEFT(w.compnummer, 3) = s.code
+
+        WHERE w.datum BETWEEN ? AND ?
+
+        GROUP BY s.sportnaam
+
+        ORDER BY s.sportnaam
+    ', [
+        $startDatum,
+        $eindDatum
+    ]);
+}
 }

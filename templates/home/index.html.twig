@@ -2,355 +2,70 @@
 
 {% block title %}Wedstrijden{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/wedstrijden.css') }}">
-{% endblock %}
-
 {% block body %}
+
+<div class="container">
 
     <h1>Wedstrijden</h1>
 
-    <div class="weekend-navigatie">
+    <p>
+        Weekend:
+        {{ startDatum|date('d-m-Y') }}
+        t/m
+        {{ eindDatum|date('d-m-Y') }}
+    </p>
 
-        <button id="vorige-weekend" type="button">
-            ←
-        </button>
-
-        <span id="weekend-datum"></span>
-
-        <button id="volgende-weekend" type="button">
-            →
-        </button>
-
-    </div>
-
-
-    <div class="wedstrijd-overzicht">
-
-        <div class="wedstrijden">
-
-            <h2>Wedstrijden</h2>
-
-            <p class="wedstrijd-aantal">
-                Aantal wedstrijden:
-                <strong id="aantal-wedstrijden">0</strong>
-            </p>
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Datum</th>
-                        <th>Tijd</th>
-                        <th>Sport</th>
-                        <th>Team 1</th>
-                        <th>Team 2</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-
-                <tbody id="wedstrijd-table-body">
-                </tbody>
-
-            </table>
-
+    <div class="summary">
+        <div class="card">
+            <h2>{{ overzicht|length }}</h2>
+            <p>Sporten</p>
         </div>
 
-
-        <div class="ontbrekende-uitslagen">
-
-            <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen') }}" class="ontbrekende-uitslagen-link">
-                <h2>Ontbrekende uitslagen</h2>
-
-                <p class="wedstrijd-aantal">
-                    Totaal ontbrekend:
-                    <strong id="totaal-ontbrekend">0</strong>
-                </p>
-            </a>
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Sport</th>
-                        <th>Aantal</th>
-                    </tr>
-                </thead>
-
-                <tbody id="ontbrekende-uitslagen-body">
-                </tbody>
-
-            </table>
-
+        <div class="card">
+            <h2>
+                {% set totaal = 0 %}
+                {% for sport in overzicht %}
+                    {% set totaal = totaal + sport.aantal_wedstrijden %}
+                {% endfor %}
+                {{ totaal }}
+            </h2>
+            <p>Wedstrijden</p>
         </div>
 
+        <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen') }}" class="card">
+            <h2>
+                {% set ontbrekend = 0 %}
+                {% for sport in overzicht %}
+                    {% set ontbrekend = ontbrekend + sport.aantal_ontbrekend %}
+                {% endfor %}
+                {{ ontbrekend }}
+            </h2>
+            <p>Ontbrekende uitslagen</p>
+        </a>
     </div>
 
-
-    <script>
-
-        let wedstrijden = [];
-        let ontbrekendeUitslagen = [];
-
-        let huidigeDatum = new Date('2026-06-13');
-
-
-        function toonDatum()
-        {
-            const zaterdag = new Date(huidigeDatum);
-            const zondag = new Date(huidigeDatum);
-
-            zondag.setDate(
-                zondag.getDate() + 1
-            );
-
-            const zaterdagTekst =
-                zaterdag.toLocaleDateString('nl-NL');
-
-            const zondagTekst =
-                zondag.toLocaleDateString('nl-NL');
-
-            document.getElementById('weekend-datum').textContent =
-                `${zaterdagTekst} - ${zondagTekst}`;
-        }
-
-
-        function datumNaarString(datum)
-        {
-            return datum.toISOString().split('T')[0];
-        }
-
-
-        function toonWedstrijden()
-        {
-            const tabel =
-                document.getElementById(
-                    'wedstrijd-table-body'
-                );
-
-            const aantal =
-                document.getElementById(
-                    'aantal-wedstrijden'
-                );
-
-            if (!tabel || !aantal) {
-                return;
-            }
-
-            tabel.innerHTML = '';
-
-            const zaterdag =
-                new Date(huidigeDatum);
-
-            const zondag =
-                new Date(huidigeDatum);
-
-            zondag.setDate(
-                zondag.getDate() + 1
-            );
-
-            const zaterdagString =
-                datumNaarString(zaterdag);
-
-            const zondagString =
-                datumNaarString(zondag);
-
-            const weekendWedstrijden =
-                wedstrijden.filter(wedstrijd => {
-
-                    return (
-                        wedstrijd.datum >= zaterdagString &&
-                        wedstrijd.datum <= zondagString
-                    );
-
-                });
-
-            aantal.textContent =
-                weekendWedstrijden.length;
-
-            if (weekendWedstrijden.length === 0) {
-
-                tabel.innerHTML = `
-                    <tr>
-                        <td colspan="6">
-                            Geen wedstrijden gevonden voor dit weekend.
-                        </td>
-                    </tr>
-                `;
-
-                return;
-            }
-
-            weekendWedstrijden.forEach(wedstrijd => {
-
-                const rij =
-                    document.createElement('tr');
-
-                const datum =
-                    wedstrijd.datum
-                        ? new Date(wedstrijd.datum)
-                            .toLocaleDateString('nl-NL')
-                        : '-';
-
-                const score1 =
-                    wedstrijd.score1 !== null &&
-                    wedstrijd.score1 !== undefined
-                        ? wedstrijd.score1
-                        : '-';
-
-                const score2 =
-                    wedstrijd.score2 !== null &&
-                    wedstrijd.score2 !== undefined
-                        ? wedstrijd.score2
-                        : '-';
-
-                rij.innerHTML = `
-                    <td>${datum}</td>
-                    <td>${wedstrijd.tijd || '-'}</td>
-                    <td>${wedstrijd.sport || '-'}</td>
-                    <td>${wedstrijd.team1 || '-'}</td>
-                    <td>${wedstrijd.team2 || '-'}</td>
-                    <td>${score1} - ${score2}</td>
-                `;
-
-                tabel.appendChild(rij);
-
-            });
-        }
-
-
-        function toonOntbrekendeUitslagen()
-        {
-            const tabel =
-                document.getElementById(
-                    'ontbrekende-uitslagen-body'
-                );
-
-            const totaal =
-                document.getElementById(
-                    'totaal-ontbrekend'
-                );
-
-            if (!tabel || !totaal) {
-                return;
-            }
-
-            tabel.innerHTML = '';
-
-            let totaalAantal = 0;
-
-            if (ontbrekendeUitslagen.length === 0) {
-
-                totaal.textContent = '0';
-
-                tabel.innerHTML = `
-                    <tr>
-                        <td colspan="2">
-                            Geen ontbrekende uitslagen.
-                        </td>
-                    </tr>
-                `;
-
-                return;
-            }
-
-            ontbrekendeUitslagen.forEach(item => {
-
-                const aantal =
-                    Number(item.aantal) || 0;
-
-                totaalAantal += aantal;
-
-                const rij =
-                    document.createElement('tr');
-
-                rij.innerHTML = `
-                    <td>${item.sport || '-'}</td>
-                    <td>${aantal}</td>
-                `;
-
-                tabel.appendChild(rij);
-
-            });
-
-            totaal.textContent =
-                totaalAantal;
-        }
-
-
-        fetch('/api/wedstrijden')
-
-            .then(response => {
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        'Fout bij API-aanvraag'
-                    );
-
-                }
-
-                return response.json();
-
-            })
-
-            .then(data => {
-
-                console.log(
-                    'API gegevens:',
-                    data
-                );
-
-                wedstrijden =
-                    data.wedstrijden || [];
-
-                ontbrekendeUitslagen =
-                    data.ontbrekendeUitslagen || [];
-
-                toonDatum();
-                toonWedstrijden();
-                toonOntbrekendeUitslagen();
-
-            })
-
-            .catch(error => {
-
-                console.error(
-                    'Fout bij het laden van gegevens:',
-                    error
-                );
-
-            });
-
-
-        document
-            .getElementById('vorige-weekend')
-            .addEventListener('click', () => {
-
-                huidigeDatum.setDate(
-                    huidigeDatum.getDate() - 7
-                );
-
-                toonDatum();
-                toonWedstrijden();
-
-            });
-
-
-        document
-            .getElementById('volgende-weekend')
-            .addEventListener('click', () => {
-
-                huidigeDatum.setDate(
-                    huidigeDatum.getDate() + 7
-                );
-
-                toonDatum();
-                toonWedstrijden();
-
-            });
-
-    </script>
+    <h2>Wedstrijd overzicht</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Sportsoort</th>
+                <th>Aantal wedstrijden</th>
+                <th>Aantal ontbrekende uitslagen</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for sport in overzicht %}
+                <tr>
+                    <td>{{ sport.sport }}</td>
+                    <td>{{ sport.aantal_wedstrijden }}</td>
+                    <td>{{ sport.aantal_ontbrekend }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
 
 {% endblock %}
