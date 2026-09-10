@@ -14,7 +14,7 @@ class WedstrijdController extends AbstractController
     public function ontbrekendeUitslagen(
         WedstrijdService $wedstrijdService
     ): Response {
-    $wedstrijden = $wedstrijdService->getOntbrekendeUitslagen();
+    $wedstrijden = $wedstrijdService->getOntbrekendeUitslagen( '2026-08-29','2026-08-30');
     
     return $this->render('wedstrijd/ontbrekende.html.twig', [
             'wedstrijden' => $wedstrijden,

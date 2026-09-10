@@ -45,7 +45,7 @@ class WedstrijdRepository
         ');
     }
 
-    public function getOntbrekendeUitslagen(): array
+    public function getOntbrekendeUitslagen(string $startDatum, string $eindDatum): array
     {
         return $this->connection->fetchAllAssociative('
             SELECT
@@ -71,10 +71,12 @@ class WedstrijdRepository
             JOIN sporten s
                 ON LEFT(w.compnummer, 3) = s.code
     
-            WHERE w.puntenteam1 IS NULL
-               OR w.puntenteam2 IS NULL
+            WHERE w.datum BETWEEN ? AND ?
+
+            AND (w.puntenteam1 IS NULL OR w.puntenteam2 IS NULL)
     
             ORDER BY w.datum, w.tijd
-        ');
+            
+        ', [$startDatum, $eindDatum]);
     }
 }

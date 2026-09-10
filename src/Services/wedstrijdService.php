@@ -16,8 +16,8 @@ class WedstrijdService
         return $this->wedstrijdRepository->getWedstrijden();
     }
 
-    public function getOntbrekendeUitslagen(): array
+    public function getOntbrekendeUitslagen(string $startDatum, string $eindDatum): array
     {
-        return $this->wedstrijdRepository->getOntbrekendeUitslagen();
+        return $this->wedstrijdRepository->getOntbrekendeUitslagen($startDatum, $eindDatum);
     }
 }
