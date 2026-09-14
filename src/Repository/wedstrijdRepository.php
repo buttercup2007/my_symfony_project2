@@ -108,6 +108,7 @@ public function getWeekendOverzicht(
     string $startDatum,
     string $eindDatum
 ): array {
+    
     return $this->connection->fetchAllAssociative('
         SELECT
             s.sportnaam AS sport,

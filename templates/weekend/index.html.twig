@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Weekend Overzicht{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/weekend.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="weekend-page">
+
+    <header class="page-header">
+        <div>
+            <h1>Weekend Overzicht</h1>
+            <p>
+                Wedstrijden van {{ startDatum|date('d-m-Y') }}
+                t/m {{ eindDatum|date('d-m-Y') }}
+            </p>
+        </div>
+    </header>
+
+    {% set totaalWedstrijden = 0 %}
+    {% set totaalOntbrekend = 0 %}
+
+    {% for item in overzicht %}
+        {% set totaalWedstrijden = totaalWedstrijden + item.aantal_wedstrijden %}
+        {% set totaalOntbrekend = totaalOntbrekend + item.aantal_ontbrekend %}
+    {% endfor %}
+
+    <section class="summary">
+
+        <div class="summary-card">
+            <span class="card-label">Totaal wedstrijden</span>
+            <strong>{{ totaalWedstrijden }}</strong>
+        </div>
+
+        <div class="summary-card missing">
+            <span class="card-label">Ontbrekende uitslagen</span>
+            <strong>{{ totaalOntbrekend }}</strong>
+        </div>
+
+        <div class="summary-card">
+            <span class="card-label">Sporten</span>
+            <strong>{{ overzicht|length }}</strong>
+        </div>
+
+    </section>
+
+    <section class="table-section">
+
+        <div class="section-header">
+            <h2>Overzicht per sport</h2>
+        </div>
+
+        <div class="table-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sport</th>
+                        <th>Aantal wedstrijden</th>
+                        <th>Ontbrekende uitslagen</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for item in overzicht %}
+
+                    <tr>
+                        <td class="sport-name">
+                            {{ item.sport }}
+                        </td>
+
+                        <td>
+                            {{ item.aantal_wedstrijden }}
+                        </td>
+
+                        <td>
+                            {{ item.aantal_ontbrekend }}
+                        </td>
+
+                        <td>
+                            {% if item.aantal_ontbrekend > 0 %}
+                                <span class="status status-missing">
+                                    Ontbrekend
+                                </span>
+                            {% else %}
+                                <span class="status status-complete">
+                                    Compleet
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+                        <td colspan="4" class="empty">
+                            Geen wedstrijden gevonden voor deze periode.
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
+

@@ -37,12 +37,12 @@ class WedstrijdService
     }
 
     public function getWeekendOverzicht(
-        string $startDatum,
-        string $eindDatum
+    string $startDatum,
+    string $eindDatum
     ): array {
-        return $this->wedstrijdRepository->getWeekendOverzicht(
-            $startDatum,
-            $eindDatum
-        );
-    }
+    return $this->wedstrijdRepository->getWeekendOverzicht(
+        $startDatum,
+        $eindDatum
+    );
+   }
 }
