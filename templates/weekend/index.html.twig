@@ -149,7 +149,7 @@
                 {% set aantalWedstrijden = 0 %}
 
                 {% for wedstrijd in wedstrijden %}
-                    {% if wedstrijd.datum >= startDatum and wedstrijd.datum <= eindDatum %}
+                    {% if wedstrijd.datum >= startDatum|date('Y-m-d') and wedstrijd.datum <= eindDatum|date('Y-m-d') %}
                         {% set aantalWedstrijden = aantalWedstrijden + 1 %}
                         <tr>
                             <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>

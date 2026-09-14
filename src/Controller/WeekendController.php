@@ -20,20 +20,6 @@ class WeekendController extends AbstractController
         $wedstrijden = $wedstrijdService->getWedstrijden();
         $vandaag = new \DateTime();
 
-        $laatsteScoreDatum = null;
-        foreach ($wedstrijden as $wedstrijd) {
-            if ($wedstrijd['score1'] !== null && $wedstrijd['score2'] !== null) {
-                $scoreDatum = new \DateTime($wedstrijd['datum']);
-                if ($laatsteScoreDatum === null || $scoreDatum > $laatsteScoreDatum) {
-                    $laatsteScoreDatum = $scoreDatum;
-                }
-            }
-        }
-
-        if ($laatsteScoreDatum !== null) {
-            $vandaag = $laatsteScoreDatum;
-        }
-
         $dagenSindsVrijdag = ((int) $vandaag->format('N') + 2) % 7;
         $startDatum = (clone $vandaag)
             ->modify("-{$dagenSindsVrijdag} days")
