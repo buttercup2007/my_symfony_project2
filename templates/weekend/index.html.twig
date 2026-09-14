@@ -14,18 +14,17 @@
     <header class="page-header">
         <div>
             <h1>Weekend Overzicht</h1>
-            <div class="weekend-navigation">
-                <a href="{{ path('app_weekend', { weekend: weekendOffset - 1 }) }}">
-                    &larr; Vorig weekend
+            <nav class="weekend-navigation" aria-label="Weekend navigatie">
+                <a class="weekend-arrow" href="{{ path('app_weekend', { weekend: weekendOffset - 1 }) }}" aria-label="Vorig weekend">
+                    <span aria-hidden="true">&larr;</span> Vorig weekend
                 </a>
-                <p>
-                    Wedstrijden van {{ startDatum|date('d-m-Y') }}
-                    t/m {{ eindDatum|date('d-m-Y') }}
+                <p class="weekend-date">
+                    {{ startDatum|date('d-m-Y') }} <span>t/m</span> {{ eindDatum|date('d-m-Y') }}
                 </p>
-                <a href="{{ path('app_weekend', { weekend: weekendOffset + 1 }) }}">
-                    Volgend weekend &rarr;
+                <a class="weekend-arrow" href="{{ path('app_weekend', { weekend: weekendOffset + 1 }) }}" aria-label="Volgend weekend">
+                    Volgend weekend <span aria-hidden="true">&rarr;</span>
                 </a>
-            </div>
+            </nav>
         </div>
     </header>
 

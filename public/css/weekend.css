@@ -22,6 +22,41 @@
     font-size: 16px;
 }
 
+.weekend-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 24px;
+    padding: 14px 16px;
+    background: #17212b;
+    color: white;
+}
+
+.weekend-arrow {
+    color: white;
+    font: 700 13px Arial, sans-serif;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.weekend-arrow:hover {
+    color: #9de0d2;
+}
+
+.weekend-date {
+    margin: 0 !important;
+    color: white !important;
+    font: 700 15px Arial, sans-serif !important;
+    text-align: center;
+}
+
+.weekend-date span {
+    margin: 0 8px;
+    color: #9fb0b5;
+    font-weight: 400;
+}
+
 .summary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -137,6 +172,16 @@ td {
 
     .page-header h1 {
         font-size: 26px;
+    }
+
+    .weekend-navigation {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .weekend-date {
+        order: -1;
     }
 
     th,
