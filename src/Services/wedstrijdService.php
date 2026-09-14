@@ -16,14 +16,14 @@ class WedstrijdService
         return $this->wedstrijdRepository->getWedstrijden();
     }
 
-    public function getOntbrekendeUitslagen(string $startDatum, string $eindDatum): array
-    {
-        return $this->wedstrijdRepository->getOntbrekendeUitslagen($startDatum, $eindDatum);
-    }
-
-    public function getWedstrijdTotalen(): array
-    {
-        return $this->wedstrijdRepository->getWedstrijdTotalen();
+    public function getOntbrekendeUitslagen(
+        string $startDatum,
+        string $eindDatum
+    ): array {
+        return $this->wedstrijdRepository->getOntbrekendeUitslagen(
+            $startDatum,
+            $eindDatum
+        );
     }
 
     public function getAantalOntbrekendeUitslagen(
@@ -37,12 +37,12 @@ class WedstrijdService
     }
 
     public function getWeekendOverzicht(
-    string $startDatum,
-    string $eindDatum
+        string $startDatum,
+        string $eindDatum
     ): array {
-    return $this->wedstrijdRepository->getWeekendOverzicht(
-        $startDatum,
-        $eindDatum
-    );
-   }
+        return $this->wedstrijdRepository->getWeekendOverzicht(
+            $startDatum,
+            $eindDatum
+        );
+    }
 }

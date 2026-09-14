@@ -9,311 +9,189 @@ use Doctrine\ORM\Mapping as ORM;
 class Wedstrijd
 {
     #[ORM\Id]
-    #[ORM\Column(length: 20)]
-    private ?string $compnummer = null;
+    #[ORM\ManyToOne(targetEntity: Competitie::class)]
+    #[ORM\JoinColumn(
+        name: 'compnummer',
+        referencedColumnName: 'compnummer',
+        nullable: false
+    )]
+    private Competitie $competitie;
 
     #[ORM\Id]
-    #[ORM\Column(length: 20)]
-    private ?string $wedstrijdnummer = null;
+    #[ORM\Column(name: 'wedstrijdnummer', type: 'string', length: 50)]
+    private string $wedstrijdnummer;
 
-    #[ORM\Column(length: 20, nullable: true)]
+    #[ORM\Column(name: 'club1nummer', type: 'string', length: 50, nullable: true)]
     private ?string $club1nummer = null;
 
-    #[ORM\Column(length: 15, nullable: true)]
-    private ?string $team1aanduiding = null;
-
-    #[ORM\Column(length: 20, nullable: true)]
+    #[ORM\Column(name: 'club2nummer', type: 'string', length: 50, nullable: true)]
     private ?string $club2nummer = null;
 
-    #[ORM\Column(length: 15, nullable: true)]
-    private ?string $team2aanduiding = null;
+    #[ORM\Column(name: 'puntenteam1', type: 'string', length: 10, nullable: true)]
+    private ?string $puntenteam1 = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $puntenteam1 = null;
+    #[ORM\Column(name: 'puntenteam2', type: 'string', length: 10, nullable: true)]
+    private ?string $puntenteam2 = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $puntenteam2 = null;
-
-    #[ORM\Column(length: 1, nullable: true)]
+    #[ORM\Column(name: 'meetellen', type: 'string', length: 1, nullable: true)]
     private ?string $meetellen = null;
 
-    #[ORM\Column(type: 'date', nullable: true)]
+    #[ORM\Column(name: 'datum', type: 'date', nullable: true)]
     private ?\DateTimeInterface $datum = null;
 
-    #[ORM\Column(length: 30, nullable: true)]
-    private ?string $bijzonderh = null;
-
-    #[ORM\Column(length: 5, nullable: true)]
+    #[ORM\Column(name: 'tijd', type: 'string', length: 5, nullable: true)]
     private ?string $tijd = null;
 
-    #[ORM\Column(length: 1, nullable: true)]
+    #[ORM\Column(name: 'bijzonderh', type: 'string', length: 255, nullable: true)]
+    private ?string $bijzonderh = null;
+
+    #[ORM\Column(name: 'periode', type: 'string', length: 20, nullable: true)]
     private ?string $periode = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $opmerkingen = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $wedstrijddag = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $pntminteam1 = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $pntminteam2 = null;
-
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'gewijzigd', type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $gewijzigd = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $id = null;
-
-
-    public function getCompnummer(): ?string
+    public function getCompetitie(): Competitie
     {
-        return $this->compnummer;
+        return $this->competitie;
     }
 
-    public function setCompnummer(string $compnummer): static
+    public function setCompetitie(Competitie $competitie): self
     {
-        $this->compnummer = $compnummer;
+        $this->competitie = $competitie;
 
         return $this;
     }
 
-
-    public function getWedstrijdnummer(): ?string
+    public function getWedstrijdnummer(): string
     {
         return $this->wedstrijdnummer;
     }
 
-    public function setWedstrijdnummer(string $wedstrijdnummer): static
+    public function setWedstrijdnummer(string $wedstrijdnummer): self
     {
         $this->wedstrijdnummer = $wedstrijdnummer;
 
         return $this;
     }
 
-
     public function getClub1nummer(): ?string
     {
         return $this->club1nummer;
     }
 
-    public function setClub1nummer(?string $club1nummer): static
+    public function setClub1nummer(?string $club1nummer): self
     {
         $this->club1nummer = $club1nummer;
 
         return $this;
     }
 
-
-    public function getTeam1aanduiding(): ?string
-    {
-        return $this->team1aanduiding;
-    }
-
-    public function setTeam1aanduiding(?string $team1aanduiding): static
-    {
-        $this->team1aanduiding = $team1aanduiding;
-
-        return $this;
-    }
-
-
     public function getClub2nummer(): ?string
     {
         return $this->club2nummer;
     }
 
-    public function setClub2nummer(?string $club2nummer): static
+    public function setClub2nummer(?string $club2nummer): self
     {
         $this->club2nummer = $club2nummer;
 
         return $this;
     }
 
-
-    public function getTeam2aanduiding(): ?string
-    {
-        return $this->team2aanduiding;
-    }
-
-    public function setTeam2aanduiding(?string $team2aanduiding): static
-    {
-        $this->team2aanduiding = $team2aanduiding;
-
-        return $this;
-    }
-
-
-    public function getPuntenteam1(): ?int
+    public function getPuntenteam1(): ?string
     {
         return $this->puntenteam1;
     }
 
-    public function setPuntenteam1(?int $puntenteam1): static
+    public function setPuntenteam1(?string $puntenteam1): self
     {
         $this->puntenteam1 = $puntenteam1;
 
         return $this;
     }
 
-
-    public function getPuntenteam2(): ?int
+    public function getPuntenteam2(): ?string
     {
         return $this->puntenteam2;
     }
 
-    public function setPuntenteam2(?int $puntenteam2): static
+    public function setPuntenteam2(?string $puntenteam2): self
     {
         $this->puntenteam2 = $puntenteam2;
 
         return $this;
     }
 
-
     public function getMeetellen(): ?string
     {
         return $this->meetellen;
     }
 
-    public function setMeetellen(?string $meetellen): static
+    public function setMeetellen(?string $meetellen): self
     {
         $this->meetellen = $meetellen;
 
         return $this;
     }
 
-
     public function getDatum(): ?\DateTimeInterface
     {
         return $this->datum;
     }
 
-    public function setDatum(?\DateTimeInterface $datum): static
+    public function setDatum(?\DateTimeInterface $datum): self
     {
         $this->datum = $datum;
 
         return $this;
     }
 
-
-    public function getBijzonderh(): ?string
-    {
-        return $this->bijzonderh;
-    }
-
-    public function setBijzonderh(?string $bijzonderh): static
-    {
-        $this->bijzonderh = $bijzonderh;
-
-        return $this;
-    }
-
-
     public function getTijd(): ?string
     {
         return $this->tijd;
     }
 
-    public function setTijd(?string $tijd): static
+    public function setTijd(?string $tijd): self
     {
         $this->tijd = $tijd;
 
         return $this;
     }
 
+    public function getBijzonderh(): ?string
+    {
+        return $this->bijzonderh;
+    }
+
+    public function setBijzonderh(?string $bijzonderh): self
+    {
+        $this->bijzonderh = $bijzonderh;
+
+        return $this;
+    }
 
     public function getPeriode(): ?string
     {
         return $this->periode;
     }
 
-    public function setPeriode(?string $periode): static
+    public function setPeriode(?string $periode): self
     {
         $this->periode = $periode;
 
         return $this;
     }
 
-
-    public function getOpmerkingen(): ?string
-    {
-        return $this->opmerkingen;
-    }
-
-    public function setOpmerkingen(?string $opmerkingen): static
-    {
-        $this->opmerkingen = $opmerkingen;
-
-        return $this;
-    }
-
-
-    public function getWedstrijddag(): ?int
-    {
-        return $this->wedstrijddag;
-    }
-
-    public function setWedstrijddag(?int $wedstrijddag): static
-    {
-        $this->wedstrijddag = $wedstrijddag;
-
-        return $this;
-    }
-
-
-    public function getPntminteam1(): ?int
-    {
-        return $this->pntminteam1;
-    }
-
-    public function setPntminteam1(?int $pntminteam1): static
-    {
-        $this->pntminteam1 = $pntminteam1;
-
-        return $this;
-    }
-
-
-    public function getPntminteam2(): ?int
-    {
-        return $this->pntminteam2;
-    }
-
-    public function setPntminteam2(?int $pntminteam2): static
-    {
-        $this->pntminteam2 = $pntminteam2;
-
-        return $this;
-    }
-
-
     public function getGewijzigd(): ?\DateTimeInterface
     {
         return $this->gewijzigd;
     }
 
-    public function setGewijzigd(?\DateTimeInterface $gewijzigd): static
+    public function setGewijzigd(?\DateTimeInterface $gewijzigd): self
     {
         $this->gewijzigd = $gewijzigd;
 
         return $this;
     }
-
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setId(?int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    
 }
-
