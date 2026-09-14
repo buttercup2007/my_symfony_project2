@@ -9,14 +9,23 @@
 {% block body %}
 
 <div class="weekend-page">
+    {% set weekendOffset = weekendOffset|default(0) %}
 
     <header class="page-header">
         <div>
             <h1>Weekend Overzicht</h1>
-            <p>
-                Wedstrijden van {{ startDatum|date('d-m-Y') }}
-                t/m {{ eindDatum|date('d-m-Y') }}
-            </p>
+            <div class="weekend-navigation">
+                <a href="{{ path('app_weekend', { weekend: weekendOffset - 1 }) }}">
+                    &larr; Vorig weekend
+                </a>
+                <p>
+                    Wedstrijden van {{ startDatum|date('d-m-Y') }}
+                    t/m {{ eindDatum|date('d-m-Y') }}
+                </p>
+                <a href="{{ path('app_weekend', { weekend: weekendOffset + 1 }) }}">
+                    Volgend weekend &rarr;
+                </a>
+            </div>
         </div>
     </header>
 
@@ -43,6 +52,11 @@
         <div class="summary-card">
             <span class="card-label">Sporten</span>
             <strong>{{ overzicht|length }}</strong>
+        </div>
+
+        <div class="summary-card scores-summary">
+            <span class="card-label">Scores</span>
+            <strong>{{ aantalScores|default(0) }}</strong>
         </div>
 
     </section>
@@ -105,6 +119,61 @@
 
                 {% endfor %}
 
+                </tbody>
+            </table>
+
+        </div>
+
+    </section>
+
+    <section class="table-section">
+
+        <div class="section-header">
+            <h2>Wedstrijden en scores</h2>
+        </div>
+
+        <div class="table-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Tijd</th>
+                        <th>Sport</th>
+                        <th>Team 1</th>
+                        <th>Team 2</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% set aantalWedstrijden = 0 %}
+
+                {% for wedstrijd in wedstrijden %}
+                    {% if wedstrijd.datum >= startDatum and wedstrijd.datum <= eindDatum %}
+                        {% set aantalWedstrijden = aantalWedstrijden + 1 %}
+                        <tr>
+                            <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>
+                            <td>{{ wedstrijd.tijd|default('-') }}</td>
+                            <td>{{ wedstrijd.sport|default('-') }}</td>
+                            <td>{{ wedstrijd.team1|default('-') }}</td>
+                            <td>{{ wedstrijd.team2|default('-') }}</td>
+                            <td>
+                                {{ wedstrijd.score1 is not null ? wedstrijd.score1 : '-' }}
+                                -
+                                {{ wedstrijd.score2 is not null ? wedstrijd.score2 : '-' }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+
+                {% if aantalWedstrijden == 0 %}
+                    <tr>
+                        <td colspan="6" class="empty">
+                            Geen wedstrijden gevonden voor deze periode.
+                        </td>
+                    </tr>
+                {% endif %}
                 </tbody>
             </table>
 

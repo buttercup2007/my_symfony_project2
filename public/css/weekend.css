@@ -46,6 +46,10 @@
     border-left: 5px solid #dc3545;
 }
 
+.summary-card.scores-summary {
+    border-left: 5px solid #0f766e;
+}
+
 .card-label {
     color: #666;
     font-size: 14px;

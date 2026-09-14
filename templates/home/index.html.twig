@@ -2,70 +2,137 @@
 
 {% block title %}Wedstrijden{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+{% endblock %}
+
 {% block body %}
 
-<div class="container">
+    <main class="home-page">
+        {% set weekendOffset = weekendOffset|default(0) %}
 
-    <h1>Wedstrijden</h1>
+        <header class="home-header">
+            <div>
+                <p class="eyebrow">Wedstrijdcentrum</p>
+                <h1>Weekend wedstrijden</h1>
+                <p class="intro">Bekijk uitslagen, teams en planning per weekend.</p>
+            </div>
+        </header>
 
-    <p>
-        Weekend:
-        {{ startDatum|date('d-m-Y') }}
-        t/m
-        {{ eindDatum|date('d-m-Y') }}
-    </p>
+        <nav class="weekend-navigation" aria-label="Weekend navigatie">
+            <a class="weekend-arrow" href="{{ path('home', { weekend: weekendOffset - 1 }) }}" aria-label="Vorig weekend">
+                <span aria-hidden="true">&larr;</span> Vorig weekend
+            </a>
 
-    <div class="summary">
-        <div class="card">
-            <h2>{{ overzicht|length }}</h2>
-            <p>Sporten</p>
-        </div>
+            <p class="weekend-date">
+                {{ startDatum|date('d-m-Y') }} <span>t/m</span> {{ eindDatum|date('d-m-Y') }}
+            </p>
 
-        <div class="card">
-            <h2>
-                {% set totaal = 0 %}
-                {% for sport in overzicht %}
-                    {% set totaal = totaal + sport.aantal_wedstrijden %}
-                {% endfor %}
-                {{ totaal }}
-            </h2>
-            <p>Wedstrijden</p>
-        </div>
+            <a class="weekend-arrow" href="{{ path('home', { weekend: weekendOffset + 1 }) }}" aria-label="Volgend weekend">
+                Volgend weekend <span aria-hidden="true">&rarr;</span>
+            </a>
+        </nav>
 
-        <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen') }}" class="card">
-            <h2>
-                {% set ontbrekend = 0 %}
-                {% for sport in overzicht %}
-                    {% set ontbrekend = ontbrekend + sport.aantal_ontbrekend %}
-                {% endfor %}
-                {{ ontbrekend }}
-            </h2>
-            <p>Ontbrekende uitslagen</p>
-        </a>
-    </div>
+        <section class="summary" aria-label="Weekend samenvatting">
+            <div class="summary-card">
+                <span class="card-label">Sporten</span>
+                <strong>{{ overzicht|length }}</strong>
+            </div>
 
-    <h2>Wedstrijd overzicht</h2>
+            <a href="{{ path('app_weekend', { weekend: weekendOffset }) }}" class="summary-card summary-card-link">
+                <span class="card-label">Wedstrijden</span>
+                <strong>
+                    {% set totaal = 0 %}
+                    {% for sport in overzicht %}
+                        {% set totaal = totaal + sport.aantal_wedstrijden %}
+                    {% endfor %}
+                    {{ totaal }}
+                </strong>
+                <span class="card-action">Bekijk weekend overzicht &rarr;</span>
+            </a>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Sportsoort</th>
-                <th>Aantal wedstrijden</th>
-                <th>Aantal ontbrekende uitslagen</th>
-            </tr>
-        </thead>
+            <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen') }}" class="summary-card summary-card-link">
+                <span class="card-label">Ontbrekende uitslagen</span>
+                <strong>
+                    {% set ontbrekend = 0 %}
+                    {% for sport in overzicht %}
+                        {% set ontbrekend = ontbrekend + sport.aantal_ontbrekend %}
+                    {% endfor %}
+                    {{ ontbrekend }}
+                </strong>
+            </a>
+        </section>
 
-        <tbody>
-            {% for sport in overzicht %}
-                <tr>
-                    <td>{{ sport.sport }}</td>
-                    <td>{{ sport.aantal_wedstrijden }}</td>
-                    <td>{{ sport.aantal_ontbrekend }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <section class="content-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Overzicht</p>
+                    <h2>Per sport</h2>
+                </div>
+            </div>
 
-</div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sportsoort</th>
+                            <th>Aantal wedstrijden</th>
+                            <th>Ontbrekende uitslagen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sport in overzicht %}
+                            <tr>
+                                <td class="strong-cell">{{ sport.sport }}</td>
+                                <td>{{ sport.aantal_wedstrijden }}</td>
+                                <td>{{ sport.aantal_ontbrekend }}</td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="3" class="empty">Geen wedstrijden gevonden voor dit weekend.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-{% endblock %}
+        <section class="content-section scores-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Uitslagen</p>
+                    <h2>Wedstrijden met scores</h2>
+                </div>
+                <span class="live-label">Scores beschikbaar</span>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Datum</th><th>Tijd</th><th>Sport</th><th>Team 1</th><th>Team 2</th><th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set aantalWedstrijden = 0 %}
+                        {% for wedstrijd in wedstrijden %}
+                            {% if wedstrijd.datum >= startDatum|date('Y-m-d') and wedstrijd.datum <= eindDatum|date('Y-m-d') %}
+                                {% set aantalWedstrijden = aantalWedstrijden + 1 %}
+                                <tr>
+                                    <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>
+                                    <td>{{ wedstrijd.tijd|default('-') }}</td>
+                                    <td>{{ wedstrijd.sport|default('-') }}</td>
+                                    <td>{{ wedstrijd.team1|default('-') }}</td>
+                                    <td>{{ wedstrijd.team2|default('-') }}</td>
+                                    <td class="score-cell">{{ wedstrijd.score1 is not null ? wedstrijd.score1 : '-' }} - {{ wedstrijd.score2 is not null ? wedstrijd.score2 : '-' }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        {% if aantalWedstrijden == 0 %}
+                            <tr><td colspan="6" class="empty">Geen wedstrijden gevonden voor dit weekend.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    {% endblock %}
