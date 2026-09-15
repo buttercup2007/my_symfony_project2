@@ -64,6 +64,8 @@ class WedstrijdRepository
                 END AS tijd,
     
                 w.club1nummer AS team1,
+                w.puntenteam1 AS score1,
+                w.puntenteam2 AS score2,
                 w.club2nummer AS team2
     
             FROM wedstrijd w
@@ -72,6 +74,8 @@ class WedstrijdRepository
                 ON LEFT(w.compnummer, 3) = s.code
     
             WHERE w.datum BETWEEN ? AND ?
+
+            AND w.datum <= CURRENT_DATE()   
 
             AND (
                 w.puntenteam1 IS NULL
@@ -100,6 +104,8 @@ class WedstrijdRepository
                 ON LEFT(w.compnummer, 3) = s.code
     
             WHERE w.datum BETWEEN ? AND ?
+    
+              AND w.datum <= CURRENT_DATE()
     
               AND (
                   w.puntenteam1 IS NULL
@@ -131,15 +137,17 @@ public function getWeekendOverzicht(
 
             SUM(
                 CASE
-                    WHEN w.puntenteam1 IS NULL
-                      OR w.puntenteam2 IS NULL
-                      OR TRIM(w.puntenteam1) = \'\'
-                      OR TRIM(w.puntenteam2) = \'\'
+                    WHEN w.datum <= CURRENT_DATE()
+                     AND (
+                        w.puntenteam1 IS NULL
+                        OR w.puntenteam2 IS NULL
+                        OR TRIM(w.puntenteam1) = \'\'
+                        OR TRIM(w.puntenteam2) = \'\'
+                     )
                     THEN 1
                     ELSE 0
                 END
             ) AS aantal_ontbrekend
-
         FROM wedstrijd w
 
         JOIN sporten s

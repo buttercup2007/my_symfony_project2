@@ -10,24 +10,41 @@
 
 <main class="missing-results-page">
 
+<a class="home-link" href="{{ path('home') }}">&larr; Terug naar home</a>
+
 <h1>Ontbrekende uitslagen</h1>
 
-<nav class="week-navigation" aria-label="Weekend navigatie">
-    <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen', { weekOffset: weekOffset - 1 }) }}">
+<div class="week-navigation">
+
+    <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen', {
+        weekOffset: weekOffset - 1
+    }) }}">
         &larr; Vorig weekend
     </a>
 
+    <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen', {
+        weekOffset: 0
+    }) }}">
+        Huidig weekend
+    </a>
+
     <span>
-        {{ startDatum|date('d-m-Y') }} - {{ eindDatum|date('d-m-Y') }}
+        {{ startDatum|date('d-m-Y') }}
+        -
+        {{ eindDatum|date('d-m-Y') }}
     </span>
 
-    <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen', { weekOffset: weekOffset + 1 }) }}">
+    <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen', {
+        weekOffset: weekOffset + 1
+    }) }}">
         Volgend weekend &rarr;
     </a>
-</nav>
+
+</div>
 
 <h2>Weekend Overzicht</h2>
-    <div class="table-scroll">
+
+<div class="table-scroll">
     <table>
         <thead>
             <tr>
@@ -36,6 +53,7 @@
                 <th>Ontbrekende uitslagen</th>
             </tr>
         </thead>
+
         <tbody>
             {% for item in overzicht %}
                 <tr>
@@ -44,22 +62,34 @@
                     <td>{{ item.aantal_ontbrekend }}</td>
                 </tr>
             {% endfor %}
+
         </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <th scope="row">Totaal</th>
+                <td>{{ totaalWedstrijden }}</td>
+                <td>{{ totaalOntbrekend }}</td>
+            </tr>
+        </tfoot>
     </table>
-    </div>
+</div>
 
 <h2>Wedstrijden met ontbrekende uitslagen</h2>
-    <div class="table-scroll">
+
+<div class="table-scroll">
     <table>
         <thead>
             <tr>
                 <th>Sport</th>
-                <th>Aantal</th>
+                <th>Datum</th>
                 <th>Tijd</th>
                 <th>Team 1</th>
                 <th>Team 2</th>
+                <th>Score 1</th>
+                <th>Score 2</th>
             </tr>
         </thead>
+
         <tbody>
             {% for wedstrijd in wedstrijden %}
                 <tr>
@@ -68,10 +98,19 @@
                     <td>{{ wedstrijd.tijd|date('H:i') }}</td>
                     <td>{{ wedstrijd.team1 }}</td>
                     <td>{{ wedstrijd.team2 }}</td>
+                    <td class="score-cell">{{ wedstrijd.score1 is not empty ? wedstrijd.score1 : '-' }}</td>
+                    <td class="score-cell">{{ wedstrijd.score2 is not empty ? wedstrijd.score2 : '-' }}</td>
                 </tr>
             {% endfor %}
         </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <th colspan="6" scope="row">Totaal ontbrekende uitslagen</th>
+                <td>{{ totaalOntbrekend }}</td>
+            </tr>
+        </tfoot>
     </table>
-    </div>
-    </main>
+</div>
+
+</main>
 {% endblock %}

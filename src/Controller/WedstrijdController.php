@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-
 class WedstrijdController extends AbstractController
 {
     #[Route('/ontbrekende-uitslagen', name: 'app_wedstrijd_ontbrekende_uitslagen')]
@@ -17,6 +16,7 @@ class WedstrijdController extends AbstractController
         WedstrijdService $wedstrijdService
     ): Response {
         $weekOffset = (int) $request->query->get('weekOffset', 0);
+
         $periode = $wedstrijdService->getWeekendPeriode($weekOffset);
 
         $startDatum = $periode['startDatum'];
@@ -37,6 +37,14 @@ class WedstrijdController extends AbstractController
             $eindDatum
         );
 
+        $totaalWedstrijden = 0;
+        $totaalOntbrekend = 0;
+
+        foreach ($overzicht as $item) {
+            $totaalWedstrijden += (int) $item['aantal_wedstrijden'];
+            $totaalOntbrekend += (int) $item['aantal_ontbrekend'];
+        }
+
         return $this->render('wedstrijd/ontbrekende.html.twig', [
             'wedstrijden' => $wedstrijden,
             'aantallen' => $aantallen,
@@ -44,6 +52,8 @@ class WedstrijdController extends AbstractController
             'startDatum' => $startDatum,
             'eindDatum' => $eindDatum,
             'weekOffset' => $weekOffset,
+            'totaalWedstrijden' => $totaalWedstrijden,
+            'totaalOntbrekend' => $totaalOntbrekend,
         ]);
     }
 }
