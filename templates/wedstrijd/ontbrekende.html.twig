@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html.twig' %}
 
-<head>
-    <title>Ontbrekende uitslagen</title>
-</head>
-<body>
+{% block title %}Weekend Overzicht{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/ontbrekende.css') }}">
+{% endblock %}
+
+{% block body %}
 
 <h1>Ontbrekende uitslagen</h1>
 
@@ -19,6 +21,24 @@
     <button type="submit">Zoeken</button>
 
 </form>
+
+<h2>Aantal ontbrekende uitslagen per sport</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Sport</th>
+                <th>Aantal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for aantal in aantallen %}
+                <tr>
+                    <td>{{ aantal.sport }}</td>
+                    <td>{{ aantal.aantal }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 <table> 
     <thead>
@@ -43,7 +63,4 @@
         {% endfor %}
     </tbody>
 </table>
-</body>
-
-
-</html>
+{% endblock %}

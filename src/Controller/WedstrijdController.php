@@ -21,9 +21,11 @@ class WedstrijdController extends AbstractController
     $eindDatum = $request->query->get('eind', '2024-12-31');
     
     $wedstrijden = $wedstrijdService->getOntbrekendeUitslagen($startDatum, $eindDatum);
+    $aantallen = $wedstrijdService->getAantalOntbrekendeUitslagen($startDatum, $eindDatum);
 
     return $this->render('wedstrijd/ontbrekende.html.twig', [
             'wedstrijden' => $wedstrijden,
+            'aantallen' => $aantallen,
             'startDatum' => $startDatum,
             'eindDatum' => $eindDatum,
         ]);

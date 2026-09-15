@@ -45,14 +45,16 @@ class WedstrijdRepository
         ');
     }
 
-    public function getOntbrekendeUitslagen(string $startDatum, string $eindDatum): array
-    {
+    public function getOntbrekendeUitslagen(
+        string $startDatum,
+        string $eindDatum
+    ): array {
         return $this->connection->fetchAllAssociative('
-            SELECT
+            SELECT 
                 s.sportnaam AS sport,
                 w.datum,
     
-                CASE
+                CASE 
                     WHEN w.tijd LIKE \'%:%\' THEN w.tijd
                     WHEN LENGTH(TRIM(w.tijd)) = 4
                         THEN CONCAT(
@@ -72,11 +74,16 @@ class WedstrijdRepository
                 ON LEFT(w.compnummer, 3) = s.code
     
             WHERE w.datum BETWEEN ? AND ?
-
-            AND (w.puntenteam1 IS NULL OR w.puntenteam2 IS NULL)
+    
+            AND (
+                w.puntenteam1 IS NULL
+                OR w.puntenteam2 IS NULL
+                OR TRIM(w.puntenteam1) = \'\'
+                OR TRIM(w.puntenteam2) = \'\'
+            )
     
             ORDER BY w.datum, w.tijd
-            
+    
         ', [$startDatum, $eindDatum]);
     }
 
