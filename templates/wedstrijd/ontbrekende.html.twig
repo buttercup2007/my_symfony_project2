@@ -8,21 +8,26 @@
 
 {% block body %}
 
+<main class="missing-results-page">
+
 <h1>Ontbrekende uitslagen</h1>
 
-<form method="GET" action="{{ path('app_wedstrijd_ontbrekende_uitslagen') }}">
+<nav class="week-navigation" aria-label="Weekend navigatie">
+    <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen', { weekOffset: weekOffset - 1 }) }}">
+        &larr; Vorig weekend
+    </a>
 
-    <label for="start">van:</label>
-    <input type="date" id="start" name="start" value="{{ startDatum }}">
+    <span>
+        {{ startDatum|date('d-m-Y') }} - {{ eindDatum|date('d-m-Y') }}
+    </span>
 
-    <label for="eind">tot:</label>
-    <input type="date" id="eind" name="eind" value="{{ eindDatum }}">
-
-    <button type="submit">Zoeken</button>
-
-</form>
+    <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen', { weekOffset: weekOffset + 1 }) }}">
+        Volgend weekend &rarr;
+    </a>
+</nav>
 
 <h2>Weekend Overzicht</h2>
+    <div class="table-scroll">
     <table>
         <thead>
             <tr>
@@ -41,8 +46,10 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
 
 <h2>Wedstrijden met ontbrekende uitslagen</h2>
+    <div class="table-scroll">
     <table>
         <thead>
             <tr>
@@ -65,4 +72,6 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
+    </main>
 {% endblock %}

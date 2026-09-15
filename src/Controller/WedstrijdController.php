@@ -15,32 +15,35 @@ class WedstrijdController extends AbstractController
     public function ontbrekendeUitslagen(
         Request $request,
         WedstrijdService $wedstrijdService
-
     ): Response {
-    $startDatum = $request->query->get('start', '2024-01-01');
-    $eindDatum = $request->query->get('eind', '2024-12-31');
-    
-    $wedstrijden = $wedstrijdService->getOntbrekendeUitslagen(
-        $startDatum,
-        $eindDatum
-    );
+        $weekOffset = (int) $request->query->get('weekOffset', 0);
+        $periode = $wedstrijdService->getWeekendPeriode($weekOffset);
 
-    $aantallen = $wedstrijdService->getAantalOntbrekendeUitslagen
-        ($startDatum,
-         $eindDatum
-    );
+        $startDatum = $periode['startDatum'];
+        $eindDatum = $periode['eindDatum'];
 
-    $overzicht = $wedstrijdService->getWeekendOverzicht(
-        $startDatum,
-        $eindDatum
-    );
+        $wedstrijden = $wedstrijdService->getOntbrekendeUitslagen(
+            $startDatum,
+            $eindDatum
+        );
 
-    return $this->render('wedstrijd/ontbrekende.html.twig', [
+        $aantallen = $wedstrijdService->getAantalOntbrekendeUitslagen(
+            $startDatum,
+            $eindDatum
+        );
+
+        $overzicht = $wedstrijdService->getWeekendOverzicht(
+            $startDatum,
+            $eindDatum
+        );
+
+        return $this->render('wedstrijd/ontbrekende.html.twig', [
             'wedstrijden' => $wedstrijden,
             'aantallen' => $aantallen,
             'overzicht' => $overzicht,
             'startDatum' => $startDatum,
             'eindDatum' => $eindDatum,
+            'weekOffset' => $weekOffset,
         ]);
     }
 }
