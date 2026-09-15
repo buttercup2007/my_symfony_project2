@@ -98,8 +98,8 @@
                     <td>{{ wedstrijd.tijd|date('H:i') }}</td>
                     <td>{{ wedstrijd.team1 }}</td>
                     <td>{{ wedstrijd.team2 }}</td>
-                    <td class="score-cell">{{ wedstrijd.score1 is not empty ? wedstrijd.score1 : '-' }}</td>
-                    <td class="score-cell">{{ wedstrijd.score2 is not empty ? wedstrijd.score2 : '-' }}</td>
+                    <td class="score-cell">{{ wedstrijd.score1|default(0) }}</td>
+                    <td class="score-cell">{{ wedstrijd.score2|default(0) }}</td>
                 </tr>
             {% endfor %}
         </tbody>

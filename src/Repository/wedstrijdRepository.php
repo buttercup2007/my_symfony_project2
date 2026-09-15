@@ -62,7 +62,7 @@ class WedstrijdRepository
                         )
                     ELSE w.tijd
                 END AS tijd,
-    
+                
                 w.club1nummer AS team1,
                 w.puntenteam1 AS score1,
                 w.puntenteam2 AS score2,

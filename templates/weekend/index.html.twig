@@ -142,7 +142,8 @@
                         <th>Sport</th>
                         <th>Team 1</th>
                         <th>Team 2</th>
-                        <th>Score</th>
+                        <th>Score 1</th>
+                        <th>Score 2</th>
                     </tr>
                 </thead>
 
@@ -158,18 +159,15 @@
                             <td>{{ wedstrijd.sport|default('-') }}</td>
                             <td>{{ wedstrijd.team1|default('-') }}</td>
                             <td>{{ wedstrijd.team2|default('-') }}</td>
-                            <td>
-                                {{ wedstrijd.score1 is not null ? wedstrijd.score1 : '-' }}
-                                -
-                                {{ wedstrijd.score2 is not null ? wedstrijd.score2 : '-' }}
-                            </td>
+                            <td class="score-cell">{{ wedstrijd.score1|default(0) }}</td>
+                            <td class="score-cell">{{ wedstrijd.score2|default(0) }}</td>
                         </tr>
                     {% endif %}
                 {% endfor %}
 
                 {% if aantalWedstrijden == 0 %}
                     <tr>
-                        <td colspan="6" class="empty">
+                        <td colspan="7" class="empty">
                             Geen wedstrijden gevonden voor deze periode.
                         </td>
                     </tr>

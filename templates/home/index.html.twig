@@ -122,7 +122,7 @@
                                     <td>{{ wedstrijd.sport|default('-') }}</td>
                                     <td>{{ wedstrijd.team1|default('-') }}</td>
                                     <td>{{ wedstrijd.team2|default('-') }}</td>
-                                    <td class="score-cell">{{ wedstrijd.score1 is not null ? wedstrijd.score1 : '-' }} - {{ wedstrijd.score2 is not null ? wedstrijd.score2 : '-' }}</td>
+                                    <td class="score-cell">{{ wedstrijd.score1|default(0) }} - {{ wedstrijd.score2|default(0) }}</td>
                                 </tr>
                             {% endif %}
                         {% endfor %}
