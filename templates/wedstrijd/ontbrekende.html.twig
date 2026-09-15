@@ -22,45 +22,47 @@
 
 </form>
 
-<h2>Aantal ontbrekende uitslagen per sport</h2>
+<h2>Weekend Overzicht</h2>
     <table>
         <thead>
             <tr>
                 <th>Sport</th>
-                <th>Aantal</th>
+                <th>Aantal wedstrijden</th>
+                <th>Ontbrekende uitslagen</th>
             </tr>
         </thead>
         <tbody>
-            {% for aantal in aantallen %}
+            {% for item in overzicht %}
                 <tr>
-                    <td>{{ aantal.sport }}</td>
-                    <td>{{ aantal.aantal }}</td>
+                    <td>{{ item.sport }}</td>
+                    <td>{{ item.aantal_wedstrijden }}</td>
+                    <td>{{ item.aantal_ontbrekend }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-<table> 
-    <thead>
-        <tr>
-            <th>Sport</th>
-            <th>Datum</th>
-            <th>Tijd</th>
-            <th>Team 1</th>
-            <th>Team 2</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for wedstrijd in wedstrijden %}
+<h2>Wedstrijden met ontbrekende uitslagen</h2>
+    <table>
+        <thead>
             <tr>
-                <td>{{ wedstrijd.sport }}</td>
-                <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>
-                <td>{{ wedstrijd.tijd|date('H:i') }}</td>
-                <td>{{ wedstrijd.team1 }}</td>
-                <td>{{ wedstrijd.team2 }}</td>
+                <th>Sport</th>
+                <th>Aantal</th>
+                <th>Tijd</th>
+                <th>Team 1</th>
+                <th>Team 2</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for wedstrijd in wedstrijden %}
+                <tr>
+                    <td>{{ wedstrijd.sport }}</td>
+                    <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>
+                    <td>{{ wedstrijd.tijd|date('H:i') }}</td>
+                    <td>{{ wedstrijd.team1 }}</td>
+                    <td>{{ wedstrijd.team2 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
