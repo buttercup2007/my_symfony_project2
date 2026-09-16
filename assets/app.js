@@ -1,5 +1,8 @@
 import './stimulus_bootstrap.js';
 import { createApp, ref } from 'vue';
+import Wedstrijden from './vue/Wedstrijden.vue';
+
+createApp(Wedstrijden).mount('#vue-app');
 
 const vueStatusElement = document.querySelector('#vue-status');
 
