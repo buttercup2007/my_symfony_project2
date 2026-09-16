@@ -27,6 +27,54 @@ body {
 }
 
 .home-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.vue-status-panel {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 280px;
+    padding: 10px 12px;
+    border: 1px solid #cfe3d4;
+    border-radius: 6px;
+    background: #f3faf4;
+    color: #215c32;
+    font-size: 14px;
+}
+
+.vue-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2d9d50;
+}
+
+.vue-status-panel button {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: #1769aa;
+    cursor: pointer;
+    font: inherit;
+    text-decoration: underline;
+}
+
+.vue-status-panel small {
+    flex-basis: 100%;
+}
+
+@media (max-width: 700px) {
+    .home-header {
+        flex-direction: column;
+    }
+}
+
+.home-header {
     padding: 0 4px 28px;
     border-bottom: 1px solid var(--line);
 }
