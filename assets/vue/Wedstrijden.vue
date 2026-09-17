@@ -4,26 +4,70 @@ import {onMounted, ref} from 'vue'
 const wedstrijden = ref([]);
 const loading = ref(true);
 const error = ref(null);
+const overzicht = ref([])
+const startDatum = ref('')
+const eindDatum = ref('')
 
 onMounted(async () => {
     try {
-        const response = await fetch('/api/wedstrijden');
+        const response = await fetch('/api/wedstrijden')
 
         if (!response.ok) {
-            throw new Error('Api kon niet worden geladen');
+            throw new Error('API kon niet worden geladen')
         }
-        wedstrijden.value = await response.json();
+
+        const data = await response.json()
+        wedstrijden.value = data.wedstrijden
+
+        const overzichtResponse = await fetch('/api/weekend-overzicht')
+
+        if (!overzichtResponse.ok) {
+            throw new Error('Weekend overzicht kon niet worden geladen')
+        }
+
+        const overzichtData = await overzichtResponse.json()
+
+        overzicht.value = overzichtData.overzicht
+        startDatum.value = overzichtData.startDatum
+        eindDatum.value = overzichtData.eindDatum
+
     } catch (err) {
-        error.value = err.message;
+        error.value = err.message
     } finally {
-        loading.value = false;
+        loading.value = false
     }
-});
+})
 
 </script>
 
 <template>
     <div>
+
+        <div v-if="overzicht.length">
+            <h2>Weekendoverzicht</h2>
+
+            <p>{{ startDatum }} t/m {{ eindDatum }}</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sport</th>
+                        <th>Aantal wedstrijden</th>
+                        <th>Ontbrekende uitslagen</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="sport in overzicht" :key="sport.sport">
+
+                        <td>{{ sport.sport }}</td>
+                        <td>{{ sport.aantal_Wedstrijden }}</td>
+                        <td>{{ sport.aantal_ontbrekend }}</td>
+                        </tr>
+                    </tbody>
+            </table>
+
+        </div>
         <h1>Wedstrijden</h1>
 
         <p v-if="loading">Laden...</p>

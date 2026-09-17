@@ -9,22 +9,21 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class wedstrijdApiController extends AbstractController
 {
-    #[Route('/api/wedstrijden', name: 'api_wedstrijden', methods: ['GET'])]
-    public function wedstrijden(
+    #[Route('/api/weekend-overzicht', name: 'api_weekend_overzicht')]
+    public function weekendOverzicht(
         WedstrijdService $wedstrijdService
     ): JsonResponse {
-
-        $startDatum = '2026-06-13';
-        $eindDatum = '2026-06-14';
-
+        $periode = $wedstrijdService->getWeekendPeriode();
+    
+        $overzicht = $wedstrijdService->getWeekendOverzicht(
+            $periode['startDatum'],
+            $periode['eindDatum']
+        );
+    
         return $this->json([
-            'wedstrijden' => $wedstrijdService->getWedstrijden(),
-
-            'ontbrekendeUitslagen' =>
-                $wedstrijdService->getOntbrekendeUitslagen(
-                    $startDatum,
-                    $eindDatum
-                ),
+            'startDatum' => $periode['startDatum'],
+            'eindDatum' => $periode['eindDatum'],
+            'overzicht' => $overzicht,
         ]);
     }
 }
