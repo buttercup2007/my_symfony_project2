@@ -7,6 +7,32 @@ const error = ref(null);
 const overzicht = ref([])
 const startDatum = ref('')
 const eindDatum = ref('')
+const weekendOffset = ref(0);
+
+async function laadWeekend(offset) {
+    loading.value = true;
+    error.value = null;
+
+    try {
+        const response = await fetch(`/api/weekend-overzicht?weekend=${offset}`);
+
+        if (!response.ok) {
+            throw new Error('Weekend overzicht kon niet worden geladen')
+        }
+
+        const data = await response.json()
+
+        overzicht.value = data.overzicht
+        startDatum.value = data.startDatum
+        eindDatum.value = data.eindDatum
+        weekendOffset.value = offset
+
+    } catch (err) {
+        error.value = err.message
+    } finally {
+        loading.value = false
+    }
+}
 
 onMounted(async () => {
     try {
@@ -41,6 +67,14 @@ onMounted(async () => {
 </script>
 
 <template>
+
+    <div class="weekend-navigation">
+        <button @click="laadWeekend(weekendOffset - 1)">Vorige weekend</button>
+
+        <span>{{ startDatum }} t/m {{ eindDatum }}</span>
+
+        <button @click="laadWeekend(weekendOffset + 1)">Volgende weekend</button>
+    </div>
     <div>
 
         <div v-if="overzicht.length">
