@@ -10,21 +10,38 @@ const eindDatum = ref('')
 const weekendOffset = ref(0);
 
 async function laadWeekend(offset) {
-    loading.value = true;
-    error.value = null;
+    loading.value = true
+    error.value = null
 
     try {
-        const response = await fetch(`/api/weekend-overzicht?weekend=${offset}`);
+        // Weekend overzicht ophalen
+        const overzichtResponse = await fetch(
+            `/api/weekend-overzicht?weekend=${offset}`
+        )
 
-        if (!response.ok) {
+        if (!overzichtResponse.ok) {
             throw new Error('Weekend overzicht kon niet worden geladen')
         }
 
-        const data = await response.json()
+        const overzichtData = await overzichtResponse.json()
 
-        overzicht.value = data.overzicht
-        startDatum.value = data.startDatum
-        eindDatum.value = data.eindDatum
+        // Wedstrijden van hetzelfde weekend ophalen
+        const wedstrijdenResponse = await fetch(
+            `/api/weekend-wedstrijden?weekend=${offset}`
+        )
+
+        if (!wedstrijdenResponse.ok) {
+            throw new Error('Weekend wedstrijden konden niet worden geladen')
+        }
+
+        const wedstrijdenData = await wedstrijdenResponse.json()
+
+        // Data in Vue zetten
+        overzicht.value = overzichtData.overzicht
+        wedstrijden.value = wedstrijdenData.wedstrijden
+
+        startDatum.value = overzichtData.startDatum
+        eindDatum.value = overzichtData.eindDatum
         weekendOffset.value = offset
 
     } catch (err) {
@@ -45,6 +62,15 @@ onMounted(async () => {
         const data = await response.json()
         wedstrijden.value = data.wedstrijden
 
+        await laadWeekend(0);
+
+    } catch (err) {
+        error.value = err.message
+    } finally {
+        loading.value = false
+    }
+})
+
         const overzichtResponse = await fetch('/api/weekend-overzicht')
 
         if (!overzichtResponse.ok) {
@@ -56,13 +82,6 @@ onMounted(async () => {
         overzicht.value = overzichtData.overzicht
         startDatum.value = overzichtData.startDatum
         eindDatum.value = overzichtData.eindDatum
-
-    } catch (err) {
-        error.value = err.message
-    } finally {
-        loading.value = false
-    }
-})
 
 </script>
 
