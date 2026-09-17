@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted} from 'vue'
+import {onMounted, ref} from 'vue'
 
 const wedstrijden = ref([]);
 const loading = ref(true);

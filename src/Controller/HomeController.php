@@ -33,7 +33,6 @@ class HomeController extends AbstractController
             $vandaag = $laatsteScoreDatum;
         }
     
-        // Find the most recent Friday
         $dagVanDeWeek = (int) $vandaag->format('N');
     
         if ($dagVanDeWeek >= 5) {
@@ -45,7 +44,6 @@ class HomeController extends AbstractController
         $vrijdag = (clone $vandaag)->modify("-{$dagenSindsVrijdag} days");
         $vrijdag->modify("{$weekendOffset} weeks");
     
-        // The weekend runs from Friday until Sunday
         $startDatum = (clone $vrijdag);
         $eindDatum = (clone $vrijdag)->modify('+2 days');
     
