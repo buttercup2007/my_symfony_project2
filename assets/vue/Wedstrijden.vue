@@ -22,13 +22,14 @@ const sporten = computed(() => {
 })
 
 const gefilterdeWedstrijden = computed(() => {
-    if (gekozenSport.value === 'Alle') {
-        return wedstrijden.value
-    }
+    return wedstrijden.value.filter(wedstrijd => {
+        const sportKomtOvereen = gekozenSport.value === 'Alle'
+            || wedstrijd.sport === gekozenSport.value
+        const datumKomtOvereen = gekozenDatum.value === 'Alle'
+            || wedstrijd.datum === gekozenDatum.value
 
-    return wedstrijden.value.filter(
-        wedstrijd => wedstrijd.sport === gekozenSport.value
-    )
+        return sportKomtOvereen && datumKomtOvereen
+    })
 })
 
 const datums = computed(() => {
@@ -132,33 +133,33 @@ onMounted(() => {
             {{ error }}
         </p>
 
-<label for="sport">
-    Filter op sport:
-</label>
+        <div class="sport-filter-form vue-filter-form">
+            <div class="filter-field">
+                <label for="weekend-sport-filter">Sport</label>
+                <select id="weekend-sport-filter" v-model="gekozenSport">
+                    <option
+                        v-for="sport in sporten"
+                        :key="sport"
+                        :value="sport"
+                    >
+                        {{ sport === 'Alle' ? 'Alle sporten' : sport }}
+                    </option>
+                </select>
+            </div>
 
-<select id="sport" v-model="gekozenSport">
-    <option
-        v-for="sport in sporten"
-        :key="sport"
-        :value="sport"
-    >
-        {{ sport }}
-    </option>
-</select>
-
-<label for="datum">
-    Filter op datum:
-</label>
-
-<select id="datum" v-model="gekozenDatum">
-    <option
-        v-for="datum in datums"
-        :key="datum"
-        :value="datum"
-    >
-        {{ datum }}
-    </option>
-</select>
+            <div class="filter-field">
+                <label for="weekend-date-filter">Datum</label>
+                <select id="weekend-date-filter" v-model="gekozenDatum">
+                    <option
+                        v-for="datum in datums"
+                        :key="datum"
+                        :value="datum"
+                    >
+                        {{ datum === 'Alle' ? 'Alle dagen' : datum }}
+                    </option>
+                </select>
+            </div>
+        </div>
 
         <div v-if="!loading && !error">
 
@@ -210,29 +211,6 @@ onMounted(() => {
             </div>
 
             <h1>Wedstrijden</h1>
-
-            <div class="sport-filter">
-
-                <label for="sport">
-                    Filter op sport:
-                </label>
-
-                <select
-                    id="sport"
-                    v-model="gekozenSport"
-                >
-
-                    <option
-                        v-for="sport in sporten"
-                        :key="sport"
-                        :value="sport"
-                    >
-                        {{ sport }}
-                    </option>
-
-                </select>
-
-            </div>
 
             <p>
                 Aantal wedstrijden:

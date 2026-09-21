@@ -168,6 +168,8 @@ h1::after {
     box-shadow: 0 6px 16px rgba(23, 33, 43, 0.04);
 }
 
+.vue-filter-form { margin-top: 24px; }
+
 .filter-field {
     display: grid;
     gap: 7px;
