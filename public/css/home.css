@@ -155,6 +155,55 @@ h1::after {
 .weekend-date { margin: 0; color: #fff; font-weight: 700; text-align: center; }
 .weekend-date span { margin: 0 8px; color: #9fb0b5; font-weight: 400; }
 
+.sport-filter-form {
+    display: flex;
+    align-items: end;
+    gap: 16px;
+    margin: -14px 0 34px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.86);
+    box-shadow: 0 6px 16px rgba(23, 33, 43, 0.04);
+}
+
+.filter-field {
+    display: grid;
+    gap: 7px;
+    min-width: 200px;
+}
+
+.filter-field label {
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.filter-field select {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 38px 0 12px;
+    border: 1px solid #bdcccf;
+    border-radius: 5px;
+    background-color: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.9rem;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.filter-field select:hover { border-color: var(--accent); }
+
+.filter-field select:focus-visible {
+    border-color: var(--accent);
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.18);
+}
+
 .summary {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -264,6 +313,8 @@ tr:last-child td { border-bottom: 0; }
     .home-page { width: min(100% - 24px, 1180px); padding-top: 32px; }
     .weekend-navigation { align-items: stretch; flex-direction: column; gap: 11px; text-align: center; }
     .weekend-date { order: -1; }
+    .sport-filter-form { align-items: stretch; flex-direction: column; gap: 14px; margin-top: -14px; padding: 16px; }
+    .filter-field { min-width: 0; }
     .summary { grid-template-columns: 1fr; }
     .section-heading { align-items: start; flex-direction: column; padding: 20px; }
     th, td { padding: 13px 14px; }

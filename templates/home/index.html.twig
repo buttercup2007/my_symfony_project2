@@ -37,21 +37,25 @@
         <form method="get" class="sport-filter-form">
             <input type="hidden" name="weekend" value="{{ weekendOffset }}">
 
-            <label for="home-sport-filter">Filter op sport:</label>
-            <select id="home-sport-filter" name="sport" onchange="this.form.submit()">
-                <option value="Alle" {% if selectedSport|default('Alle') == 'Alle' %}selected{% endif %}>Alle</option>
-                {% for sport in sportOptions %}
-                    <option value="{{ sport }}" {% if selectedSport|default('Alle') == sport %}selected{% endif %}>{{ sport }}</option>
-                {% endfor %}
-            </select>
+            <div class="filter-field">
+                <label for="home-sport-filter">Sport</label>
+                <select id="home-sport-filter" name="sport" onchange="this.form.submit()">
+                    <option value="Alle" {% if selectedSport|default('Alle') == 'Alle' %}selected{% endif %}>Alle sporten</option>
+                    {% for sport in sportOptions %}
+                        <option value="{{ sport }}" {% if selectedSport|default('Alle') == sport %}selected{% endif %}>{{ sport }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-            <label for="home-date-filter">Filter op datum:</label>
-            <select id="home-date-filter" name="date" onchange="this.form.submit()">
-                <option value="Alle" {% if selectedDate|default('Alle') == 'Alle' %}selected{% endif %}>Alle</option>
-                {% for dateOption in dateOptions|default([]) %}
-                    <option value="{{ dateOption }}" {% if selectedDate|default('Alle') == dateOption %}selected{% endif %}>{{ dateOption|date('d-m-Y') }}</option>
-                {% endfor %}
-            </select>
+            <div class="filter-field">
+                <label for="home-date-filter">Datum</label>
+                <select id="home-date-filter" name="date" onchange="this.form.submit()">
+                    <option value="Alle" {% if selectedDate|default('Alle') == 'Alle' %}selected{% endif %}>Alle dagen</option>
+                    {% for dateOption in dateOptions|default([]) %}
+                        <option value="{{ dateOption }}" {% if selectedDate|default('Alle') == dateOption %}selected{% endif %}>{{ dateOption|date('d-m-Y') }}</option>
+                    {% endfor %}
+                </select>
+            </div>
         </form>
 
         <section class="summary" aria-label="Weekend samenvatting">
