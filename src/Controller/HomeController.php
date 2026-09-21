@@ -17,6 +17,7 @@ class HomeController extends AbstractController
     ): Response {
         $weekendOffset = $request->query->getInt('weekend', 0);
         $selectedSport = $request->query->get('sport', 'Alle');
+        $selectedDate = $request->query->get('date', 'Alle');
         $vandaag = new \DateTime();
         $wedstrijden = $wedstrijdService->getWedstrijden();
 
@@ -57,6 +58,21 @@ class HomeController extends AbstractController
         $startDatum = (clone $vrijdag);
         $eindDatum = (clone $vrijdag)->modify('+2 days');
 
+        $dateOptions = [];
+        $periode = new \DatePeriod(
+            (clone $startDatum),
+            new \DateInterval('P1D'),
+            (clone $eindDatum)->modify('+1 day')
+        );
+
+        foreach ($periode as $datum) {
+            $dateOptions[] = $datum->format('Y-m-d');
+        }
+
+        if (!in_array($selectedDate, $dateOptions, true)) {
+            $selectedDate = 'Alle';
+        }
+
         $overzicht = $wedstrijdService->getWeekendOverzicht(
             $startDatum->format('Y-m-d'),
             $eindDatum->format('Y-m-d'),
@@ -66,8 +82,15 @@ class HomeController extends AbstractController
         $filteredWedstrijden = $wedstrijden;
         if ($selectedSport !== 'Alle' && $selectedSport !== null && $selectedSport !== '') {
             $filteredWedstrijden = array_values(array_filter(
-                $wedstrijden,
+                $filteredWedstrijden,
                 static fn (array $wedstrijd): bool => ($wedstrijd['sport'] ?? '') === $selectedSport
+            ));
+        }
+
+        if ($selectedDate !== 'Alle' && $selectedDate !== null && $selectedDate !== '') {
+            $filteredWedstrijden = array_values(array_filter(
+                $filteredWedstrijden,
+                static fn (array $wedstrijd): bool => ($wedstrijd['datum'] ?? '') === $selectedDate
             ));
         }
 
@@ -90,7 +113,9 @@ class HomeController extends AbstractController
             'eindDatum' => $eindDatum,
             'weekendOffset' => $weekendOffset,
             'selectedSport' => $selectedSport,
+            'selectedDate' => $selectedDate,
             'sportOptions' => $sportOptions,
+            'dateOptions' => $dateOptions,
             'aantalScores' => $aantalScores,
         ]);
     }

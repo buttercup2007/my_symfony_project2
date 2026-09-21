@@ -11,6 +11,7 @@ const eindDatum = ref('')
 const weekendOffset = ref(0)
 
 const gekozenSport = ref('Alle')
+const gekozenDatum = ref('Alle')
 
 const sporten = computed(() => {
     const uniekeSporten = wedstrijden.value.map(
@@ -28,6 +29,14 @@ const gefilterdeWedstrijden = computed(() => {
     return wedstrijden.value.filter(
         wedstrijd => wedstrijd.sport === gekozenSport.value
     )
+})
+
+const datums = computed(() => {
+    const uniekeDatums = wedstrijden.value.map(
+        wedstrijd => wedstrijd.datum
+    )
+
+    return ['Alle', ...new Set(uniekeDatums)]
 })
 
 async function laadWeekend(offset) {
@@ -135,7 +144,21 @@ onMounted(() => {
     >
         {{ sport }}
     </option>
-</select>        
+</select>
+
+<label for="datum">
+    Filter op datum:
+</label>
+
+<select id="datum" v-model="gekozenDatum">
+    <option
+        v-for="datum in datums"
+        :key="datum"
+        :value="datum"
+    >
+        {{ datum }}
+    </option>
+</select>
 
         <div v-if="!loading && !error">
 
