@@ -3,7 +3,7 @@
 {% block title %}Weekend Overzicht{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/weekend.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/weekend.css') }}?v=20260921-2">
 {% endblock %}
 
 {% block body %}
@@ -22,6 +22,9 @@
                 <p class="weekend-date">
                     {{ startDatum|date('d-m-Y') }} <span>t/m</span> {{ eindDatum|date('d-m-Y') }}
                 </p>
+                <a class="weekend-current" href="{{ path('app_weekend', { weekend: 0 }) }}">
+                    Huidig weekend
+                </a>
                 <a class="weekend-arrow" href="{{ path('app_weekend', { weekend: weekendOffset + 1 }) }}" aria-label="Volgend weekend">
                     Volgend weekend <span aria-hidden="true">&rarr;</span>
                 </a>

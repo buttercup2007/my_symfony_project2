@@ -29,6 +29,10 @@
                 {{ startDatum|date('d-m-Y') }} <span>t/m</span> {{ eindDatum|date('d-m-Y') }}
             </p>
 
+            <a class="weekend-current" href="{{ path('home', { weekend: 0, sport: selectedSport|default('Alle'), date: selectedDate|default('Alle') }) }}">
+                Huidig weekend
+            </a>
+
             <a class="weekend-arrow" href="{{ path('home', { weekend: weekendOffset + 1, sport: selectedSport|default('Alle'), date: selectedDate|default('Alle') }) }}" aria-label="Volgend weekend">
                 Volgend weekend <span aria-hidden="true">&rarr;</span>
             </a>

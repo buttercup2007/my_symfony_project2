@@ -149,9 +149,27 @@ h1::after {
     box-shadow: 0 12px 25px rgba(23, 33, 43, 0.12);
 }
 
-.weekend-arrow { color: #fff; white-space: nowrap; }
+.weekend-arrow {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.weekend-current,
+.weekend-current:visited {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
 .weekend-arrow:hover,
-.weekend-arrow:focus-visible { color: #a6e0d5; }
+.weekend-arrow:focus-visible,
+.weekend-current:hover,
+.weekend-current:focus-visible { color: #a6e0d5; }
+.weekend-current:hover,
+.weekend-current:focus-visible {
+    text-decoration: underline;
+}
 .weekend-date { margin: 0; color: #fff; font-weight: 700; text-align: center; }
 .weekend-date span { margin: 0 8px; color: #9fb0b5; font-weight: 400; }
 
@@ -315,6 +333,7 @@ tr:last-child td { border-bottom: 0; }
     .home-page { width: min(100% - 24px, 1180px); padding-top: 32px; }
     .weekend-navigation { align-items: stretch; flex-direction: column; gap: 11px; text-align: center; }
     .weekend-date { order: -1; }
+    .weekend-current { align-self: center; }
     .sport-filter-form { align-items: stretch; flex-direction: column; gap: 14px; margin-top: -14px; padding: 16px; }
     .filter-field { min-width: 0; }
     .summary { grid-template-columns: 1fr; }
