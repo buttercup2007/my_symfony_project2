@@ -6,18 +6,21 @@ use App\Repository\WedstrijdRepository;
 
 class WedstrijdService
 {
-    public function getWeekendWedstrijden(
-    string $startDatum,
-    string $eindDatum
-    ): array {
-    return $this->wedstrijdRepository->getWeekendWedstrijden(
-        $startDatum,
-        $eindDatum
-    );
-}
     public function __construct(
         private WedstrijdRepository $wedstrijdRepository
     ) {
+    }
+
+    public function getWeekendWedstrijden(
+        string $startDatum,
+        string $eindDatum,
+        ?string $sport = null
+    ): array {
+        return $this->wedstrijdRepository->getWeekendWedstrijden(
+            $startDatum,
+            $eindDatum,
+            $sport
+        );
     }
 
     public function getWedstrijden(): array
@@ -47,11 +50,13 @@ class WedstrijdService
 
     public function getWeekendOverzicht(
         string $startDatum,
-        string $eindDatum
+        string $eindDatum,
+        ?string $sport = null
     ): array {
         return $this->wedstrijdRepository->getWeekendOverzicht(
             $startDatum,
-            $eindDatum
+            $eindDatum,
+            $sport
         );
     }
 

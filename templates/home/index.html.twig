@@ -21,7 +21,7 @@
         </header>
 
         <nav class="weekend-navigation" aria-label="Weekend navigatie">
-            <a class="weekend-arrow" href="{{ path('home', { weekend: weekendOffset - 1 }) }}" aria-label="Vorig weekend">
+            <a class="weekend-arrow" href="{{ path('home', { weekend: weekendOffset - 1, sport: selectedSport|default('Alle') }) }}" aria-label="Vorig weekend">
                 <span aria-hidden="true">&larr;</span> Vorig weekend
             </a>
 
@@ -29,10 +29,21 @@
                 {{ startDatum|date('d-m-Y') }} <span>t/m</span> {{ eindDatum|date('d-m-Y') }}
             </p>
 
-            <a class="weekend-arrow" href="{{ path('home', { weekend: weekendOffset + 1 }) }}" aria-label="Volgend weekend">
+            <a class="weekend-arrow" href="{{ path('home', { weekend: weekendOffset + 1, sport: selectedSport|default('Alle') }) }}" aria-label="Volgend weekend">
                 Volgend weekend <span aria-hidden="true">&rarr;</span>
             </a>
         </nav>
+
+        <form method="get" class="sport-filter-form">
+            <input type="hidden" name="weekend" value="{{ weekendOffset }}">
+            <label for="home-sport-filter">Filter op sport:</label>
+            <select id="home-sport-filter" name="sport" onchange="this.form.submit()">
+                <option value="Alle" {% if selectedSport|default('Alle') == 'Alle' %}selected{% endif %}>Alle</option>
+                {% for sport in sportOptions %}
+                    <option value="{{ sport }}" {% if selectedSport|default('Alle') == sport %}selected{% endif %}>{{ sport }}</option>
+                {% endfor %}
+            </select>
+        </form>
 
         <section class="summary" aria-label="Weekend samenvatting">
             <div class="summary-card">
@@ -40,14 +51,21 @@
                 <strong>{{ overzicht|length }}</strong>
             </div>
 
-            <a href="{{ path('app_weekend', { weekend: weekendOffset }) }}" class="summary-card summary-card-link">
+            <div class="summary-card">
+                <span class="card-label">Totaal wedstrijden</span>
+                <strong>
+                    {% set totaalWedstrijden = 0 %}
+                    {% for sport in overzicht %}
+                        {% set totaalWedstrijden = totaalWedstrijden + sport.aantal_wedstrijden %}
+                    {% endfor %}
+                    {{ totaalWedstrijden }}
+                </strong>
+            </div>
+
+            <a href="{{ path('app_weekend', { weekend: weekendOffset, sport: selectedSport|default('Alle') }) }}" class="summary-card summary-card-link">
                 <span class="card-label">Wedstrijden</span>
                 <strong>
-                    {% set totaal = 0 %}
-                    {% for sport in overzicht %}
-                        {% set totaal = totaal + sport.aantal_wedstrijden %}
-                    {% endfor %}
-                    {{ totaal }}
+                    {{ totaalWedstrijden }}
                 </strong>
                 <span class="card-action">Bekijk weekend overzicht &rarr;</span>
             </a>
