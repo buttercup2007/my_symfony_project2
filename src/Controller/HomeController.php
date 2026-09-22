@@ -40,9 +40,10 @@ class HomeController extends AbstractController
             }
         }
 
-        if ($laatsteScoreDatum !== null) {
-            $vandaag = $laatsteScoreDatum;
-        }
+        $weekend = $wedstrijdService ->getWeekendPeriode($weekendOffset);
+
+        $startDatum = new \DateTime($weekend['startDatum']);
+        $eindDatum = new \DateTime($weekend['eindDatum']);
 
         $dagVanDeWeek = (int) $vandaag->format('N');
 
