@@ -1,13 +1,13 @@
 :root {
-    --ink: #17212b;
-    --muted: #687582;
-    --line: #dce4e8;
+    --ink: #2c211b;
+    --muted: #77675d;
+    --line: #ead8c7;
     --paper: #ffffff;
-    --wash: #eef4f2;
-    --accent: #0f766e;
-    --accent-dark: #0b514c;
-    --highlight: #e3f2ed;
-    --danger: #b94a48;
+    --wash: #fff1e2;
+    --accent: #f26922;
+    --accent-dark: #b94713;
+    --highlight: #ffe1c5;
+    --danger: #b64024;
 }
 
 * { box-sizing: border-box; }
@@ -15,7 +15,7 @@
 body {
     min-height: 100vh;
     margin: 0;
-    background: linear-gradient(135deg, #edf5f3 0%, #f7f8f6 55%, #e9f0f2 100%);
+    background: linear-gradient(135deg, #fff7ef 0%, #f8ece0 55%, #f2dfce 100%);
     color: var(--ink);
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -40,10 +40,10 @@ body {
     gap: 8px;
     max-width: 280px;
     padding: 10px 12px;
-    border: 1px solid #cfe3d4;
+    border: 1px solid #f0c9a6;
     border-radius: 6px;
-    background: #f3faf4;
-    color: #215c32;
+    background: #fff0df;
+    color: #9a3a15;
     font-size: 14px;
 }
 
@@ -51,14 +51,14 @@ body {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #2d9d50;
+    background: var(--accent);
 }
 
 .vue-status-panel button {
     border: 0;
     padding: 0;
     background: transparent;
-    color: #1769aa;
+    color: var(--accent-dark);
     cursor: pointer;
     font: inherit;
     text-decoration: underline;
@@ -165,13 +165,13 @@ h1::after {
 .weekend-arrow:hover,
 .weekend-arrow:focus-visible,
 .weekend-current:hover,
-.weekend-current:focus-visible { color: #a6e0d5; }
+.weekend-current:focus-visible { color: #ffd0a9; }
 .weekend-current:hover,
 .weekend-current:focus-visible {
     text-decoration: underline;
 }
 .weekend-date { margin: 0; color: #fff; font-weight: 700; text-align: center; }
-.weekend-date span { margin: 0 8px; color: #9fb0b5; font-weight: 400; }
+.weekend-date span { margin: 0 8px; color: #f2b98d; font-weight: 400; }
 
 .sport-filter-form {
     display: flex;
@@ -206,7 +206,7 @@ h1::after {
     width: 100%;
     min-height: 42px;
     padding: 0 38px 0 12px;
-    border: 1px solid #bdcccf;
+    border: 1px solid #dfc4ae;
     border-radius: 5px;
     background-color: var(--paper);
     color: var(--ink);
@@ -221,7 +221,7 @@ h1::after {
 .filter-field select:focus-visible {
     border-color: var(--accent);
     outline: 0;
-    box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.18);
+    box-shadow: 0 0 0 3px rgba(242, 105, 34, 0.2);
 }
 
 .summary {
@@ -317,9 +317,9 @@ h1::after {
 .table-wrap { overflow-x: auto; }
 
 table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-th, td { padding: 15px 18px; border-bottom: 1px solid #edf1f2; text-align: left; white-space: nowrap; }
+th, td { padding: 15px 18px; border-bottom: 1px solid #f3e7dc; text-align: left; white-space: nowrap; }
 th { background: var(--wash); color: var(--muted); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; }
-tbody tr:hover { background: #f7fbfa; }
+tbody tr:hover { background: #fff7f0; }
 tr:last-child td { border-bottom: 0; }
 .strong-cell { font-weight: 700; }
 .score-cell { color: var(--accent-dark); font-weight: 700; }

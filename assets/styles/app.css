@@ -2,6 +2,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 30px;
+    background: #fff7ef;
+    color: #2c211b;
 }
 
 
@@ -24,7 +26,7 @@ h2 {
 
 .weekend-navigatie button {
     border: none;
-    background-color: #333;
+    background-color: #f26922;
     color: white;
     width: 40px;
     height: 40px;
@@ -35,7 +37,7 @@ h2 {
 
 
 .weekend-navigatie button:hover {
-    background-color: #555;
+    background-color: #b94713;
 }
 
 
@@ -67,13 +69,13 @@ td {
 
 
 th {
-    background-color: #f2f2f2;
+    background-color: #fff1e2;
     font-weight: bold;
 }
 
 
 tbody tr:hover {
-    background-color: #f8f8f8;
+    background-color: #fff7f0;
 }
 
 .wedstrijd-aantal {
@@ -86,7 +88,7 @@ tbody tr:hover {
 }
 
 .ontbrekende-uitslagen {
-    background-color: #f9f9f9;
+    background-color: #fff0df;
     padding: 20px;
     border-radius: 8px;
 }

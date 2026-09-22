@@ -1,13 +1,13 @@
 :root {
-    --ink: #17212b;
-    --muted: #687582;
-    --line: #dce4e8;
+    --ink: #2c211b;
+    --muted: #77675d;
+    --line: #ead8c7;
     --paper: #ffffff;
-    --wash: #eef4f2;
-    --accent: #0f766e;
-    --accent-dark: #0b514c;
-    --highlight: #e3f2ed;
-    --danger: #b94a48;
+    --wash: #fff1e2;
+    --accent: #f26922;
+    --accent-dark: #b94713;
+    --highlight: #ffe1c5;
+    --danger: #b64024;
 }
 
 * { box-sizing: border-box; }
@@ -15,7 +15,7 @@
 body {
     min-height: 100vh;
     margin: 0;
-    background: linear-gradient(135deg, #edf5f3 0%, #f7f8f6 55%, #e9f0f2 100%);
+    background: linear-gradient(135deg, #fff7ef 0%, #f8ece0 55%, #f2dfce 100%);
     color: var(--ink);
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -85,7 +85,7 @@ body {
 .weekend-arrow:hover,
 .weekend-arrow:focus-visible,
 .weekend-current:hover,
-.weekend-current:focus-visible { color: #a6e0d5; }
+.weekend-current:focus-visible { color: #ffd0a9; }
 
 .weekend-date {
     margin: 0 !important;
@@ -95,7 +95,7 @@ body {
     text-align: center;
 }
 
-.weekend-date span { margin: 0 8px; color: #9fb0b5; font-weight: 400; }
+.weekend-date span { margin: 0 8px; color: #f2b98d; font-weight: 400; }
 
 .summary {
     display: grid;
@@ -132,14 +132,14 @@ body {
 .section-header h2 { font-size: 1.65rem; }
 .table-container { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; }
-th, td { padding: 15px 18px; border-bottom: 1px solid #edf1f2; text-align: left; white-space: nowrap; }
+th, td { padding: 15px 18px; border-bottom: 1px solid #f3e7dc; text-align: left; white-space: nowrap; }
 th { background: var(--wash); color: var(--muted); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; }
-tbody tr:hover { background: #f7fbfa; }
+tbody tr:hover { background: #fff7f0; }
 tr:last-child td { border-bottom: 0; }
 .sport-name { font-weight: 700; }
 .score-cell { min-width: 72px; color: var(--accent-dark); font-weight: 700; text-align: center; }
 .status { display: inline-block; padding: 5px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
-.status-missing { background: #fbe5e4; color: #9c3c3a; }
+.status-missing { background: #ffe2d1; color: #a63918; }
 .status-complete { background: var(--highlight); color: var(--accent-dark); }
 .empty { padding: 30px; color: var(--muted); text-align: center; white-space: normal; }
 

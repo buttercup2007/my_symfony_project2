@@ -4,61 +4,55 @@
 
 {% block body %}
 
-<div class="wedstrijd-detail">
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
+{% endblock %}
 
-    <a href="{{ path('home') }}">
-        &larr; Terug naar weekend
-    </a>
+<main class="wedstrijd-detail">
+    <header class="detail-header">
+        <a class="back-link" href="{{ path('home') }}">
+            &larr; Terug naar weekend
+        </a>
+        <p class="sport-label">{{ wedstrijd.sport }}</p>
+        <h1>Wedstrijd</h1>
+    </header>
 
-    <h1>Wedstrijd</h1>
-
-    <p>{{wedstrijd.sport }}</p>
-
-    <div class="wedstrijd-teams">
-
-        <div class="team">
-            <strong>{{wedstrijd.team1 }}</strong>
-
-            {% if wedstrijd.score1 is not null %}
-                <span>{{wedstrijd.score1 }}</span>
-
-            {% else %}
-                <span>-</span>
-            {% endif %}
-
+    <section class="match-sheet" aria-label="Wedstrijdresultaat">
+        <div class="team team-home">
+            <span class="team-label">Thuis</span>
+            <strong>{{ wedstrijd.team1 }}</strong>
         </div>
 
-        <div class="vs"> - </div>
-
-        <div class="team">
-            {% if wedstrijd.score2 is not null %}
-                <span>{{wedstrijd.score2 }}</span>
-            {% else %}
-                <span>-</span>
-            {% endif %}
-            <strong>{{wedstrijd.team2 }}</strong>
-
+        <div class="scoreline" aria-label="Score">
+            <span>{{ wedstrijd.score1 is not null ? wedstrijd.score1 : '-' }}</span>
+            <span class="score-separator">:</span>
+            <span>{{ wedstrijd.score2 is not null ? wedstrijd.score2 : '-' }}</span>
         </div>
 
-        <div class="wedstrijd-info">
-
-            <p>
-                <strong>Datum:</strong> {{wedstrijd.datum|date('d-m-Y') }}
-            </p>
-
-            <p> 
-                <strong>Tijd:</strong> {{wedstrijd.tijd }}
-            </p>
-
-            <p>
-                <strong>Locatie:</strong>{{ wedstrijd.compnummer }}
-            </p>
-
-            <p>
-                <strong>Wedstrijdnummer:</strong> {{ wedstrijd.wedstrijdnummer }}   
-            </p>
-
+        <div class="team team-away">
+            <span class="team-label">Uit</span>
+            <strong>{{ wedstrijd.team2 }}</strong>
         </div>
-    </div>
+    </section>
+
+    <section class="wedstrijd-info" aria-label="Wedstrijddetails">
+        <div>
+            <span>Datum</span>
+            <strong>{{ wedstrijd.datum|date('d-m-Y') }}</strong>
+        </div>
+        <div>
+            <span>Aanvang</span>
+            <strong>{{ wedstrijd.tijd }}</strong>
+        </div>
+        <div>
+            <span>Competitie</span>
+            <strong>{{ wedstrijd.compnummer }}</strong>
+        </div>
+        <div>
+            <span>Wedstrijdnummer</span>
+            <strong>{{ wedstrijd.wedstrijdnummer }}</strong>
+        </div>
+    </section>
+</main>
 
 {% endblock %}

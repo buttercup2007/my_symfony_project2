@@ -1,0 +1,203 @@
+:root {
+    --match-ink: #22201e;
+    --match-muted: #736b62;
+    --match-line: #e5d8ca;
+    --match-surface: #fffaf3;
+    --match-wash: #fff0df;
+    --match-accent: #f26922;
+    --match-accent-dark: #c84d12;
+    --match-accent-soft: #ffe0c6;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f7ede2;
+    background-image: linear-gradient(90deg, rgba(242, 105, 34, 0.06) 1px, transparent 1px), linear-gradient(rgba(242, 105, 34, 0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--match-ink);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.wedstrijd-detail {
+    width: min(100% - 40px, 980px);
+    margin: 0 auto;
+    padding: 56px 0 80px;
+}
+
+.detail-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px 24px;
+    align-items: end;
+    margin-bottom: 26px;
+}
+
+.back-link {
+    color: var(--match-accent-dark);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+    color: var(--match-ink);
+    text-decoration: underline;
+}
+
+.sport-label {
+    margin: 0;
+    color: var(--match-accent);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-align: right;
+    text-transform: uppercase;
+}
+
+.detail-header h1 {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.35rem, 5vw, 4.25rem);
+    font-weight: 400;
+    line-height: 0.95;
+}
+
+.match-sheet {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    min-height: 250px;
+    padding: 44px 52px;
+    background: linear-gradient(135deg, #fffaf3 0%, #fff2e5 100%);
+    border: 1px solid #e5c7ad;
+    border-top: 7px solid var(--match-accent);
+    border-radius: 8px;
+    box-shadow: 0 18px 42px rgba(91, 47, 21, 0.13);
+}
+
+.team { min-width: 0; }
+
+.team-away { text-align: right; }
+
+.team-label,
+.wedstrijd-info span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--match-accent-dark);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.team strong {
+    display: block;
+    overflow-wrap: anywhere;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+    font-weight: 400;
+    line-height: 1.04;
+}
+
+.scoreline {
+    display: grid;
+    grid-template-columns: 2.5ch auto 2.5ch;
+    align-items: center;
+    gap: 14px;
+    margin: 0 44px;
+    color: var(--match-accent-dark);
+    font-size: clamp(3.25rem, 8vw, 6.75rem);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    text-align: center;
+}
+
+.score-separator {
+    color: var(--match-accent);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.55em;
+    font-weight: 400;
+}
+
+.wedstrijd-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 18px;
+    border: 1px solid #e5c7ad;
+    border-radius: 8px;
+    background: var(--match-wash);
+    overflow: hidden;
+}
+
+.wedstrijd-info div {
+    min-width: 0;
+    padding: 19px 22px;
+    border-right: 1px solid #e5c7ad;
+}
+
+.wedstrijd-info div:last-child { border-right: 0; }
+
+.wedstrijd-info strong {
+    display: block;
+    overflow-wrap: anywhere;
+    font-size: 0.98rem;
+}
+
+@media (max-width: 720px) {
+    .wedstrijd-detail {
+        width: min(100% - 28px, 1040px);
+        padding: 30px 0 48px;
+    }
+
+    .match-sheet {
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        min-height: 190px;
+        padding: 34px 20px;
+    }
+
+    .scoreline {
+        gap: 6px;
+        margin: 0 18px;
+    }
+
+    .wedstrijd-info { grid-template-columns: repeat(2, 1fr); }
+
+    .wedstrijd-info div:nth-child(2) { border-right: 0; }
+
+    .wedstrijd-info div:nth-child(-n + 2) { border-bottom: 1px solid #e5c7ad; }
+}
+
+@media (max-width: 480px) {
+    .detail-header { grid-template-columns: 1fr; }
+
+    .sport-label { text-align: left; }
+
+    .match-sheet {
+        grid-template-columns: 1fr;
+        gap: 22px;
+        text-align: center;
+    }
+
+    .team-away { text-align: center; }
+
+    .scoreline {
+        grid-row: 2;
+        justify-content: center;
+    }
+
+    .team-away { grid-row: 3; }
+
+    .wedstrijd-info { grid-template-columns: 1fr; }
+
+    .wedstrijd-info div,
+    .wedstrijd-info div:nth-child(2) {
+        border-right: 0;
+        border-bottom: 1px solid #e5c7ad;
+    }
+
+    .wedstrijd-info div:last-child { border-bottom: 0; }
+}
