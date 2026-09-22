@@ -174,8 +174,11 @@ class WedstrijdRepository
     ): array {
         $sql = '
             SELECT
+                w.compnummer,
+                w.wedstrijdnummer,
+    
                 w.datum,
-
+    
                 CASE
                     WHEN w.tijd LIKE \'%:%\' THEN w.tijd
                     WHEN LENGTH(TRIM(w.tijd)) = 4
@@ -186,31 +189,79 @@ class WedstrijdRepository
                         )
                     ELSE w.tijd
                 END AS tijd,
-
+    
                 s.sportnaam AS sport,
-
+    
                 w.club1nummer AS team1,
                 w.club2nummer AS team2,
-
+    
                 w.puntenteam1 AS score1,
                 w.puntenteam2 AS score2
-
+    
             FROM wedstrijd w
-
+    
             JOIN sporten s
                 ON LEFT(w.compnummer, 3) = s.code
-
+    
             WHERE w.datum BETWEEN ? AND ?';
-
+    
         $params = [$startDatum, $eindDatum];
-
+    
         if ($sport !== null && $sport !== '' && $sport !== 'Alle') {
             $sql .= ' AND s.sportnaam = ?';
             $params[] = $sport;
         }
-
+    
         $sql .= ' ORDER BY w.datum, w.tijd';
-
+    
         return $this->connection->fetchAllAssociative($sql, $params);
     }
+
+    public function getWedstrijd(
+    string $compnummer,
+    string $wedstrijdnummer
+): ?array {
+    return $this->connection->fetchAssociative('
+        SELECT
+            w.compnummer,
+            w.wedstrijdnummer,
+            w.datum,
+
+            CASE
+                WHEN w.tijd LIKE \'%:%\' THEN w.tijd
+                WHEN LENGTH(TRIM(w.tijd)) = 4
+                    THEN CONCAT(
+                        LEFT(TRIM(w.tijd), 2),
+                        \'\:\',
+                        RIGHT(TRIM(w.tijd), 2)
+                    )
+                ELSE w.tijd
+            END AS tijd,
+
+            s.sportnaam AS sport,
+
+            w.club1nummer AS team1,
+            w.club2nummer AS team2,
+
+            w.puntenteam1 AS score1,
+            w.puntenteam2 AS score2,
+
+            w.periode,
+            w.meetellen
+
+        FROM wedstrijd w
+
+        JOIN sporten s
+            ON LEFT(w.compnummer, 3) = s.code
+
+        WHERE w.compnummer = ?
+          AND w.wedstrijdnummer = ?
+
+        LIMIT 1
+    ', [
+        $compnummer,
+        $wedstrijdnummer
+    ]) ?: null;
+}
+    
 }

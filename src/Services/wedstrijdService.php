@@ -84,4 +84,14 @@ class WedstrijdService
             'eindDatum' => $zondag->format('Y-m-d'),
         ];
     }
+
+    public function getWedstrijd(
+    string $compnummer,
+    string $wedstrijdnummer
+): ?array {
+    return $this->wedstrijdRepository->getWedstrijd(
+        $compnummer,
+        $wedstrijdnummer
+    );
+}
 }
