@@ -161,7 +161,10 @@
                         {% for wedstrijd in wedstrijden %}
                             {% if wedstrijd.datum >= startDatum|date('Y-m-d') and wedstrijd.datum <= eindDatum|date('Y-m-d') %}
                                 {% set aantalWedstrijden = aantalWedstrijden + 1 %}
-                                <tr>
+                                <tr
+                                    class="wedstrijd-row"
+                                    onclick="window.location.href='{{ path('wedstrijd_detail', {compnummer: wedstrijd.compnummer, wedstrijdnummer: wedstrijd.wedstrijdnummer}) }}'"
+                                >
                                     <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>
                                     <td>{{ wedstrijd.tijd|default('-') }}</td>
                                     <td>{{ wedstrijd.sport|default('-') }}</td>

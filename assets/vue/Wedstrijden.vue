@@ -95,6 +95,13 @@ watch(
     }
 )
 
+function openWedstrijd(wedstrijd) {
+    const url =
+        `/wedstrijd/${encodeURIComponent(wedstrijd.compnummer)}/${encodeURIComponent(wedstrijd.wedstrijdnummer)}`
+
+    window.location.href = url
+}
+
 onMounted(() => {
     laadWeekend(0)
 })
@@ -186,23 +193,39 @@ onMounted(() => {
                     <tbody>
 
                         <tr
-                            v-for="sport in overzicht"
-                            :key="sport.sport"
+                            v-for="wedstrijd in gefilterdeWedstrijden"
+                            :key="wedstrijd.compnummer + '-' + wedstrijd.wedstrijdnummer"
+                            class="wedstrijd-row"
+                            @click="openWedstrijd(wedstrijd)"
                         >
 
                             <td>
-                                {{ sport.sport }}
+                                {{ wedstrijd.datum }}
                             </td>
 
                             <td>
-                                {{ sport.aantal_Wedstrijden }}
+                                {{ wedstrijd.tijd }}
                             </td>
 
                             <td>
-                                {{ sport.aantal_ontbrekend }}
+                                {{ wedstrijd.sport }}
                             </td>
 
-                        </tr>
+                            <td>
+                                {{ wedstrijd.team1 }}
+                            </td>
+
+                            <td>
+                                {{ wedstrijd.team2 }}
+                            </td>
+
+                            <td>
+                                {{ wedstrijd.score1 ?? '-' }}
+        -
+                                {{ wedstrijd.score2 ?? '-' }}
+                            </td>
+
+                            </tr>
 
                     </tbody>
 
@@ -237,12 +260,11 @@ onMounted(() => {
 
                     <tr
                         v-for="wedstrijd in gefilterdeWedstrijden"
-                        :key="
-                            wedstrijd.datum +
-                            wedstrijd.team1 +
-                            wedstrijd.team2
-                        "
+                        :key="wedstrijd.compnummer + '-' + wedstrijd.wedstrijdnummer"
+                        @click="openWedstrijd(wedstrijd)"
+                        class="wedstrijd-row"
                     >
+
 
                         <td>
                             {{ wedstrijd.datum }}
@@ -285,3 +307,13 @@ onMounted(() => {
     </div>
 
 </template>
+
+<style scoped>
+.wedstrijd-row {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+.wedstrijd-row:hover {
+    background-color: #f2f2f2;
+}
+</style>

@@ -15,6 +15,8 @@ class WedstrijdRepository
     {
         return $this->connection->fetchAllAssociative('
             SELECT
+                w.compnummer,
+                w.wedstrijdnummer,
                 w.datum,
 
                 CASE
