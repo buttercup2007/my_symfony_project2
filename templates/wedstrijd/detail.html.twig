@@ -2,11 +2,11 @@
 
 {% block title %}Wedstrijd Detail{% endblock %}
 
-{% block body %}
-
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
 {% endblock %}
+
+{% block body %}
 
 <main class="wedstrijd-detail">
     <header class="detail-header">
@@ -14,7 +14,7 @@
             &larr; Terug naar weekend
         </a>
         <p class="sport-label">{{ wedstrijd.sport }}</p>
-        <h1>Wedstrijd</h1>
+        <h1>Wedstrijd lalalal</h1>
     </header>
 
     <section class="match-sheet" aria-label="Wedstrijdresultaat">
@@ -24,9 +24,9 @@
         </div>
 
         <div class="scoreline" aria-label="Score">
-            <span>{{ wedstrijd.score1 is not null ? wedstrijd.score1 : '-' }}</span>
+            <span class="score-value{{ wedstrijd.score1 is null ? ' score-missing' : '' }}">{{ wedstrijd.score1 is not null ? wedstrijd.score1 : '.' }}</span>
    
-            <span>{{ wedstrijd.score2 is not null ? wedstrijd.score2 : '-' }}</span>
+            <span class="score-value{{ wedstrijd.score2 is null ? ' score-missing' : '' }}">{{ wedstrijd.score2 is not null ? wedstrijd.score2 : '.' }}</span>
         </div>
 
         <div class="team team-away">

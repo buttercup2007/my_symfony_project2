@@ -8,8 +8,17 @@
         {% block stylesheets %}{% endblock %}
 
         {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+
+           {% if app.environment == 'dev' %}
+           <script type="module" src="http://localhost:5173/@vite/client"></script>
+           <script type="module" src="http://localhost:5173/assets/app.js"></script>
+        {% else %}
+           {% block importmap %}
+               {{ importmap('app') }}
+           {% endblock %}
+        {% endif %}
+
+       {% endblock %}
 
         {% set frankenphp_hot_reload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
         {% if frankenphp_hot_reload %}

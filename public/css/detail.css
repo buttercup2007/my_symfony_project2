@@ -44,26 +44,20 @@ body {
 .back-link {
     display: inline-flex;
     align-items: center;
-    padding: 10px 16px;
     width: fit-content;
-    border: 2px solid var(--match-accent);
-    border-radius: 999px;
     color: var(--match-accent-dark);
     font-size: 0.9rem;
     font-weight: 700;
     text-decoration: none;
     transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
         color 0.2s ease,
         transform 0.2s ease;
 }
 
 .back-link:hover,
 .back-link:focus-visible {
-    background-color: var(--match-accent);
-    border-color: var(--match-accent);
-    color: #fffaf3;
+    color: var(--match-ink);
+    text-decoration: underline;
     transform: translateX(-2px);
 }
 
@@ -146,7 +140,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 16px;
+    margin: 0 60px;
 
     color: var(--match-accent-dark);
     font-size: clamp(4rem, 9vw, 8rem);
@@ -170,30 +165,21 @@ body {
 .wedstrijd-info {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
     margin-top: 34px;
     background: transparent;
     border: 0;
     border-radius: 0px;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .wedstrijd-info div {
     min-width: 0;
     padding: 22px 30px;
-    border: 2px solid var(--match-accent);
-    border-radius: 12px;
-    transition:
-        background-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
+    border-right: 1px solid var(--match-line);
 }
 
-.wedstrijd-info div:hover,
-.wedstrijd-info div:focus-within {
-    background-color: var(--match-wash);
-    box-shadow: 0 8px 18px rgba(242, 105, 34, 0.16);
-    transform: translateY(-4px);
+.wedstrijd-info div:last-child {
+    border-right: 0;
 }
 
 .wedstrijd-info span {
@@ -310,7 +296,12 @@ body {
 
     .wedstrijd-info div,
     .wedstrijd-info div:nth-child(2) {
-        border: 2px solid var(--match-accent);
+        border-right: 0;
+        border-bottom: 1px solid var(--match-line);
+    }
+
+    .wedstrijd-info div:last-child {
+        border-bottom: 0;
     }
 }
 

@@ -1,0 +1,48 @@
+{
+  "name": "my_symfony_project",
+  "version": "1.0.0",
+  "description": "Dit document beschrijft de stageopdracht die in de komende zes maanden\r wordt uitgevoerd. Sneller afronden mag altijd. Het betreft de\r stageopdracht voor Petra Nedeljkovic.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "csstype": "^3.2.3",
+    "detect-libc": "^2.1.2",
+    "entities": "^7.0.1",
+    "estree-walker": "^2.0.2",
+    "fdir": "^6.5.0",
+    "lightningcss": "^1.33.0",
+    "lightningcss-win32-x64-msvc": "^1.33.0",
+    "magic-string": "^0.30.21",
+    "nanoid": "^3.3.19",
+    "picocolors": "^1.1.1",
+    "picomatch": "^4.0.7",
+    "postcss": "^8.5.28",
+    "rolldown": "^1.2.8",
+    "source-map-js": "^1.2.1",
+    "tinyglobby": "^0.2.17",
+    "vue": "^3.5.43"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buttercup2007/my_symfony_project2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/buttercup2007/my_symfony_project2/issues"
+  },
+  "homepage": "https://github.com/buttercup2007/my_symfony_project2#readme",
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.9",
+    "vite": "^8.3.0"
+  }
+}

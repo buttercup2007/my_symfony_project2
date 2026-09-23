@@ -1,34 +1,15 @@
-import './stimulus_bootstrap.js';
-import { createApp, ref } from 'vue';
-import Wedstrijden from './vue/Wedstrijden.vue';
+import { createApp } from 'vue'
+import Wedstrijden from './vue/Wedstrijden.vue'
+import VueStatus from './vue/VueStatus.vue'
 
-createApp(Wedstrijden).mount('#vue-app');
+const vueAppElement = document.querySelector('#vue-app')
 
-const vueStatusElement = document.querySelector('#vue-status');
+if (vueAppElement) {
+    createApp(Wedstrijden).mount(vueAppElement)
+}
+
+const vueStatusElement = document.querySelector('#vue-status')
 
 if (vueStatusElement) {
-	createApp({
-		setup() {
-			const showDetails = ref(false);
-
-			return { showDetails };
-		},
-		template: `
-			<div class="vue-status-panel">
-				<span class="vue-status-dot" aria-hidden="true"></span>
-				<span>Vue is actief</span>
-				<button type="button" @click="showDetails = !showDetails">
-					{{ showDetails ? 'Verberg details' : 'Toon details' }}
-				</button>
-				<small v-if="showDetails">Deze melding wordt reactief bijgewerkt door Vue.</small>
-			</div>
-		`,
-	}).mount(vueStatusElement);
+    createApp(VueStatus).mount(vueStatusElement)
 }
-/*
- * Welcome to your app's main JavaScript file!
- *
- * This file will be included onto the page via the importmap() Twig function,
- * which should already be in your base.html.twig.
- */
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

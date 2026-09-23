@@ -117,7 +117,7 @@ onMounted(() => {
             <button
                 @click="laadWeekend(weekendOffset - 1)"
             >
-                Vorig weekend
+                Vorig weekendennfnvj
             </button>
 
             <span>
