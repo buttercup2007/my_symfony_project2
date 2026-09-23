@@ -170,75 +170,75 @@ onMounted(() => {
 
         <div v-if="!loading && !error">
 
-            <div v-if="overzicht.length">
+        <div v-if="overzicht.length">
 
-                <h2>Weekendoverzicht</h2>
-
-                <p>
-                    {{ startDatum }} t/m {{ eindDatum }}
-                </p>
-
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Sport</th>
-                            <th>Aantal wedstrijden</th>
-                            <th>Ontbrekende uitslagen</th>
-                        </tr>
-                    </thead>
-
-
-                    <tbody>
-
-                        <tr
-                            v-for="wedstrijd in gefilterdeWedstrijden"
-                            :key="wedstrijd.compnummer + '-' + wedstrijd.wedstrijdnummer"
-                            class="wedstrijd-row"
-                            @click="openWedstrijd(wedstrijd)"
-                        >
-
-                            <td>
-                                {{ wedstrijd.datum }}
-                            </td>
-
-                            <td>
-                                {{ wedstrijd.tijd }}
-                            </td>
-
-                            <td>
-                                {{ wedstrijd.sport }}
-                            </td>
-
-                            <td>
-                                {{ wedstrijd.team1 }}
-                            </td>
-
-                            <td>
-                                {{ wedstrijd.team2 }}
-                            </td>
-
-                            <td>
-                                {{ wedstrijd.score1 ?? '-' }}
-        -
-                                {{ wedstrijd.score2 ?? '-' }}
-                            </td>
-
-                            </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-            <h1>Wedstrijden</h1>
+            <h2>Weekendoverzicht</h2>
 
             <p>
-                Aantal wedstrijden:
-                {{ gefilterdeWedstrijden.length }}
+                {{ startDatum }} t/m {{ eindDatum }}
             </p>
+
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Sport</th>
+                        <th>Aantal wedstrijden</th>
+                        <th>Ontbrekende uitslagen</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    <tr
+                        v-for="wedstrijd in gefilterdeWedstrijden"
+                        :key="wedstrijd.compnummer + '-' + wedstrijd.wedstrijdnummer"
+                        class="wedstrijd-row"
+                        @click="openWedstrijd(wedstrijd)"
+                    >
+
+                    <td>
+                        {{ wedstrijd.datum }}
+                    </td>
+
+                    <td>
+                        {{ wedstrijd.tijd }}
+                    </td>
+
+                    <td>
+                        {{ wedstrijd.sport }}
+                    </td>
+
+                    <td>
+                        {{ wedstrijd.team1 }}
+                    </td>
+
+                    <td>
+                        {{ wedstrijd.team2 }}
+                    </td>
+
+                    <td>
+                        {{ wedstrijd.score1 ?? '-' }}
+        -
+                        {{ wedstrijd.score2 ?? '-' }}
+                    </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <h1>Wedstrijden</h1>
+
+        <p>
+            Aantal wedstrijden:
+            {{ gefilterdeWedstrijden.length }}
+        </p>
 
             <table>
 
