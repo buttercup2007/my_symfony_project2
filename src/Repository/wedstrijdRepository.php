@@ -24,7 +24,7 @@ class WedstrijdRepository
                     WHEN LENGTH(TRIM(w.tijd)) = 4
                         THEN CONCAT(
                             LEFT(TRIM(w.tijd), 2),
-                            \'\:\',
+                            \':\',
                             RIGHT(TRIM(w.tijd), 2)
                         )
                     ELSE w.tijd
@@ -32,8 +32,8 @@ class WedstrijdRepository
 
                 s.sportsoort AS sport,
 
-                w.club1nummer AS team1,
-                w.club2nummer AS team2,
+                c1.naam AS team1,
+                c2.naam AS team2,
 
                 w.puntenteam1 AS score1,
                 w.puntenteam2 AS score2
@@ -43,12 +43,20 @@ class WedstrijdRepository
             JOIN sporten s
                 ON LEFT(w.compnummer, 3) = s.code
 
+            LEFT JOIN clubs c1
+                ON TRIM(w.club1nummer) = TRIM(c1.clubnummer)
+
+            LEFT JOIN clubs c2
+                ON TRIM(w.club2nummer) = TRIM(c2.clubnummer)
+
             ORDER BY w.datum, w.tijd
         ');
     }
 
-    public function getOntbrekendeUitslagen(string $startDatum, string $eindDatum): array
-    {
+    public function getOntbrekendeUitslagen(
+        string $startDatum,
+        string $eindDatum
+    ): array {
         return $this->connection->fetchAllAssociative('
             SELECT
                 s.sportnaam AS sport,
@@ -59,21 +67,27 @@ class WedstrijdRepository
                     WHEN LENGTH(TRIM(w.tijd)) = 4
                         THEN CONCAT(
                             LEFT(TRIM(w.tijd), 2),
-                            \'\:\',
+                            \':\',
                             RIGHT(TRIM(w.tijd), 2)
                         )
                     ELSE w.tijd
                 END AS tijd,
 
-                w.club1nummer AS team1,
+                c1.naam AS team1,
                 w.puntenteam1 AS score1,
                 w.puntenteam2 AS score2,
-                w.club2nummer AS team2
+                c2.naam AS team2
 
             FROM wedstrijd w
 
             JOIN sporten s
                 ON LEFT(w.compnummer, 3) = s.code
+
+            LEFT JOIN clubs c1
+                ON TRIM(w.club1nummer) = TRIM(c1.clubnummer)
+
+            LEFT JOIN clubs c2
+                ON TRIM(w.club2nummer) = TRIM(c2.clubnummer)
 
             WHERE w.datum BETWEEN ? AND ?
 
@@ -148,6 +162,7 @@ class WedstrijdRepository
                         ELSE 0
                     END
                 ) AS aantal_ontbrekend
+
             FROM wedstrijd w
 
             JOIN sporten s
@@ -178,92 +193,50 @@ class WedstrijdRepository
             SELECT
                 w.compnummer,
                 w.wedstrijdnummer,
-    
+
                 w.datum,
-    
+
                 CASE
                     WHEN w.tijd LIKE \'%:%\' THEN w.tijd
                     WHEN LENGTH(TRIM(w.tijd)) = 4
                         THEN CONCAT(
                             LEFT(TRIM(w.tijd), 2),
-                            \'\:\',
+                            \':\',
                             RIGHT(TRIM(w.tijd), 2)
                         )
                     ELSE w.tijd
                 END AS tijd,
-    
+
                 s.sportnaam AS sport,
-    
-                w.club1nummer AS team1,
-                w.club2nummer AS team2,
-    
+
+                c1.naam AS team1,
+                c2.naam AS team2,
+
                 w.puntenteam1 AS score1,
                 w.puntenteam2 AS score2
-    
+
             FROM wedstrijd w
-    
+
             JOIN sporten s
                 ON LEFT(w.compnummer, 3) = s.code
-    
+
+            LEFT JOIN clubs c1
+                ON TRIM(w.club1nummer) = TRIM(c1.clubnummer)
+
+            LEFT JOIN clubs c2
+                ON TRIM(w.club2nummer) = TRIM(c2.clubnummer)
+
             WHERE w.datum BETWEEN ? AND ?';
-    
+
         $params = [$startDatum, $eindDatum];
-    
+
         if ($sport !== null && $sport !== '' && $sport !== 'Alle') {
             $sql .= ' AND s.sportnaam = ?';
             $params[] = $sport;
         }
-    
+
         $sql .= ' ORDER BY w.datum, w.tijd';
-    
+
         return $this->connection->fetchAllAssociative($sql, $params);
     }
-
-    public function getWedstrijd(
-    string $compnummer,
-    string $wedstrijdnummer
-): ?array {
-    return $this->connection->fetchAssociative('
-        SELECT
-            w.compnummer,
-            w.wedstrijdnummer,
-            w.datum,
-
-            CASE
-                WHEN w.tijd LIKE \'%:%\' THEN w.tijd
-                WHEN LENGTH(TRIM(w.tijd)) = 4
-                    THEN CONCAT(
-                        LEFT(TRIM(w.tijd), 2),
-                        \'\:\',
-                        RIGHT(TRIM(w.tijd), 2)
-                    )
-                ELSE w.tijd
-            END AS tijd,
-
-            s.sportnaam AS sport,
-
-            w.club1nummer AS team1,
-            w.club2nummer AS team2,
-
-            w.puntenteam1 AS score1,
-            w.puntenteam2 AS score2,
-
-            w.periode,
-            w.meetellen
-
-        FROM wedstrijd w
-
-        JOIN sporten s
-            ON LEFT(w.compnummer, 3) = s.code
-
-        WHERE w.compnummer = ?
-          AND w.wedstrijdnummer = ?
-
-        LIMIT 1
-    ', [
-        $compnummer,
-        $wedstrijdnummer
-    ]) ?: null;
-}
-    
 }
