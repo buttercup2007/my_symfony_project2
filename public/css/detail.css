@@ -6,6 +6,7 @@
     --match-wash: #fff3e7;
     --match-accent: #f26922;
     --match-accent-dark: #c84d12;
+    --match-highlight: #ffe1c5;
 }
 
 body {
@@ -28,9 +29,57 @@ body {
 }
 
 .wedstrijd-detail {
+    position: relative;
+    z-index: 1;
     width: min(100% - 40px, 1350px);
     margin: 0 auto;
     padding: 52px 0 90px;
+}
+
+.decor-rings {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.decor-ring {
+    position: absolute;
+    border: 10px solid var(--match-accent);
+    border-radius: 50%;
+}
+
+.decor-ring--top-large {
+    top: -190px;
+    left: -190px;
+    width: 400px;
+    height: 400px;
+    opacity: 0.22;
+}
+
+.decor-ring--top-small {
+    top: -80px;
+    left: -80px;
+    width: 210px;
+    height: 210px;
+    opacity: 0.32;
+}
+
+.decor-ring--bottom-large {
+    right: -200px;
+    bottom: -200px;
+    width: 420px;
+    height: 420px;
+    opacity: 0.22;
+}
+
+.decor-ring--bottom-small {
+    right: -90px;
+    bottom: -90px;
+    width: 230px;
+    height: 230px;
+    opacity: 0.32;
 }
 
 .detail-header {
@@ -134,52 +183,108 @@ body {
     font-size: clamp(2rem, 4vw, 3.6rem);
     font-weight: 400;
     line-height: 1.05;
+    transition: color 0.2s ease;
+}
+
+.team-winner strong {
+    color: var(--match-accent-dark);
+    font-weight: 700;
+}
+
+.team-winner .team-label {
+    color: var(--match-accent);
+}
+
+.team-loser strong {
+    color: var(--match-muted);
+}
+
+.scoreline-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.match-status {
+    color: var(--match-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
 
 .scoreline {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
     margin: 0 60px;
-
-    color: var(--match-accent-dark);
-    font-size: clamp(4rem, 9vw, 8rem);
-    font-weight: 800;
-    font-variant-numeric: tabular-nums;
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
     line-height: 1;
     white-space: nowrap;
 }
 
-.scoreline > span:not(.score-separator) {
-    display: inline;
+.score-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28em;
+    padding: 0.32em 0.85em;
+    border: 0.035em solid var(--match-highlight);
+    border-radius: 999px;
+    background: linear-gradient(180deg, #fffdfa 0%, var(--match-wash) 100%);
+    color: var(--match-accent-dark);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    box-shadow:
+        0 0.12em 0.4em rgba(200, 77, 18, 0.16),
+        inset 0 0.03em 0 rgba(255, 255, 255, 0.7);
+}
+
+.score-value {
+    min-width: 1.1ch;
+    text-align: center;
+}
+
+.score-value.score-missing {
+    color: var(--match-muted);
+    font-size: 0.55em;
+    font-weight: 400;
 }
 
 .score-separator {
     color: var(--match-accent);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 0.5em;
-    font-weight: 400;
+    font-weight: 300;
+    opacity: 0.7;
 }
 
 .wedstrijd-info {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
     margin-top: 34px;
     background: transparent;
     border: 0;
     border-radius: 0px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .wedstrijd-info div {
     min-width: 0;
     padding: 22px 30px;
-    border-right: 1px solid var(--match-line);
+    border: 2px solid var(--match-line);
+    border-radius: 12px;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
-.wedstrijd-info div:last-child {
-    border-right: 0;
+.wedstrijd-info div:hover {
+    background: var(--match-wash);
+    border-color: var(--match-accent);
+    box-shadow: 0 10px 22px rgba(200, 77, 18, 0.14);
+    transform: translateY(-4px);
 }
 
 .wedstrijd-info span {
@@ -286,22 +391,11 @@ body {
         grid-row: auto;
         gap: 10px;
         margin: 0;
-        font-size: clamp(3.5rem, 18vw, 5.5rem);
+        font-size: clamp(2rem, 10vw, 3rem);
     }
 
     .wedstrijd-info {
         grid-template-columns: 1fr;
-        border-radius: 12px;
-    }
-
-    .wedstrijd-info div,
-    .wedstrijd-info div:nth-child(2) {
-        border-right: 0;
-        border-bottom: 1px solid var(--match-line);
-    }
-
-    .wedstrijd-info div:last-child {
-        border-bottom: 0;
     }
 }
 
@@ -321,7 +415,7 @@ body {
     }
 
     .scoreline {
-        font-size: 3.5rem;
+        font-size: 2rem;
     }
 
     .wedstrijd-info div {

@@ -3,10 +3,17 @@
 {% block title %}Wedstrijd Detail{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/detail.css') }}?v=20260924-4">
 {% endblock %}
 
 {% block body %}
+
+<div class="decor-rings" aria-hidden="true">
+    <span class="decor-ring decor-ring--top-large"></span>
+    <span class="decor-ring decor-ring--top-small"></span>
+    <span class="decor-ring decor-ring--bottom-large"></span>
+    <span class="decor-ring decor-ring--bottom-small"></span>
+</div>
 
 <main class="wedstrijd-detail">
     <header class="detail-header">
@@ -18,18 +25,27 @@
     </header>
 
     <section class="match-sheet" aria-label="Wedstrijdresultaat">
-        <div class="team team-home">
+        {% set isDecided = wedstrijd.score1 is not null and wedstrijd.score2 is not null %}
+        {% set team1Wins = isDecided and wedstrijd.score1 > wedstrijd.score2 %}
+        {% set team2Wins = isDecided and wedstrijd.score2 > wedstrijd.score1 %}
+
+        <div class="team team-home{{ team1Wins ? ' team-winner' : '' }}{{ team2Wins ? ' team-loser' : '' }}">
             <span class="team-label">Thuis</span>
             <strong>{{ wedstrijd.team1 }}</strong>
         </div>
 
-        <div class="scoreline" aria-label="Score">
-            <span class="score-value{{ wedstrijd.score1 is null ? ' score-missing' : '' }}">{{ wedstrijd.score1 is not null ? wedstrijd.score1 : '.' }}</span>
-   
-            <span class="score-value{{ wedstrijd.score2 is null ? ' score-missing' : '' }}">{{ wedstrijd.score2 is not null ? wedstrijd.score2 : '.' }}</span>
+        <div class="scoreline-wrap">
+            <span class="match-status">{{ isDecided ? 'Eindstand' : 'Nog te spelen' }}</span>
+            <div class="scoreline" aria-label="Score">
+                <span class="score-pill">
+                    <span class="score-value{{ wedstrijd.score1 is null ? ' score-missing' : '' }}">{{ wedstrijd.score1 is not null ? wedstrijd.score1 : '–' }}</span>
+                    <span class="score-separator">:</span>
+                    <span class="score-value{{ wedstrijd.score2 is null ? ' score-missing' : '' }}">{{ wedstrijd.score2 is not null ? wedstrijd.score2 : '–' }}</span>
+                </span>
+            </div>
         </div>
 
-        <div class="team team-away">
+        <div class="team team-away{{ team2Wins ? ' team-winner' : '' }}{{ team1Wins ? ' team-loser' : '' }}">
             <span class="team-label">Uit</span>
             <strong>{{ wedstrijd.team2 }}</strong>
         </div>

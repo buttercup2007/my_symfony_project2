@@ -3,10 +3,17 @@
 {% block title %}Wedstrijden{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/home.css') }}?v=20260922-1">
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}?v=20260924-6">
 {% endblock %}
 
 {% block body %}
+    <div class="decor-circles" aria-hidden="true">
+        <span class="decor-circle decor-circle--top-large"></span>
+        <span class="decor-circle decor-circle--top-small"></span>
+        <span class="decor-circle decor-circle--bottom-large"></span>
+        <span class="decor-circle decor-circle--bottom-small"></span>
+    </div>
+
     <main class="home-page">
         {% set weekendOffset = weekendOffset|default(0) %}
 
@@ -168,7 +175,13 @@
                                     <td>{{ wedstrijd.sport|default('-') }}</td>
                                     <td>{{ wedstrijd.team1|default('-') }}</td>
                                     <td>{{ wedstrijd.team2|default('-') }}</td>
-                                    <td class="score-cell">{{ wedstrijd.score1|default(0) }} - {{ wedstrijd.score2|default(0) }}</td>
+                                    <td class="score-cell">
+                                        <span class="score-badge">
+                                            <span class="score-num">{{ wedstrijd.score1|default(0) }}</span>
+                                            <span class="score-sep">:</span>
+                                            <span class="score-num">{{ wedstrijd.score2|default(0) }}</span>
+                                        </span>
+                                    </td>
                                 </tr>
                             {% endif %}
                         {% endfor %}

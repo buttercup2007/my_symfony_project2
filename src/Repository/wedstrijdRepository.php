@@ -239,4 +239,51 @@ class WedstrijdRepository
 
         return $this->connection->fetchAllAssociative($sql, $params);
     }
+
+    public function getWedstrijd(
+        string $compnummer,
+        string $wedstrijdnummer
+    ): ?array {
+        $result = $this->connection->fetchAssociative('
+            SELECT
+                w.compnummer,
+                w.wedstrijdnummer,
+                w.datum,
+
+                CASE
+                    WHEN w.tijd LIKE \'%:%\' THEN w.tijd
+                    WHEN LENGTH(TRIM(w.tijd)) = 4
+                        THEN CONCAT(
+                            LEFT(TRIM(w.tijd), 2),
+                            \':\',
+                            RIGHT(TRIM(w.tijd), 2)
+                        )
+                    ELSE w.tijd
+                END AS tijd,
+
+                s.sportsoort AS sport,
+
+                c1.naam AS team1,
+                c2.naam AS team2,
+
+                w.puntenteam1 AS score1,
+                w.puntenteam2 AS score2
+
+            FROM wedstrijd w
+
+            JOIN sporten s
+                ON LEFT(w.compnummer, 3) = s.code
+
+            LEFT JOIN clubs c1
+                ON TRIM(w.club1nummer) = TRIM(c1.clubnummer)
+
+            LEFT JOIN clubs c2
+                ON TRIM(w.club2nummer) = TRIM(c2.clubnummer)
+
+            WHERE w.compnummer = ?
+              AND w.wedstrijdnummer = ?
+        ', [$compnummer, $wedstrijdnummer]);
+
+        return $result === false ? null : $result;
+    }
 }
