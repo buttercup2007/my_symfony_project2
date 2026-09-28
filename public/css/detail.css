@@ -1,26 +1,27 @@
 :root {
-    --match-ink: #22201e;
-    --match-muted: #736b62;
-    --match-line: #e5d8ca;
-    --match-surface: #fffaf3;
-    --match-wash: #fff3e7;
-    --match-accent: #f26922;
-    --match-accent-dark: #c84d12;
-    --match-highlight: #ffe1c5;
+    --match-ink: #101828;
+    --match-muted: #667085;
+    --match-line: #d9e1ea;
+    --match-surface: #ffffff;
+    --match-wash: #f2f6fa;
+    --match-accent: #16a34a;
+    --match-accent-dark: #087a35;
+    --match-highlight: #dcfce7;
+    --match-navy: #0f172a;
 }
 
 body {
     min-height: 100vh;
     margin: 0;
-    background-color: #f7ede2;
+    background-color: #f8fafc;
     background-image:
         linear-gradient(
             90deg,
-            rgba(242, 105, 34, 0.045) 1px,
+            rgba(22, 163, 74, 0.045) 1px,
             transparent 1px
         ),
         linear-gradient(
-            rgba(242, 105, 34, 0.045) 1px,
+            rgba(22, 163, 74, 0.045) 1px,
             transparent 1px
         );
     background-size: 32px 32px;
@@ -105,7 +106,7 @@ body {
 
 .back-link:hover,
 .back-link:focus-visible {
-    color: var(--match-ink);
+    color: var(--match-accent-dark);
     text-decoration: underline;
     transform: translateX(-2px);
 }
@@ -123,11 +124,12 @@ body {
 .detail-header h1 {
     grid-column: 1 / -1;
     margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: clamp(3rem, 6vw, 7rem);
-    font-weight: 400;
+    font-weight: 800;
     line-height: 0.95;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
 }
 
 .match-sheet {
@@ -141,8 +143,8 @@ body {
     border: 1px solid var(--match-line);
     border-radius: 16px;
     box-shadow:
-        0 24px 60px rgba(91, 47, 21, 0.10),
-        0 3px 10px rgba(91, 47, 21, 0.04);
+        0 24px 60px rgba(15, 23, 42, 0.10),
+        0 3px 10px rgba(15, 23, 42, 0.04);
     overflow: hidden;
 }
 
@@ -179,9 +181,9 @@ body {
     display: block;
     overflow-wrap: anywhere;
     color: var(--match-ink);
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: clamp(2rem, 4vw, 3.6rem);
-    font-weight: 400;
+    font-weight: 700;
     line-height: 1.05;
     transition: color 0.2s ease;
 }
@@ -230,13 +232,13 @@ body {
     gap: 0.28em;
     padding: 0.32em 0.85em;
     border: 0.035em solid var(--match-highlight);
-    border-radius: 999px;
-    background: linear-gradient(180deg, #fffdfa 0%, var(--match-wash) 100%);
+    border-radius: 10px;
+    background: linear-gradient(180deg, #ffffff 0%, var(--match-wash) 100%);
     color: var(--match-accent-dark);
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     box-shadow:
-        0 0.12em 0.4em rgba(200, 77, 18, 0.16),
+        0 0.12em 0.4em rgba(8, 122, 53, 0.16),
         inset 0 0.03em 0 rgba(255, 255, 255, 0.7);
 }
 
@@ -271,7 +273,7 @@ body {
 .wedstrijd-info div {
     min-width: 0;
     padding: 22px 30px;
-    border: 2px solid var(--match-line);
+    border: 1px solid var(--match-line);
     border-radius: 12px;
     transition:
         background-color 0.2s ease,
@@ -283,7 +285,7 @@ body {
 .wedstrijd-info div:hover {
     background: var(--match-wash);
     border-color: var(--match-accent);
-    box-shadow: 0 10px 22px rgba(200, 77, 18, 0.14);
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.10);
     transform: translateY(-4px);
 }
 
@@ -314,8 +316,8 @@ body {
 
 .match-sheet:hover {
     box-shadow:
-        0 28px 70px rgba(91, 47, 21, 0.13),
-        0 4px 12px rgba(91, 47, 21, 0.05);
+    0 28px 70px rgba(15, 23, 42, 0.13),
+    0 4px 12px rgba(15, 23, 42, 0.05);
 }
 
 @media (max-width: 850px) {

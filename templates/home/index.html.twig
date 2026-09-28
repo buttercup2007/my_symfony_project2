@@ -3,7 +3,7 @@
 {% block title %}Wedstrijden{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/home.css') }}?v=20260928-1">
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}?v=20260928-4">
 {% endblock %}
 
 {% block body %}
@@ -30,13 +30,15 @@
                 <span aria-hidden="true">&larr;</span> Vorig weekend
             </a>
 
-            <p class="weekend-date">
-                {{ startDatum|date('d-m-Y') }} <span>t/m</span> {{ eindDatum|date('d-m-Y') }}
-            </p>
+            <div class="weekend-date-group">
+                <p class="weekend-date">
+                    {{ startDatum|date('d-m-Y') }} <span>t/m</span> {{ eindDatum|date('d-m-Y') }}
+                </p>
 
-            <a class="weekend-current" href="{{ path('home', { weekend: 0, sport: selectedSport|default('Alle'), date: selectedDate|default('Alle') }) }}">
-                Huidig weekend
-            </a>
+                <a class="weekend-current" href="{{ path('home', { weekend: 0, sport: selectedSport|default('Alle'), date: selectedDate|default('Alle') }) }}">
+                    Huidig weekend
+                </a>
+            </div>
 
             <a class="weekend-arrow" href="{{ path('home', { weekend: weekendOffset + 1, sport: selectedSport|default('Alle'), date: selectedDate|default('Alle') }) }}" aria-label="Volgend weekend">
                 Volgend weekend <span aria-hidden="true">&rarr;</span>
