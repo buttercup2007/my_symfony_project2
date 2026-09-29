@@ -151,6 +151,16 @@ tbody td:first-child { font-weight: 700; }
 tbody td:last-child { color: var(--warning); font-weight: 700; }
 .score-cell { min-width: 72px; color: var(--accent-dark); font-weight: 700; text-align: center; }
 
+.empty,
+tbody td.empty:first-child,
+tbody td.empty:last-child {
+    padding: 30px;
+    color: var(--muted);
+    text-align: center;
+    white-space: normal;
+    font-weight: 400;
+}
+
 .total-row { background: var(--ink); font-weight: 700; }
 .total-row th,
 .total-row td { border-top: 2px solid var(--accent); border-bottom: 0; color: #fff; }
