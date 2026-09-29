@@ -129,7 +129,7 @@ function openWedstrijd(wedstrijd) {
 }
 
 onMounted(() => {
-    laadWeekend(-4)
+    laadWeekend(0)
 })
 </script>
 
