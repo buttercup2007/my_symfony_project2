@@ -53,6 +53,33 @@ const totaalOntbrekend = computed(() =>
     overzicht.value.reduce((totaal, item) => totaal + Number(item.aantal_ontbrekend), 0)
 )
 
+const wedstrijdenPerDatum = computed(() => {
+    const groepen = new Map()
+
+    for (const wedstrijd of gefilterdeWedstrijden.value) {
+        if (!groepen.has(wedstrijd.datum)) {
+            groepen.set(wedstrijd.datum, [])
+        }
+
+        groepen.get(wedstrijd.datum).push(wedstrijd)
+    }
+
+    return [...groepen.entries()]
+        .sort(([datumA], [datumB]) => datumA.localeCompare(datumB))
+        .map(([datum, wedstrijdenOpDatum]) => ({
+            datum,
+            wedstrijden: wedstrijdenOpDatum
+        }))
+})
+
+function formatDatum(datum) {
+    return new Date(datum).toLocaleDateString('nl-NL', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+    })
+}
+
 async function laadWeekend(offset) {
     loading.value = true
     error.value = null
@@ -178,18 +205,14 @@ onMounted(() => {
 
         <div v-if="!loading && !error">
 
-            <!-- Snelkoppelingen -->
+            <!-- Samenvatting -->
 
             <section class="summary" aria-label="Weekend samenvatting">
 
-                <a
-                    :href="`/weekend?weekend=${weekendOffset}`"
-                    class="summary-card summary-card-link"
-                >
+                <div class="summary-card">
                     <span class="card-label">Wedstrijden</span>
                     <strong>{{ totaalWedstrijden }}</strong>
-                    <span class="card-action">Bekijk weekend overzicht &rarr;</span>
-                </a>
+                </div>
 
                 <a
                     href="/ontbrekende-uitslagen"
@@ -319,7 +342,6 @@ onMounted(() => {
                         <thead>
 
                             <tr>
-                                <th>Datum</th>
                                 <th>Tijd</th>
                                 <th>Sport</th>
                                 <th>Team 1</th>
@@ -329,53 +351,62 @@ onMounted(() => {
 
                         </thead>
 
-                        <tbody>
+                        <template
+                            v-for="groep in wedstrijdenPerDatum"
+                            :key="groep.datum"
+                        >
+                            <tbody class="datum-groep">
 
-                            <tr
-                                v-for="wedstrijd in gefilterdeWedstrijden"
-                                :key="
-                                    wedstrijd.compnummer +
-                                    '-' +
-                                    wedstrijd.wedstrijdnummer
-                                "
-                                @click="openWedstrijd(wedstrijd)"
-                                class="wedstrijd-row"
-                            >
+                                <tr class="datum-rij">
+                                    <td colspan="5">
+                                        {{ formatDatum(groep.datum) }}
+                                    </td>
+                                </tr>
 
-                                <td>
-                                    {{ wedstrijd.datum }}
-                                </td>
+                                <tr
+                                    v-for="wedstrijd in groep.wedstrijden"
+                                    :key="
+                                        wedstrijd.compnummer +
+                                        '-' +
+                                        wedstrijd.wedstrijdnummer
+                                    "
+                                    @click="openWedstrijd(wedstrijd)"
+                                    class="wedstrijd-row"
+                                >
 
-                                <td>
-                                    {{ wedstrijd.tijd }}
-                                </td>
+                                    <td>
+                                        {{ wedstrijd.tijd }}
+                                    </td>
 
-                                <td>
-                                    {{ wedstrijd.sport }}
-                                </td>
+                                    <td>
+                                        {{ wedstrijd.sport }}
+                                    </td>
 
-                                <td>
-                                    {{ wedstrijd.team1 }}
-                                </td>
+                                    <td>
+                                        {{ wedstrijd.team1 }}
+                                    </td>
 
-                                <td>
-                                    {{ wedstrijd.team2 }}
-                                </td>
+                                    <td>
+                                        {{ wedstrijd.team2 }}
+                                    </td>
 
-                                <td class="score-cell">
-                                    {{ wedstrijd.score1 ?? '-' }}
-                                    :
-                                    {{ wedstrijd.score2 ?? '-' }}
-                                </td>
+                                    <td class="score-cell">
+                                        {{ wedstrijd.score1 ?? '-' }}
+                                        :
+                                        {{ wedstrijd.score2 ?? '-' }}
+                                    </td>
 
-                            </tr>
+                                </tr>
 
-                            <tr v-if="gefilterdeWedstrijden.length === 0">
-                                <td colspan="6" class="empty">
+                            </tbody>
+                        </template>
+
+                        <tbody v-if="gefilterdeWedstrijden.length === 0">
+                            <tr>
+                                <td colspan="5" class="empty">
                                     Geen wedstrijden gevonden.
                                 </td>
                             </tr>
-
                         </tbody>
 
                     </table>
@@ -400,5 +431,15 @@ onMounted(() => {
 
 .summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.datum-rij td {
+    background: var(--wash, #f2f6fa);
+    color: var(--muted, #667085);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 </style>

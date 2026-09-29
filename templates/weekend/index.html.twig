@@ -3,7 +3,7 @@
 {% block title %}Weekend Overzicht{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/weekend.css') }}?v=20260928-5">
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}?v=20260929-1">
 {% endblock %}
 
 {% block body %}
@@ -15,187 +15,19 @@
     <span class="decor-circle decor-circle--bottom-small"></span>
 </div>
 
-<div class="weekend-page">
-    {% set weekendOffset = weekendOffset|default(0) %}
+<main class="home-page">
 
-    <header class="page-header">
-        <a class="home-link" href="{{ path('home') }}">&larr; Terug naar home</a>
+    <header class="home-header">
         <div>
-            <h1>Weekend Overzicht</h1>
-            <nav class="weekend-navigation" aria-label="Weekend navigatie">
-                <a class="weekend-arrow" href="{{ path('app_weekend', { weekend: weekendOffset - 1 }) }}" aria-label="Vorig weekend">
-                    <span aria-hidden="true">&larr;</span> Vorig weekend
-                </a>
-                <div class="weekend-date-group">
-                    <p class="weekend-date">
-                        {{ startDatum|date('d-m-Y') }} <span>t/m</span> {{ eindDatum|date('d-m-Y') }}
-                    </p>
-                    <a class="weekend-current" href="{{ path('app_weekend', { weekend: 0 }) }}">
-                        Huidig weekend
-                    </a>
-                </div>
-                <a class="weekend-arrow" href="{{ path('app_weekend', { weekend: weekendOffset + 1 }) }}" aria-label="Volgend weekend">
-                    Volgend weekend <span aria-hidden="true">&rarr;</span>
-                </a>
-            </nav>
+            <a class="home-link" href="{{ path('home') }}">&larr; Terug naar home</a>
+            <p class="eyebrow">Weekendoverzicht</p>
+            <h1>Wedstrijden en uitslagen</h1>
+            <p class="intro">Filter op sport en datum en bekijk individuele wedstrijden.</p>
         </div>
     </header>
 
-    {% set totaalWedstrijden = 0 %}
-    {% set totaalOntbrekend = 0 %}
-
-    {% for item in overzicht %}
-        {% set totaalWedstrijden = totaalWedstrijden + item.aantal_wedstrijden %}
-        {% set totaalOntbrekend = totaalOntbrekend + item.aantal_ontbrekend %}
-    {% endfor %}
-
-    <section class="summary">
-
-        <div class="summary-card">
-            <span class="card-label">Totaal wedstrijden</span>
-            <strong>{{ totaalWedstrijden }}</strong>
-        </div>
-
-        <div class="summary-card missing">
-            <span class="card-label">Ontbrekende uitslagen</span>
-            <strong>{{ totaalOntbrekend }}</strong>
-        </div>
-
-        <div class="summary-card">
-            <span class="card-label">Sporten</span>
-            <strong>{{ overzicht|length }}</strong>
-        </div>
-
-        <div class="summary-card scores-summary">
-            <span class="card-label">Scores</span>
-            <strong>{{ aantalScores|default(0) }}</strong>
-        </div>
-
-    </section>
-
-    <section class="table-section">
-
-        <div class="section-header">
-            <h2>Overzicht per sport</h2>
-        </div>
-
-        <div class="table-container">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sport</th>
-                        <th>Aantal wedstrijden</th>
-                        <th>Ontbrekende uitslagen</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                {% for item in overzicht %}
-
-                    <tr>
-                        <td class="sport-name">
-                            {{ item.sport }}
-                        </td>
-
-                        <td>
-                            {{ item.aantal_wedstrijden }}
-                        </td>
-
-                        <td>
-                            {{ item.aantal_ontbrekend }}
-                        </td>
-
-                        <td>
-                            {% if item.aantal_ontbrekend > 0 %}
-                                <span class="status status-missing">
-                                    Ontbrekend
-                                </span>
-                            {% else %}
-                                <span class="status status-complete">
-                                    Compleet
-                                </span>
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                {% else %}
-
-                    <tr>
-                        <td colspan="4" class="empty">
-                            Geen wedstrijden gevonden voor deze periode.
-                        </td>
-                    </tr>
-
-                {% endfor %}
-
-                </tbody>
-            </table>
-
-        </div>
-
-    </section>
-
-    <section class="table-section">
-
-        <div class="section-header">
-            <h2>Wedstrijden en scores</h2>
-        </div>
-
-        <div class="table-container">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Datum</th>
-                        <th>Tijd</th>
-                        <th>Sport</th>
-                        <th>Team 1</th>
-                        <th>Team 2</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                {% set aantalWedstrijden = 0 %}
-
-                {% for wedstrijd in wedstrijden %}
-                    {% if wedstrijd.datum >= startDatum|date('Y-m-d') and wedstrijd.datum <= eindDatum|date('Y-m-d') %}
-                        {% set aantalWedstrijden = aantalWedstrijden + 1 %}
-                        <tr>
-                            <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>
-                            <td>{{ wedstrijd.tijd|default('-') }}</td>
-                            <td>{{ wedstrijd.sport|default('-') }}</td>
-                            <td>{{ wedstrijd.team1|default('-') }}</td>
-                            <td>{{ wedstrijd.team2|default('-') }}</td>
-                            <td class="score-cell">
-                                {% if wedstrijd.score1 is not null and wedstrijd.score2 is not null %}
-                                    {{ wedstrijd.score1 }} - {{ wedstrijd.score2 }}
-                                {% else %}
-                                    -
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-
-                {% if aantalWedstrijden == 0 %}
-                    <tr>
-                        <td colspan="6" class="empty">
-                            Geen wedstrijden gevonden voor deze periode.
-                        </td>
-                    </tr>
-                {% endif %}
-                </tbody>
-            </table>
-
-        </div>
-
-    </section>
-
-</div>
+    <div id="vue-app"></div>
+</main>
 
 {% endblock %}
 

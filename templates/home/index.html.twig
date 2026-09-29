@@ -4,7 +4,7 @@
 {% block title %}Wedstrijden{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/home.css') }}?v=20260928-4">
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}?v=20260929-1">
 {% endblock %}
 
 {% block body %}
@@ -16,17 +16,76 @@
     </div>
 
     <main class="home-page">
-        {% set weekendOffset = weekendOffset|default(0) %}
 
         <header class="home-header">
             <div>
+                <p class="eyebrow">Dashboard</p>
                 <h1>Weekend wedstrijden</h1>
-                <p class="intro">Bekijk uitslagen, teams en planning per weekend.</p>
+                <p class="intro">
+                    {{ startDatum|date('d-m-Y') }} t/m {{ eindDatum|date('d-m-Y') }}
+                </p>
             </div>
-            <div id="vue-status" aria-live="polite"></div>
         </header>
 
-        <div id="vue-app"></div>
+        <section class="summary" aria-label="Weekend samenvatting">
+
+            <div class="summary-card">
+                <span class="card-label">Wedstrijden</span>
+                <strong>{{ totaalWedstrijden }}</strong>
+            </div>
+
+            <div class="summary-card">
+                <span class="card-label">Uitslagen</span>
+                <strong>{{ totaalUitslagen }}</strong>
+            </div>
+
+            <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen') }}" class="summary-card summary-card-link">
+                <span class="card-label">Ontbrekende uitslagen</span>
+                <strong>{{ totaalOntbrekend }}</strong>
+                <span class="card-action">Bekijk ontbrekende uitslagen &rarr;</span>
+            </a>
+
+            <a href="{{ path('app_weekend') }}" class="summary-card summary-card-link">
+                <span class="card-label">Sporten</span>
+                <strong>{{ overzicht|length }}</strong>
+                <span class="card-action">Bekijk weekend &rarr;</span>
+            </a>
+
+        </section>
+
+        <section class="content-section">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Overzicht</p>
+                    <h2>Per sport</h2>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sport</th>
+                            <th>Aantal wedstrijden</th>
+                            <th>Ontbrekende uitslagen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in overzicht %}
+                            <tr>
+                                <td class="strong-cell">{{ item.sport }}</td>
+                                <td>{{ item.aantal_wedstrijden }}</td>
+                                <td>{{ item.aantal_ontbrekend }}</td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="3" class="empty">Geen wedstrijden gevonden voor dit weekend.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
     </main>
 
     
