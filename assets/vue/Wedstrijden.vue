@@ -45,6 +45,14 @@ const gefilterdeWedstrijden = computed(() => {
     })
 })
 
+const totaalWedstrijden = computed(() =>
+    overzicht.value.reduce((totaal, item) => totaal + Number(item.aantal_wedstrijden), 0)
+)
+
+const totaalOntbrekend = computed(() =>
+    overzicht.value.reduce((totaal, item) => totaal + Number(item.aantal_ontbrekend), 0)
+)
+
 async function laadWeekend(offset) {
     loading.value = true
     error.value = null
@@ -129,25 +137,36 @@ onMounted(() => {
 
     <div>
 
-        <div class="weekend-navigation">
+        <nav class="weekend-navigation" aria-label="Weekend navigatie">
 
             <button
+                class="weekend-arrow"
                 @click="laadWeekend(weekendOffset - 1)"
             >
-                Vorig weekend
+                <span aria-hidden="true">&larr;</span> Vorig weekend
             </button>
 
-            <span>
-                {{ startDatum }} t/m {{ eindDatum }}
-            </span>
+            <div class="weekend-date-group">
+                <p class="weekend-date">
+                    {{ startDatum }} <span>t/m</span> {{ eindDatum }}
+                </p>
+
+                <button
+                    class="weekend-current"
+                    @click="laadWeekend(0)"
+                >
+                    Huidig weekend
+                </button>
+            </div>
 
             <button
+                class="weekend-arrow"
                 @click="laadWeekend(weekendOffset + 1)"
             >
-                Volgend weekend
+                Volgend weekend <span aria-hidden="true">&rarr;</span>
             </button>
 
-        </div>
+        </nav>
 
         <p v-if="loading">
             Laden...
@@ -158,6 +177,30 @@ onMounted(() => {
         </p>
 
         <div v-if="!loading && !error">
+
+            <!-- Snelkoppelingen -->
+
+            <section class="summary" aria-label="Weekend samenvatting">
+
+                <a
+                    :href="`/weekend?weekend=${weekendOffset}`"
+                    class="summary-card summary-card-link"
+                >
+                    <span class="card-label">Wedstrijden</span>
+                    <strong>{{ totaalWedstrijden }}</strong>
+                    <span class="card-action">Bekijk weekend overzicht &rarr;</span>
+                </a>
+
+                <a
+                    href="/ontbrekende-uitslagen"
+                    class="summary-card summary-card-link"
+                >
+                    <span class="card-label">Ontbrekende uitslagen</span>
+                    <strong>{{ totaalOntbrekend }}</strong>
+                    <span class="card-action">Bekijk ontbrekende uitslagen &rarr;</span>
+                </a>
+
+            </section>
 
             <!-- Filters -->
 
@@ -211,121 +254,134 @@ onMounted(() => {
 
             <!-- Weekendoverzicht -->
 
-            <div v-if="overzicht.length">
+            <section v-if="overzicht.length" class="content-section">
 
-                <h2>Weekendoverzicht</h2>
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Overzicht</p>
+                        <h2>Weekendoverzicht</h2>
+                    </div>
+                    <span class="live-label">{{ startDatum }} t/m {{ eindDatum }}</span>
+                </div>
 
-                <p>
-                    {{ startDatum }} t/m {{ eindDatum }}
-                </p>
+                <div class="table-wrap">
+                    <table>
 
-                <table>
+                        <thead>
+                            <tr>
+                                <th>Sport</th>
+                                <th>Aantal wedstrijden</th>
+                                <th>Ontbrekende uitslagen</th>
+                            </tr>
+                        </thead>
 
-                    <thead>
-                        <tr>
-                            <th>Sport</th>
-                            <th>Aantal wedstrijden</th>
-                            <th>Ontbrekende uitslagen</th>
-                        </tr>
-                    </thead>
+                        <tbody>
 
-                    <tbody>
+                            <tr
+                                v-for="item in overzicht"
+                                :key="item.sport"
+                            >
+                                <td class="strong-cell">
+                                    {{ item.sport }}
+                                </td>
 
-                        <tr
-                            v-for="item in overzicht"
-                            :key="item.sport"
-                        >
-                            <td>
-                                {{ item.sport }}
-                            </td>
+                                <td>
+                                    {{ item.aantal_wedstrijden }}
+                                </td>
 
-                            <td>
-                                {{ item.aantal_wedstrijden }}
-                            </td>
+                                <td>
+                                    {{ item.aantal_ontbrekend }}
+                                </td>
+                            </tr>
 
-                            <td>
-                                {{ item.aantal_ontbrekend }}
-                            </td>
-                        </tr>
+                        </tbody>
 
-                    </tbody>
+                    </table>
+                </div>
 
-                </table>
-
-            </div>
+            </section>
 
             <!-- Wedstrijden -->
 
-            <h1>Wedstrijden</h1>
+            <section class="content-section">
 
-            <p>
-                Aantal wedstrijden:
-                {{ gefilterdeWedstrijden.length }}
-            </p>
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Uitslagen</p>
+                        <h2>Wedstrijden</h2>
+                    </div>
+                    <span class="live-label">{{ gefilterdeWedstrijden.length }} wedstrijden</span>
+                </div>
 
-            <table>
+                <div class="table-wrap">
+                    <table>
 
-                <thead>
+                        <thead>
 
-                    <tr>
-                        <th>Datum</th>
-                        <th>Tijd</th>
-                        <th>Sport</th>
-                        <th>Team 1</th>
-                        <th>Team 2</th>
-                        <th>Score</th>
-                    </tr>
+                            <tr>
+                                <th>Datum</th>
+                                <th>Tijd</th>
+                                <th>Sport</th>
+                                <th>Team 1</th>
+                                <th>Team 2</th>
+                                <th>Score</th>
+                            </tr>
 
-                </thead>
+                        </thead>
 
-                <tbody>
+                        <tbody>
 
-                    <tr
-                        v-for="wedstrijd in gefilterdeWedstrijden"
-                        :key="
-                            wedstrijd.compnummer +
-                            '-' +
-                            wedstrijd.wedstrijdnummer
-                        "
-                        @click="openWedstrijd(wedstrijd)"
-                        class="wedstrijd-row"
-                    >
+                            <tr
+                                v-for="wedstrijd in gefilterdeWedstrijden"
+                                :key="
+                                    wedstrijd.compnummer +
+                                    '-' +
+                                    wedstrijd.wedstrijdnummer
+                                "
+                                @click="openWedstrijd(wedstrijd)"
+                                class="wedstrijd-row"
+                            >
 
-                        <td>
-                            {{ wedstrijd.datum }}
-                        </td>
+                                <td>
+                                    {{ wedstrijd.datum }}
+                                </td>
 
-                        <td>
-                            {{ wedstrijd.tijd }}
-                        </td>
+                                <td>
+                                    {{ wedstrijd.tijd }}
+                                </td>
 
-                        <td>
-                            {{ wedstrijd.sport }}
-                        </td>
+                                <td>
+                                    {{ wedstrijd.sport }}
+                                </td>
 
-                        <td>
-                            {{ wedstrijd.team1 }}
-                        </td>
+                                <td>
+                                    {{ wedstrijd.team1 }}
+                                </td>
 
-                        <td>
-                            {{ wedstrijd.team2 }}
-                        </td>
+                                <td>
+                                    {{ wedstrijd.team2 }}
+                                </td>
 
-                        <td class="score">
-                            {{ wedstrijd.score1 ?? '-' }}
-                            :
-                            {{ wedstrijd.score2 ?? '-' }}
-                        </td>
+                                <td class="score-cell">
+                                    {{ wedstrijd.score1 ?? '-' }}
+                                    :
+                                    {{ wedstrijd.score2 ?? '-' }}
+                                </td>
 
-                    </tr>
+                            </tr>
 
-                </tbody>
+                            <tr v-if="gefilterdeWedstrijden.length === 0">
+                                <td colspan="6" class="empty">
+                                    Geen wedstrijden gevonden.
+                                </td>
+                            </tr>
 
-            </table>
+                        </tbody>
 
-            <p v-if="gefilterdeWedstrijden.length === 0">
-                Geen wedstrijden gevonden.
-            </p>
+                    </table>
+                </div>
+
+            </section>
 
         </div>
 
@@ -342,16 +398,7 @@ onMounted(() => {
     background-color: #f2f2f2;
 }
 
-.score {
-    font-weight: bold;
-    color: black;
-}
-
-td {
-    color: black;
-}
-
-th {
-    color: black;
+.summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 </style>
