@@ -1,0 +1,62 @@
+{
+    "app": {
+        "path": "\/assets\/app-kyUTU5u.js",
+        "type": "js"
+    },
+    "\/assets\/stimulus_bootstrap.js": {
+        "path": "\/assets\/stimulus_bootstrap-xCO4u8H.js",
+        "type": "js"
+    },
+    "\/assets\/@symfony\/stimulus-bundle\/controllers.js": {
+        "path": "\/assets\/@symfony\/stimulus-bundle\/controllers-l48UNx5.js",
+        "type": "js"
+    },
+    "\/assets\/@symfony\/ux-turbo\/turbo_controller.js": {
+        "path": "\/assets\/@symfony\/ux-turbo\/turbo_controller-bFCo5ub.js",
+        "type": "js"
+    },
+    "\/assets\/@symfony\/ux-turbo\/mercure_stream_source_element.js": {
+        "path": "\/assets\/@symfony\/ux-turbo\/mercure_stream_source_element-XIjPTus.js",
+        "type": "js"
+    },
+    "\/assets\/controllers\/hello_controller.js": {
+        "path": "\/assets\/controllers\/hello_controller-VYgvytJ.js",
+        "type": "js"
+    },
+    "\/assets\/controllers\/csrf_protection_controller.js": {
+        "path": "\/assets\/controllers\/csrf_protection_controller-6ynUAeX.js",
+        "type": "js"
+    },
+    "@hotwired\/stimulus": {
+        "path": "\/assets\/vendor\/@hotwired\/stimulus\/stimulus.index-ryewcoo.js",
+        "type": "js"
+    },
+    "@symfony\/stimulus-bundle": {
+        "path": "\/assets\/@symfony\/stimulus-bundle\/loader-IOzBDLu.js",
+        "type": "js"
+    },
+    "@hotwired\/turbo": {
+        "path": "\/assets\/vendor\/@hotwired\/turbo\/turbo.index-J4AkTcK.js",
+        "type": "js"
+    },
+    "vue": {
+        "path": "\/assets\/vendor\/vue\/vue.index-OWNNU0B.js",
+        "type": "js"
+    },
+    "@vue\/runtime-dom": {
+        "path": "\/assets\/vendor\/@vue\/runtime-dom\/runtime-dom.index-pMicMui.js",
+        "type": "js"
+    },
+    "@vue\/runtime-core": {
+        "path": "\/assets\/vendor\/@vue\/runtime-core\/runtime-core.index-ShpygaF.js",
+        "type": "js"
+    },
+    "@vue\/shared": {
+        "path": "\/assets\/vendor\/@vue\/shared\/shared.index-q4SxdfS.js",
+        "type": "js"
+    },
+    "@vue\/reactivity": {
+        "path": "\/assets\/vendor\/@vue\/reactivity\/reactivity.index-dHChDu1.js",
+        "type": "js"
+    }
+}

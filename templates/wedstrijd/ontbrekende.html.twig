@@ -3,7 +3,7 @@
 {% block title %}Weekend Overzicht{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/ontbrekende.css') }}?v=20260928-2">
+    <link rel="stylesheet" href="{{ asset('css/ontbrekende.css') }}?v=20260928-4">
 {% endblock %}
 
 {% block body %}
@@ -21,33 +21,33 @@
 
 <h1>Ontbrekende uitslagen</h1>
 
-<div class="week-navigation">
+<nav class="weekend-navigation" aria-label="Weekend navigatie">
 
-    <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen', {
+    <a class="weekend-arrow" href="{{ path('app_wedstrijd_ontbrekende_uitslagen', {
         weekOffset: weekOffset - 1
-    }) }}">
+    }) }}" aria-label="Vorig weekend">
         &larr; Vorig weekend
     </a>
 
-    <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen', {
-        weekOffset: 0
-    }) }}">
-        Huidig weekend
-    </a>
+    <div class="weekend-date-group">
+        <p class="weekend-date">
+            {{ startDatum|date('d-m-Y') }} <span>t/m</span> {{ eindDatum|date('d-m-Y') }}
+        </p>
 
-    <span>
-        {{ startDatum|date('d-m-Y') }}
-        -
-        {{ eindDatum|date('d-m-Y') }}
-    </span>
+        <a class="weekend-current" href="{{ path('app_wedstrijd_ontbrekende_uitslagen', {
+            weekOffset: 0
+        }) }}">
+            Huidig weekend
+        </a>
+    </div>
 
-    <a href="{{ path('app_wedstrijd_ontbrekende_uitslagen', {
+    <a class="weekend-arrow" href="{{ path('app_wedstrijd_ontbrekende_uitslagen', {
         weekOffset: weekOffset + 1
-    }) }}">
+    }) }}" aria-label="Volgend weekend">
         Volgend weekend &rarr;
     </a>
 
-</div>
+</nav>
 
 <h2>Weekend Overzicht</h2>
 

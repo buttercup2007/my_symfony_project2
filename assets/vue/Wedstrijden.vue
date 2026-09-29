@@ -1,5 +1,7 @@
 <script setup>
+
 import { computed, onMounted, ref, watch } from 'vue'
+console.log('WEDSTRIJDEN.VUE IS GELADEN')
 
 const wedstrijden = ref([])
 const loading = ref(true)
@@ -21,17 +23,6 @@ const sporten = computed(() => {
     return ['Alle', ...new Set(uniekeSporten)]
 })
 
-const gefilterdeWedstrijden = computed(() => {
-    return wedstrijden.value.filter(wedstrijd => {
-        const sportKomtOvereen = gekozenSport.value === 'Alle'
-            || wedstrijd.sport === gekozenSport.value
-        const datumKomtOvereen = gekozenDatum.value === 'Alle'
-            || wedstrijd.datum === gekozenDatum.value
-
-        return sportKomtOvereen && datumKomtOvereen
-    })
-})
-
 const datums = computed(() => {
     const uniekeDatums = wedstrijden.value.map(
         wedstrijd => wedstrijd.datum
@@ -40,23 +31,36 @@ const datums = computed(() => {
     return ['Alle', ...new Set(uniekeDatums)]
 })
 
+const gefilterdeWedstrijden = computed(() => {
+    return wedstrijden.value.filter(wedstrijd => {
+        const sportKomtOvereen =
+            gekozenSport.value === 'Alle' ||
+            wedstrijd.sport === gekozenSport.value
+
+        const datumKomtOvereen =
+            gekozenDatum.value === 'Alle' ||
+            wedstrijd.datum === gekozenDatum.value
+
+        return sportKomtOvereen && datumKomtOvereen
+    })
+})
+
 async function laadWeekend(offset) {
     loading.value = true
     error.value = null
 
     try {
-        const sportParam = gekozenSport.value && gekozenSport.value !== 'Alle'
-            ? `&sport=${encodeURIComponent(gekozenSport.value)}`
-            : ''
+        const sportParam =
+            gekozenSport.value && gekozenSport.value !== 'Alle'
+                ? `&sport=${encodeURIComponent(gekozenSport.value)}`
+                : ''
 
         const overzichtResponse = await fetch(
             `/api/weekend-overzicht?weekend=${offset}${sportParam}`
         )
 
         if (!overzichtResponse.ok) {
-            throw new Error(
-                'Weekend overzicht kon niet worden geladen'
-            )
+            throw new Error('Weekend overzicht kon niet worden geladen')
         }
 
         const overzichtData = await overzichtResponse.json()
@@ -66,22 +70,36 @@ async function laadWeekend(offset) {
         )
 
         if (!wedstrijdenResponse.ok) {
-            throw new Error(
-                'Weekend wedstrijden konden niet worden geladen'
-            )
+            throw new Error('Weekend wedstrijden konden niet worden geladen')
         }
 
         const wedstrijdenData = await wedstrijdenResponse.json()
 
+        console.log('OVERZICHT:', overzichtData)
+console.log('WEDSTRIJDATA:', wedstrijdenData)
+console.log('EERSTE WEDSTRIJD:', wedstrijdenData.wedstrijden[0])
+
+const wedstrijdenMetScore = wedstrijdenData.wedstrijden.filter(
+    wedstrijd =>
+        wedstrijd.score1 !== null &&
+        wedstrijd.score2 !== null
+)
+
+console.log('WEDSTRIJDEN MET SCORE:', wedstrijdenMetScore.length)
+console.log('EERSTE WEDSTRIJD MET SCORE:', wedstrijdenMetScore[0])
+
         overzicht.value = overzichtData.overzicht
         wedstrijden.value = wedstrijdenData.wedstrijden
 
-        startDatum.value = overzichtData.startDatum
-        eindDatum.value = overzichtData.eindDatum
+        startDatum.value = wedstrijdenData.startDatum
+        eindDatum.value = wedstrijdenData.eindDatum
 
         weekendOffset.value = offset
 
+        gekozenDatum.value = 'Alle'
+
     } catch (err) {
+        console.error('FOUT:', err)
         error.value = err.message
     } finally {
         loading.value = false
@@ -103,10 +121,9 @@ function openWedstrijd(wedstrijd) {
 }
 
 onMounted(() => {
-    laadWeekend(0)
+    laadWeekend(-4)
 })
 </script>
-
 
 <template>
 
@@ -117,7 +134,7 @@ onMounted(() => {
             <button
                 @click="laadWeekend(weekendOffset - 1)"
             >
-                Vorig weekendennfnvj
+                Vorig weekend
             </button>
 
             <span>
@@ -140,105 +157,111 @@ onMounted(() => {
             {{ error }}
         </p>
 
-        <div class="sport-filter-form vue-filter-form">
-            <div class="filter-field">
-                <label for="weekend-sport-filter">Sport</label>
-                <select id="weekend-sport-filter" v-model="gekozenSport">
-                    <option
-                        v-for="sport in sporten"
-                        :key="sport"
-                        :value="sport"
-                    >
-                        {{ sport === 'Alle' ? 'Alle sporten' : sport }}
-                    </option>
-                </select>
-            </div>
-
-            <div class="filter-field">
-                <label for="weekend-date-filter">Datum</label>
-                <select id="weekend-date-filter" v-model="gekozenDatum">
-                    <option
-                        v-for="datum in datums"
-                        :key="datum"
-                        :value="datum"
-                    >
-                        {{ datum === 'Alle' ? 'Alle dagen' : datum }}
-                    </option>
-                </select>
-            </div>
-        </div>
-
         <div v-if="!loading && !error">
 
-        <div v-if="overzicht.length">
+            <!-- Filters -->
 
-            <h2>Weekendoverzicht</h2>
+            <div class="sport-filter-form vue-filter-form">
+
+                <div class="filter-field">
+                    <label for="weekend-sport-filter">
+                        Sport
+                    </label>
+
+                    <select
+                        id="weekend-sport-filter"
+                        v-model="gekozenSport"
+                    >
+                        <option
+                            v-for="sport in sporten"
+                            :key="sport"
+                            :value="sport"
+                        >
+                            {{ sport === 'Alle'
+                                ? 'Alle sporten'
+                                : sport
+                            }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter-field">
+                    <label for="weekend-date-filter">
+                        Datum
+                    </label>
+
+                    <select
+                        id="weekend-date-filter"
+                        v-model="gekozenDatum"
+                    >
+                        <option
+                            v-for="datum in datums"
+                            :key="datum"
+                            :value="datum"
+                        >
+                            {{ datum === 'Alle'
+                                ? 'Alle dagen'
+                                : datum
+                            }}
+                        </option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Weekendoverzicht -->
+
+            <div v-if="overzicht.length">
+
+                <h2>Weekendoverzicht</h2>
+
+                <p>
+                    {{ startDatum }} t/m {{ eindDatum }}
+                </p>
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Sport</th>
+                            <th>Aantal wedstrijden</th>
+                            <th>Ontbrekende uitslagen</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr
+                            v-for="item in overzicht"
+                            :key="item.sport"
+                        >
+                            <td>
+                                {{ item.sport }}
+                            </td>
+
+                            <td>
+                                {{ item.aantal_wedstrijden }}
+                            </td>
+
+                            <td>
+                                {{ item.aantal_ontbrekend }}
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- Wedstrijden -->
+
+            <h1>Wedstrijden</h1>
 
             <p>
-                {{ startDatum }} t/m {{ eindDatum }}
+                Aantal wedstrijden:
+                {{ gefilterdeWedstrijden.length }}
             </p>
-
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Sport</th>
-                        <th>Aantal wedstrijden</th>
-                        <th>Ontbrekende uitslagen</th>
-                    </tr>
-                </thead>
-
-
-                <tbody>
-
-                    <tr
-                        v-for="wedstrijd in gefilterdeWedstrijden"
-                        :key="wedstrijd.compnummer + '-' + wedstrijd.wedstrijdnummer"
-                        class="wedstrijd-row"
-                        @click="openWedstrijd(wedstrijd)"
-                    >
-
-                    <td>
-                        {{ wedstrijd.datum }}
-                    </td>
-
-                    <td>
-                        {{ wedstrijd.tijd }}
-                    </td>
-
-                    <td>
-                        {{ wedstrijd.sport }}
-                    </td>
-
-                    <td>
-                        {{ wedstrijd.team1 }}
-                    </td>
-
-                    <td>
-                        {{ wedstrijd.team2 }}
-                    </td>
-
-                    <td>
-                        {{ wedstrijd.score1 ?? '-' }}
-        -
-                        {{ wedstrijd.score2 ?? '-' }}
-                    </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-        <h1>Wedstrijden</h1>
-
-        <p>
-            Aantal wedstrijden:
-            {{ gefilterdeWedstrijden.length }}
-        </p>
 
             <table>
 
@@ -255,16 +278,18 @@ onMounted(() => {
 
                 </thead>
 
-
                 <tbody>
 
                     <tr
                         v-for="wedstrijd in gefilterdeWedstrijden"
-                        :key="wedstrijd.compnummer + '-' + wedstrijd.wedstrijdnummer"
+                        :key="
+                            wedstrijd.compnummer +
+                            '-' +
+                            wedstrijd.wedstrijdnummer
+                        "
                         @click="openWedstrijd(wedstrijd)"
                         class="wedstrijd-row"
                     >
-
 
                         <td>
                             {{ wedstrijd.datum }}
@@ -286,10 +311,10 @@ onMounted(() => {
                             {{ wedstrijd.team2 }}
                         </td>
 
-                        <td>
-                            {{ wedstrijd.score1 }}
-                            -
-                            {{ wedstrijd.score2 }}
+                        <td class="score">
+                            {{ wedstrijd.score1 ?? '-' }}
+                            :
+                            {{ wedstrijd.score2 ?? '-' }}
                         </td>
 
                     </tr>
@@ -299,7 +324,7 @@ onMounted(() => {
             </table>
 
             <p v-if="gefilterdeWedstrijden.length === 0">
-                Geen wedstrijden gevonden voor deze sport.
+                Geen wedstrijden gevonden.
             </p>
 
         </div>
@@ -311,9 +336,22 @@ onMounted(() => {
 <style scoped>
 .wedstrijd-row {
     cursor: pointer;
-    transition: background-color 0.15s ease;
 }
+
 .wedstrijd-row:hover {
     background-color: #f2f2f2;
+}
+
+.score {
+    font-weight: bold;
+    color: black;
+}
+
+td {
+    color: black;
+}
+
+th {
+    color: black;
 }
 </style>

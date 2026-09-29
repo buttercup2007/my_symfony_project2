@@ -1,0 +1,426 @@
+:root {
+    --match-ink: #101828;
+    --match-muted: #667085;
+    --match-line: #d9e1ea;
+    --match-surface: #ffffff;
+    --match-wash: #f2f6fa;
+    --match-accent: #16a34a;
+    --match-accent-dark: #087a35;
+    --match-highlight: #dcfce7;
+    --match-navy: #0f172a;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f8fafc;
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(22, 163, 74, 0.045) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            rgba(22, 163, 74, 0.045) 1px,
+            transparent 1px
+        );
+    background-size: 32px 32px;
+    color: var(--match-ink);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.wedstrijd-detail {
+    position: relative;
+    z-index: 1;
+    width: min(100% - 40px, 1350px);
+    margin: 0 auto;
+    padding: 52px 0 90px;
+}
+
+.decor-rings {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.decor-ring {
+    position: absolute;
+    border: 10px solid var(--match-accent);
+    border-radius: 50%;
+}
+
+.decor-ring--top-large {
+    top: -190px;
+    left: -190px;
+    width: 400px;
+    height: 400px;
+    opacity: 0.22;
+}
+
+.decor-ring--top-small {
+    top: -80px;
+    left: -80px;
+    width: 210px;
+    height: 210px;
+    opacity: 0.32;
+}
+
+.decor-ring--bottom-large {
+    right: -200px;
+    bottom: -200px;
+    width: 420px;
+    height: 420px;
+    opacity: 0.22;
+}
+
+.decor-ring--bottom-small {
+    right: -90px;
+    bottom: -90px;
+    width: 230px;
+    height: 230px;
+    opacity: 0.32;
+}
+
+.detail-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px 30px;
+    align-items: end;
+    margin-bottom: 30px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    color: var(--match-accent-dark);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+    color: var(--match-accent-dark);
+    text-decoration: underline;
+    transform: translateX(-2px);
+}
+
+.sport-label {
+    margin: 0;
+    color: var(--match-accent);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-align: right;
+    text-transform: uppercase;
+}
+
+.detail-header h1 {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: clamp(3rem, 6vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+}
+
+.match-sheet {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    min-height: 390px;
+    padding: 75px 80px;
+    background: var(--match-surface);
+    border: 1px solid var(--match-line);
+    border-radius: 16px;
+    box-shadow:
+        0 24px 60px rgba(15, 23, 42, 0.10),
+        0 3px 10px rgba(15, 23, 42, 0.04);
+    overflow: hidden;
+}
+
+.match-sheet::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--match-accent);
+}
+
+.team {
+    min-width: 0;
+    padding: 10px 20px;
+}
+
+.team-away {
+    text-align: right;
+}
+
+.team-label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--match-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.team strong {
+    display: block;
+    overflow-wrap: anywhere;
+    color: var(--match-ink);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: clamp(2rem, 4vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.05;
+    transition: color 0.2s ease;
+}
+
+.team-winner strong {
+    color: var(--match-accent-dark);
+    font-weight: 700;
+}
+
+.team-winner .team-label {
+    color: var(--match-accent);
+}
+
+.team-loser strong {
+    color: var(--match-muted);
+}
+
+.scoreline-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.match-status {
+    color: var(--match-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.scoreline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 60px;
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.score-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28em;
+    padding: 0.32em 0.85em;
+    border: 0.035em solid var(--match-highlight);
+    border-radius: 10px;
+    background: linear-gradient(180deg, #ffffff 0%, var(--match-wash) 100%);
+    color: var(--match-accent-dark);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    box-shadow:
+        0 0.12em 0.4em rgba(8, 122, 53, 0.16),
+        inset 0 0.03em 0 rgba(255, 255, 255, 0.7);
+}
+
+.score-value {
+    min-width: 1.1ch;
+    text-align: center;
+}
+
+.score-value.score-missing {
+    color: var(--match-muted);
+    font-size: 0.55em;
+    font-weight: 400;
+}
+
+.score-separator {
+    color: var(--match-accent);
+    font-weight: 300;
+    opacity: 0.7;
+}
+
+.wedstrijd-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 34px;
+    background: transparent;
+    border: 0;
+    border-radius: 0px;
+    overflow: visible;
+}
+
+.wedstrijd-info div {
+    min-width: 0;
+    padding: 22px 30px;
+    border: 1px solid var(--match-line);
+    border-radius: 12px;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.wedstrijd-info div:hover {
+    background: var(--match-wash);
+    border-color: var(--match-accent);
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.10);
+    transform: translateY(-4px);
+}
+
+.wedstrijd-info span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--match-accent-dark);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.wedstrijd-info strong {
+    display: block;
+    overflow-wrap: anywhere;
+    color: var(--match-ink);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.match-sheet,
+.wedstrijd-info {
+    transition:
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+.match-sheet:hover {
+    box-shadow:
+    0 28px 70px rgba(15, 23, 42, 0.13),
+    0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+@media (max-width: 850px) {
+
+    .wedstrijd-detail {
+        width: min(100% - 36px, 1100px);
+        padding: 42px 0 70px;
+    }
+
+    .match-sheet {
+        min-height: 240px;
+        padding: 44px 34px;
+    }
+
+    .team {
+        padding: 8px;
+    }
+
+    .scoreline {
+        gap: 10px;
+        margin: 0 24px;
+    }
+
+    .wedstrijd-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .wedstrijd-detail {
+        width: min(100% - 28px, 100%);
+        padding: 30px 0 50px;
+    }
+
+    .detail-header {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+    .sport-label {
+        text-align: left;
+    }
+
+    .detail-header h1 {
+        font-size: clamp(2.4rem, 12vw, 4rem);
+    }
+
+    .match-sheet {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        min-height: auto;
+        padding: 42px 22px;
+        border-radius: 14px;
+        text-align: center;
+    }
+
+    .team {
+        padding: 0;
+    }
+
+    .team-away {
+        text-align: center;
+    }
+
+    .team strong {
+        font-size: clamp(1.7rem, 8vw, 2.5rem);
+    }
+
+    .scoreline {
+        grid-row: auto;
+        gap: 10px;
+        margin: 0;
+        font-size: clamp(2rem, 10vw, 3rem);
+    }
+
+    .wedstrijd-info {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .wedstrijd-detail {
+        width: calc(100% - 20px);
+        padding-top: 24px;
+    }
+
+    .match-sheet {
+        padding: 36px 18px;
+    }
+
+    .team strong {
+        font-size: 1.55rem;
+    }
+
+    .scoreline {
+        font-size: 2rem;
+    }
+
+    .wedstrijd-info div {
+        padding: 18px;
+    }
+}

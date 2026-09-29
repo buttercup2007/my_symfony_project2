@@ -30,7 +30,7 @@ class WedstrijdRepository
                     ELSE w.tijd
                 END AS tijd,
 
-                s.sportsoort AS sport,
+                s.sportnaam AS sport,
 
                 c1.naam AS team1,
                 c2.naam AS team2,
@@ -261,7 +261,7 @@ class WedstrijdRepository
                     ELSE w.tijd
                 END AS tijd,
 
-                s.sportsoort AS sport,
+                s.sportnaam AS sport,
 
                 c1.naam AS team1,
                 c2.naam AS team2,
