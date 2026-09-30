@@ -518,3 +518,68 @@ tr:last-child td { border-bottom: 0; }
     .section-heading { align-items: start; flex-direction: column; padding: 20px; }
     th, td { padding: 13px 14px; }
 }
+
+/* Dashboard (home page): scale everything up a bit for more presence. */
+.dashboard-page {
+    width: min(100% - 40px, 1320px);
+}
+
+.dashboard-page .eyebrow {
+    font-size: 0.85rem;
+}
+
+.dashboard-page h1 {
+    font-size: clamp(3.2rem, 7vw, 5.8rem);
+}
+
+.dashboard-page .intro {
+    font-size: 1.25rem;
+}
+
+.dashboard-page .summary {
+    gap: 22px;
+    margin-bottom: 46px;
+}
+
+.dashboard-page .summary-card {
+    min-height: 190px;
+    padding: 30px;
+    border-radius: 18px;
+}
+
+.dashboard-page .card-label {
+    font-size: 0.85rem;
+}
+
+.dashboard-page .summary-card strong {
+    margin-top: 14px;
+    font-size: 3.8rem;
+}
+
+.dashboard-page .card-action {
+    margin-top: 16px;
+    font-size: 0.9rem;
+}
+
+.dashboard-page .section-heading {
+    padding: 28px 32px;
+}
+
+.dashboard-page .section-heading h2 {
+    font-size: clamp(1.9rem, 3.5vw, 2.4rem);
+}
+
+.dashboard-page th,
+.dashboard-page td {
+    padding: 20px 24px;
+    font-size: 1.05rem;
+}
+
+.dashboard-page th {
+    font-size: 0.85rem;
+}
+
+@media (max-width: 650px) {
+    .dashboard-page .summary-card { min-height: 160px; padding: 22px; }
+    .dashboard-page .summary-card strong { font-size: 2.8rem; }
+}

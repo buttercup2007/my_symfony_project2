@@ -102,7 +102,15 @@
                 <tr>
                     <td>{{ wedstrijd.sport }}</td>
                     <td>{{ wedstrijd.datum|date('d-m-Y') }}</td>
-                    <td>{{ wedstrijd.tijd|date('H:i') }}</td>
+                    
+                    <td>
+                    {% if wedstrijd.tijd and wedstrijd.tijd != 'nnb' %}
+                    {{ wedstrijd.tijd|date('H:i') }}
+                    {% else %}
+                        NNB
+                    {% endif %}
+                    </td>
+
                     <td>{{ wedstrijd.team1 }}</td>
                     <td>{{ wedstrijd.team2 }}</td>
                     <td class="score-cell">{{ wedstrijd.score1|default(0) }}</td>

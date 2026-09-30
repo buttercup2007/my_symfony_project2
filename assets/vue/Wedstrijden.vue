@@ -205,8 +205,6 @@ onMounted(() => {
 
         <div v-if="!loading && !error">
 
-            <!-- Samenvatting -->
-
             <section class="summary" aria-label="Weekend samenvatting">
 
                 <div class="summary-card">
@@ -224,8 +222,6 @@ onMounted(() => {
                 </a>
 
             </section>
-
-            <!-- Filters -->
 
             <div class="sport-filter-form vue-filter-form">
 
@@ -275,8 +271,6 @@ onMounted(() => {
 
             </div>
 
-            <!-- Weekendoverzicht -->
-
             <section v-if="overzicht.length" class="content-section">
 
                 <div class="section-heading">
@@ -323,8 +317,6 @@ onMounted(() => {
                 </div>
 
             </section>
-
-            <!-- Wedstrijden -->
 
             <section class="content-section">
 
