@@ -111,17 +111,17 @@ async function laadWeekend(offset) {
         const wedstrijdenData = await wedstrijdenResponse.json()
 
         console.log('OVERZICHT:', overzichtData)
-console.log('WEDSTRIJDATA:', wedstrijdenData)
-console.log('EERSTE WEDSTRIJD:', wedstrijdenData.wedstrijden[0])
+        console.log('WEDSTRIJDATA:', wedstrijdenData)
+        console.log('EERSTE WEDSTRIJD:', wedstrijdenData.wedstrijden[0])
 
-const wedstrijdenMetScore = wedstrijdenData.wedstrijden.filter(
-    wedstrijd =>
+        const wedstrijdenMetScore = wedstrijdenData.wedstrijden.filter(
+        wedstrijd =>
         wedstrijd.score1 !== null &&
         wedstrijd.score2 !== null
-)
+        )
 
-console.log('WEDSTRIJDEN MET SCORE:', wedstrijdenMetScore.length)
-console.log('EERSTE WEDSTRIJD MET SCORE:', wedstrijdenMetScore[0])
+        console.log('WEDSTRIJDEN MET SCORE:', wedstrijdenMetScore.length)
+        console.log('EERSTE WEDSTRIJD MET SCORE:', wedstrijdenMetScore[0])
 
         overzicht.value = overzichtData.overzicht
         wedstrijden.value = wedstrijdenData.wedstrijden
@@ -343,10 +343,7 @@ onMounted(() => {
 
                         </thead>
 
-                        <template
-                            v-for="groep in wedstrijdenPerDatum"
-                            :key="groep.datum"
-                        >
+                        <template v-for="groep in wedstrijdenPerDatum" :key="groep.datum">
                             <tbody class="datum-groep">
 
                                 <tr class="datum-rij">

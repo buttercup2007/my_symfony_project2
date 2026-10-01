@@ -11,6 +11,7 @@ class WedstrijdRepository
     ) {
     }
 
+    // Haalt alle wedstrijden uit de database.
     public function getWedstrijden(): array
     {
         return $this->connection->fetchAllAssociative('
@@ -52,7 +53,8 @@ class WedstrijdRepository
             ORDER BY w.datum, w.tijd
         ');
     }
-
+    
+    // Haalt wedstrijden op waarvan de uitslag ontbreekt.
     public function getOntbrekendeUitslagen(
         string $startDatum,
         string $eindDatum
@@ -70,7 +72,7 @@ class WedstrijdRepository
                             \':\',
                             RIGHT(TRIM(w.tijd), 2)
                         )
-                    ELSE w.tijd
+                    ELSE w.tijd  
                 END AS tijd,
 
                 c1.naam AS team1,
@@ -103,7 +105,8 @@ class WedstrijdRepository
             ORDER BY w.datum, w.tijd
         ', [$startDatum, $eindDatum]);
     }
-
+    
+    // Telt de ontbrekende uitslagen per sport.
     public function getAantalOntbrekendeUitslagen(
         string $startDatum,
         string $eindDatum
@@ -138,6 +141,8 @@ class WedstrijdRepository
         ]);
     }
 
+
+    // Maakt een overzicht van wedstrijden per sport.
     public function getWeekendOverzicht(
         string $startDatum,
         string $eindDatum,
@@ -184,6 +189,7 @@ class WedstrijdRepository
         return $this->connection->fetchAllAssociative($sql, $params);
     }
 
+    // Haalt alle wedstrijden van een weekend op.
     public function getWeekendWedstrijden(
         string $startDatum,
         string $eindDatum,
@@ -235,11 +241,14 @@ class WedstrijdRepository
             $params[] = $sport;
         }
 
+        // Sorteert op datum en tijd.
+
         $sql .= ' ORDER BY w.datum, w.tijd';
 
         return $this->connection->fetchAllAssociative($sql, $params);
     }
-
+    
+    // Haalt één specifieke wedstrijd op.
     public function getWedstrijd(
         string $compnummer,
         string $wedstrijdnummer
@@ -284,6 +293,7 @@ class WedstrijdRepository
               AND w.wedstrijdnummer = ?
         ', [$compnummer, $wedstrijdnummer]);
 
+        // Geeft null terug als de wedstrijd niet bestaat.
         return $result === false ? null : $result;
     }
 }
